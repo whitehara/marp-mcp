@@ -11,9 +11,9 @@ export const imageCenterLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: withLengthPrompt("Slide heading", 40),
+      description: withLengthPrompt("Slide heading", 54),
       required: true,
-      maxLength: 40,
+      maxLength: 54,
     },
     imagePath: {
       type: "string",
@@ -23,17 +23,17 @@ export const imageCenterLayout: SlideLayout = {
     },
     description: {
       type: "string",
-      description: withLengthPrompt("Image description below image", 55),
+      description: withLengthPrompt("Image description below image", 75),
       required: false,
-      maxLength: 55,
+      maxLength: 75,
     },
     citations: {
       type: "string",
-      description: withLengthPrompt("Citation", 50, {
+      description: withLengthPrompt("Citation", 130, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 50,
+      maxLength: 130,
     },
   },
   template: (params) => {
@@ -43,14 +43,14 @@ export const imageCenterLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    slide += `![h:350](${params.imagePath})`;
+    slide += `![h:450](${params.imagePath})`;
 
     if (params.description) {
       slide += `\n\n${params.description}`;
     }
 
     if (params.citations) {
-      slide += `\n\n<!-- footer: ${params.citations} -->`;
+      slide += `\n\n<!-- _footer: ${params.citations} -->`;
     }
 
     return slide;

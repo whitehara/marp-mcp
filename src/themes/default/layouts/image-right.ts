@@ -15,16 +15,16 @@ export const imageRightLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: withLengthPrompt("Slide heading", 17),
+      description: withLengthPrompt("Slide heading", 23),
       required: true,
-      maxLength: 17,
+      maxLength: 23,
     },
     list: {
       type: "array",
-      description: `List items (max 8 items, each ${formatLengthPrompt(23)})`,
+      description: `List items (max 8 items, each ${formatLengthPrompt(28)})`,
       required: true,
-      maxItems: 8,
-      maxLength: 23,
+      maxItems: 10,
+      maxLength: 28,
     },
     imagePath: {
       type: "string",
@@ -34,11 +34,11 @@ export const imageRightLayout: SlideLayout = {
     },
     citations: {
       type: "string",
-      description: withLengthPrompt("Citation", 50, {
+      description: withLengthPrompt("Citation", 60, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 50,
+      maxLength: 60,
     },
   },
   template: (params) => {
@@ -55,7 +55,7 @@ export const imageRightLayout: SlideLayout = {
     slide += `\n![bg right:50% contain](${params.imagePath})`;
 
     if (params.citations) {
-      slide += `\n\n<!-- footer: ${params.citations} -->`;
+      slide += `\n\n<!-- _footer: ${params.citations} -->`;
     }
 
     return slide;

@@ -39,6 +39,11 @@ Author Name · Example Org
 | ---- | ----- |
 | Alpha | 42 |
 | Beta | 37 |
+| Gamma | 58 |
+| Delta | 21 |
+| Epsilon | 73 |
+| Zeta | 15 |
+| Eta | 29 |
 
 Higher is better.
 

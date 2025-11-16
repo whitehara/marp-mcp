@@ -8,16 +8,12 @@ header: Example Labs | default walkthrough
 # Section Header
 ## Supporting message
 
-<!-- _class: section -->
-
 ---
 
 <!-- layout: title -->
 # Sample Presentation
 
 Author Name · Example Org
-
-<!-- _class: lead -->
 
 ---
 
@@ -29,7 +25,7 @@ Author Name · Example Org
 - Next steps
 
 
-<!-- footer: Source: Sample Dataset -->
+<!-- _footer: Source: Sample Dataset -->
 
 ---
 
@@ -40,12 +36,15 @@ Author Name · Example Org
 | ---- | ----- |
 | Alpha | 42 |
 | Beta | 37 |
+| Gamma | 58 |
+| Delta | 21 |
+| Epsilon | 73 |
+| Zeta | 15 |
+| Eta | 29 |
 
 Higher is better.
 
-<!-- _class: table-center table-tiny -->
-
-<!-- footer: Source: Sample Stats -->
+<!-- _footer: Source: Sample Stats -->
 
 ---
 
@@ -58,15 +57,15 @@ Higher is better.
 
 ![bg right:50% contain](https://picsum.photos/1280/720)
 
-<!-- footer: Diagram credit: picsum.photos -->
+<!-- _footer: Diagram credit: picsum.photos -->
 
 ---
 
 <!-- layout: image-center -->
 ## Workflow Snapshot
 
-![h:350](https://picsum.photos/1280/720)
+![h:450](https://picsum.photos/1280/720)
 
 Step-by-step overview.
 
-<!-- footer: Figure 1 -->
+<!-- _footer: Figure 1 -->

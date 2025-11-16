@@ -7,7 +7,6 @@ import type { SlideLayout } from "../../types.js";
 export const titleLayout: SlideLayout = {
   name: "title",
   description: "Title slide with heading and content",
-  className: "lead",
   params: {
     heading: {
       type: "string",
@@ -27,8 +26,6 @@ export const titleLayout: SlideLayout = {
     if (params.content) {
       slide += `\n${params.content}\n`;
     }
-    slide += `\n<!-- _class: lead -->`;
-
     return slide;
   },
 };

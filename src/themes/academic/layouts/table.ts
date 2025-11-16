@@ -18,7 +18,7 @@ export const tableLayout: SlideLayout = {
     tableMarkdown: {
       type: "string",
       description:
-        "Table in markdown format (max 7 rows excluding header, total ~40 chars/~23 Japanese chars across columns recommended)",
+        "Table in markdown format (max 8 rows excluding header, keep content concise for better width fit)",
       required: true,
     },
     description: {

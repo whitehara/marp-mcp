@@ -8,19 +8,18 @@ import { withLengthPrompt } from "../../../utils/text-length.js";
 export const sectionLayout: SlideLayout = {
   name: "section",
   description: "Section break slide with centered title and subtitle",
-  className: "section",
   params: {
     title: {
       type: "string",
-      description: withLengthPrompt("Section title", 30),
+      description: withLengthPrompt("Section title", 44),
       required: true,
-      maxLength: 30,
+      maxLength: 44,
     },
     subtitle: {
       type: "string",
-      description: withLengthPrompt("Section subtitle", 40),
+      description: withLengthPrompt("Section subtitle", 54),
       required: false,
-      maxLength: 40,
+      maxLength: 54,
     },
   },
   template: (params) => {
@@ -28,7 +27,6 @@ export const sectionLayout: SlideLayout = {
     if (params.subtitle) {
       slide += `## ${params.subtitle}\n`;
     }
-    slide += `\n<!-- _class: section -->`;
     return slide;
   },
 };

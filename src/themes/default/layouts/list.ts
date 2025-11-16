@@ -14,24 +14,24 @@ export const listLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: withLengthPrompt("Slide heading", 40),
+      description: withLengthPrompt("Slide heading", 54),
       required: true,
-      maxLength: 40,
+      maxLength: 54,
     },
     list: {
       type: "array",
-      description: `List items (max 8 items, each ${formatLengthPrompt(50)})`,
+      description: `List items (max 8 items, each ${formatLengthPrompt(70)})`,
       required: true,
-      maxItems: 8,
-      maxLength: 50,
+      maxItems: 10,
+      maxLength: 70,
     },
     citations: {
       type: "string",
-      description: withLengthPrompt("Citation", 50, {
+      description: withLengthPrompt("Citation", 130, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 50,
+      maxLength: 130,
     },
   },
   template: (params) => {
@@ -45,7 +45,7 @@ export const listLayout: SlideLayout = {
     });
 
     if (params.citations) {
-      slide += `\n\n<!-- footer: ${params.citations} -->`;
+      slide += `\n\n<!-- _footer: ${params.citations} -->`;
     }
 
     return slide;

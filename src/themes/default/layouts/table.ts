@@ -7,35 +7,35 @@ import { withLengthPrompt } from "../../../utils/text-length.js";
 
 export const tableLayout: SlideLayout = {
   name: "table",
-  description: "Table slide with fixed center-tiny layout",
+  description: "Table slide with description (max 7 rows)",
   params: {
     heading: {
       type: "string",
-      description: withLengthPrompt("Slide heading", 40),
+      description: withLengthPrompt("Slide heading", 54),
       required: true,
-      maxLength: 40,
+      maxLength: 54,
     },
     tableMarkdown: {
       type: "string",
       description:
-        "Table in markdown format (max 7 rows excluding header, total ~40 chars/~23 Japanese chars across columns recommended)",
+        "Table in markdown format (max 7 rows excluding header, keep content concise for better width fit)",
       required: true,
     },
     description: {
       type: "string",
-      description: withLengthPrompt("Table description below table", 55, {
+      description: withLengthPrompt("Table description below table", 75, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 55,
+      maxLength: 75,
     },
     citations: {
       type: "string",
-      description: withLengthPrompt("Citation", 50, {
+      description: withLengthPrompt("Citation", 130, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 50,
+      maxLength: 130,
     },
   },
   template: (params) => {
@@ -50,10 +50,8 @@ export const tableLayout: SlideLayout = {
       slide += `\n\n${params.description}`;
     }
 
-    slide += `\n\n<!-- _class: table-center table-tiny -->`;
-
     if (params.citations) {
-      slide += `\n\n<!-- footer: ${params.citations} -->`;
+      slide += `\n\n<!-- _footer: ${params.citations} -->`;
     }
 
     return slide;
