@@ -25,9 +25,9 @@ import {
   manageSlide,
 } from "./tools/manage_slide.js";
 import {
-  generateSlideIdsSchema,
-  generateSlideIds,
-} from "./tools/generate_slide_ids.js";
+  initMarpFileSchema,
+  initMarpFile,
+} from "./tools/init_marp_file.js";
 
 // Create server instance
 const server = new McpServer({
@@ -48,10 +48,10 @@ server.tool(
 );
 
 server.tool(
-  "generate_slide_ids",
-  "Automatically generates and assigns unique IDs to all slides in a Marp file that don't have IDs yet",
-  generateSlideIdsSchema.shape,
-  generateSlideIds
+  "init_marp_file",
+  "Initializes a Marp markdown file by ensuring required frontmatter and assigning slide IDs",
+  initMarpFileSchema.shape,
+  initMarpFile
 );
 
 server.tool(
@@ -78,7 +78,7 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error(`Marp MCP Server running on stdio (theme: ${getActiveTheme().name})`);
-  console.error("Tools: list_layouts, generate_slide_ids, manage_slide");
+  console.error("Tools: list_layouts, init_marp_file, manage_slide");
 }
 
 function parseThemeArgument(args: string[]): string | undefined {

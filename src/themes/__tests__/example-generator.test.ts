@@ -105,6 +105,7 @@ function buildExampleMarkdown(themeName: ThemeName): string {
     "marp: true",
     `theme: ${themeName}`,
     `header: ${buildHeaderDirective(themeName)}`,
+    `paginate: true`,
     "---",
     "",
     slides.join("\n\n---\n\n"),

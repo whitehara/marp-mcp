@@ -2,6 +2,7 @@
 marp: true
 theme: default
 header: Example Labs | default walkthrough
+paginate: true
 ---
 
 <!-- layout: section -->

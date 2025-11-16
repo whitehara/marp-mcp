@@ -2,6 +2,7 @@
 marp: true
 theme: academic
 header: Example Labs | academic walkthrough
+paginate: true
 ---
 
 <!-- layout: section -->

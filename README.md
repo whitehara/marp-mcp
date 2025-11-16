@@ -40,7 +40,7 @@ Future themes can be activated with the same flag once they are added.
 | Tool | Description |
 |------|-------------|
 | `list_layouts` | List all available slide layouts with parameters and descriptions |
-| `generate_slide_ids` | Automatically generates unique IDs for all slides in a Marp file |
+| `init_marp_file` | Ensure Marp frontmatter fields exist and generate IDs for all slides |
 | `manage_slide` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
 
 ## Available Layouts
