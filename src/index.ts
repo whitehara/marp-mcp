@@ -59,7 +59,7 @@ server.tool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Marp MCP Server v0.4.0 running on stdio");
+  console.error("Marp MCP Server running on stdio");
   console.error("Tools: list_layouts, generate_slide_ids, manage_slide");
 }
 

@@ -3,6 +3,10 @@
  */
 
 import type { SlideLayout } from "./types.js";
+import {
+  formatLengthPrompt,
+  withLengthPrompt,
+} from "../utils/text-length.js";
 
 export const imageRightLayout: SlideLayout = {
   name: "image-right",
@@ -10,13 +14,13 @@ export const imageRightLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: "Slide heading (max 17 chars, ~10 chars for Japanese)",
+      description: withLengthPrompt("Slide heading", 17),
       required: true,
       maxLength: 17,
     },
     list: {
       type: "array",
-      description: "List items (max 8 items, each max 23 chars, ~14 chars for Japanese)",
+      description: `List items (max 8 items, each ${formatLengthPrompt(23)})`,
       required: true,
       maxItems: 8,
       maxLength: 23,
@@ -28,7 +32,9 @@ export const imageRightLayout: SlideLayout = {
     },
     citations: {
       type: "string",
-      description: "Citation (max 50 chars, ~30 chars for Japanese, no line break)",
+      description: withLengthPrompt("Citation", 50, {
+        note: "no line break",
+      }),
       required: false,
       maxLength: 50,
     },

@@ -3,6 +3,7 @@
  */
 
 import type { SlideLayout } from "./types.js";
+import { withLengthPrompt } from "../utils/text-length.js";
 
 export const sectionLayout: SlideLayout = {
   name: "section",
@@ -11,13 +12,13 @@ export const sectionLayout: SlideLayout = {
   params: {
     title: {
       type: "string",
-      description: "Section title (max 30 chars, ~18 chars for Japanese)",
+      description: withLengthPrompt("Section title", 30),
       required: true,
       maxLength: 30,
     },
     subtitle: {
       type: "string",
-      description: "Section subtitle (max 40 chars, ~22 chars for Japanese)",
+      description: withLengthPrompt("Section subtitle", 40),
       required: false,
       maxLength: 40,
     },

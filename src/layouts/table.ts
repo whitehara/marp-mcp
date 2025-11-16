@@ -3,6 +3,7 @@
  */
 
 import type { SlideLayout } from "./types.js";
+import { withLengthPrompt } from "../utils/text-length.js";
 
 export const tableLayout: SlideLayout = {
   name: "table",
@@ -10,7 +11,7 @@ export const tableLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: "Slide heading (max 40 chars, ~22 chars for Japanese)",
+      description: withLengthPrompt("Slide heading", 40),
       required: true,
       maxLength: 40,
     },
@@ -21,13 +22,17 @@ export const tableLayout: SlideLayout = {
     },
     description: {
       type: "string",
-      description: "Table description below table (max 55 chars, ~33 chars for Japanese, no line break)",
+      description: withLengthPrompt("Table description below table", 55, {
+        note: "no line break",
+      }),
       required: false,
       maxLength: 55,
     },
     citations: {
       type: "string",
-      description: "Citation (max 50 chars, ~30 chars for Japanese, no line break)",
+      description: withLengthPrompt("Citation", 50, {
+        note: "no line break",
+      }),
       required: false,
       maxLength: 50,
     },

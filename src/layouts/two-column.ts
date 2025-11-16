@@ -3,6 +3,10 @@
  */
 
 import type { SlideLayout } from "./types.js";
+import {
+  formatLengthPrompt,
+  withLengthPrompt,
+} from "../utils/text-length.js";
 
 export const twoColumnLayout: SlideLayout = {
   name: "two-column",
@@ -10,39 +14,45 @@ export const twoColumnLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: "Slide heading (max 40 chars, ~22 chars for Japanese)",
+      description: withLengthPrompt("Slide heading", 40),
       required: true,
       maxLength: 40,
     },
     column1Heading: {
       type: "string",
-      description: "Column 1 heading (max 17 chars, ~10 chars for Japanese)",
+      description: withLengthPrompt("Column 1 heading", 17),
       required: true,
       maxLength: 17,
     },
     column1List: {
       type: "array",
-      description: "Column 1 list items (max 6 items, each max 23 chars, ~14 chars for Japanese)",
+      description: `Column 1 list items (max 6 items, each ${formatLengthPrompt(
+        23,
+      )})`,
       required: true,
       maxItems: 6,
       maxLength: 23,
     },
     column2Heading: {
       type: "string",
-      description: "Column 2 heading (max 17 chars, ~10 chars for Japanese)",
+      description: withLengthPrompt("Column 2 heading", 17),
       required: true,
       maxLength: 17,
     },
     column2List: {
       type: "array",
-      description: "Column 2 list items (max 6 items, each max 23 chars, ~14 chars for Japanese)",
+      description: `Column 2 list items (max 6 items, each ${formatLengthPrompt(
+        23,
+      )})`,
       required: true,
       maxItems: 6,
       maxLength: 23,
     },
     citations: {
       type: "string",
-      description: "Citation (max 50 chars, ~30 chars for Japanese, no line break)",
+      description: withLengthPrompt("Citation", 50, {
+        note: "no line break",
+      }),
       required: false,
       maxLength: 50,
     },
