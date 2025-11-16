@@ -3,7 +3,7 @@
 ![NPM Downloads](https://img.shields.io/npm/dt/%40masaki39%2Fmarp-mcp)
 
 An MCP server for creating and editing Marp presentations with AI assistance.
-This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports both the default Marp theme and the [academic custom CSS](./assets/academic_custom.css) in this repository.
+This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports both the default Marp theme and the [academic custom CSS](./assets/academic.css) in this repository.
 
 <a href="https://glama.ai/mcp/servers/@masaki39/marp-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/@masaki39/marp-mcp/badge" alt="Marp Server MCP server" />
@@ -18,7 +18,7 @@ Add to your MCP client configuration:
   "mcpServers": {
     "marp-mcp": {
       "command": "npx",
-  "args": ["-y", "@masaki39/marp-mcp"]
+      "args": ["-y", "@masaki39/marp-mcp"]
     }
   }
 }
@@ -68,8 +68,8 @@ The example was created entirely using this MCP server and showcases:
 Source: [example.md](./assets/example.md)
 
 Theme-specific layout references:
-- [Academic theme example](./assets/academic-theme-example.md)
-- [Default theme example](./assets/default-theme-example.md)
+- [Academic theme example](./assets/examples/example-academic-theme.md)
+- [Default theme example](./assets/examples/example-default-theme.md)
 
 ## License
 
