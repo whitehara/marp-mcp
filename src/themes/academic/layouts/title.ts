@@ -1,8 +1,8 @@
 /**
- * Title slide layout - presentation title with author info
+ * Academic theme - Title slide layout
  */
 
-import type { SlideLayout } from "./types.js";
+import type { SlideLayout } from "../../types.js";
 
 export const titleLayout: SlideLayout = {
   name: "title",

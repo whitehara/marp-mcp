@@ -1,11 +1,11 @@
 /**
- * Image layout - centered image display
+ * Default theme - Image-center layout
  */
 
-import type { SlideLayout } from "./types.js";
-import { withLengthPrompt } from "../utils/text-length.js";
+import type { SlideLayout } from "../../types.js";
+import { withLengthPrompt } from "../../../utils/text-length.js";
 
-export const imageLayout: SlideLayout = {
+export const imageCenterLayout: SlideLayout = {
   name: "image-center",
   description: "Slide with centered image (fixed h:350)",
   params: {
@@ -17,7 +17,8 @@ export const imageLayout: SlideLayout = {
     },
     imagePath: {
       type: "string",
-      description: "Image file path (local paths supported, e.g., ./attachments/image.png)",
+      description:
+        "Image file path (local paths supported, e.g., ./attachments/image.png)",
       required: true,
     },
     description: {
@@ -42,17 +43,14 @@ export const imageLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    // Fixed image directive: center h:350
-    slide += `![center h:350](${params.imagePath})`;
+    slide += `![h:350](${params.imagePath})`;
 
-    // Image description (optional)
     if (params.description) {
       slide += `\n\n${params.description}`;
     }
 
-    // Citation (single, no line break)
     if (params.citations) {
-      slide += `\n\n> ${params.citations}`;
+      slide += `\n\n<!-- footer: ${params.citations} -->`;
     }
 
     return slide;

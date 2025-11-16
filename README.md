@@ -1,9 +1,9 @@
 # Marp MCP Server
 
-![NPM Downloads](https://img.shields.io/npm/dm/%40masaki39%2Fmarp-mcp)
+![NPM Downloads](https://img.shields.io/npm/dt/%40masaki39%2Fmarp-mcp)
 
 An MCP server for creating and editing Marp presentations with AI assistance.
-This MCP server allows LLMs to edit Markdown files according to a specified layout, optimized for the [custom CSS](./assets/academic_custom.css) in this repository.
+This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports both the default Marp theme and the [academic custom CSS](./assets/academic_custom.css) in this repository.
 
 <a href="https://glama.ai/mcp/servers/@masaki39/marp-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/@masaki39/marp-mcp/badge" alt="Marp Server MCP server" />
@@ -18,11 +18,22 @@ Add to your MCP client configuration:
   "mcpServers": {
     "marp-mcp": {
       "command": "npx",
-      "args": ["-y", "@masaki39/marp-mcp"]
+  "args": ["-y", "@masaki39/marp-mcp"]
     }
   }
 }
 ```
+
+### Theme selection
+
+The server uses Marp's default theme unless you specify another one. To switch themes when launching the MCP server, pass `-t` or `--theme`:
+
+```bash
+npx @masaki39/marp-mcp -t academic
+npx @masaki39/marp-mcp --theme academic
+```
+
+Future themes can be activated with the same flag once they are added.
 
 ## Tools
 
@@ -40,7 +51,7 @@ Add to your MCP client configuration:
 | `section` | Section divider with centered title and subtitle |
 | `list` | Content slide with heading and bullet points or text |
 | `table` | Table layout with customizable size and alignment |
-| `two-column` | Two-column layout for side-by-side content |
+| `two-column` | Two-column layout for side-by-side content *(academic theme only)* |
 | `image-right` | Layout with image on the right side |
 | `image-center` | Centered image layout with adjustable dimensions |
 
@@ -55,6 +66,10 @@ The example was created entirely using this MCP server and showcases:
 - Image layouts (center and right)
 
 Source: [example.md](./assets/example.md)
+
+Theme-specific layout references:
+- [Academic theme example](./assets/academic-theme-example.md)
+- [Default theme example](./assets/default-theme-example.md)
 
 ## License
 

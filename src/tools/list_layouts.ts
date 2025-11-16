@@ -3,14 +3,8 @@
  */
 
 import { z } from "zod";
-import type { SlideLayout } from "../layouts/types.js";
-import { sectionLayout } from "../layouts/section.js";
-import { titleLayout } from "../layouts/title.js";
-import { listLayout } from "../layouts/list.js";
-import { tableLayout } from "../layouts/table.js";
-import { twoColumnLayout } from "../layouts/two-column.js";
-import { imageRightLayout } from "../layouts/image-right.js";
-import { imageLayout } from "../layouts/image-center.js";
+import { getActiveTheme } from "../themes/index.js";
+import type { SlideLayout } from "../themes/types.js";
 
 interface ToolResponse {
   [x: string]: unknown;
@@ -21,37 +15,28 @@ interface ToolResponse {
 }
 
 /**
- * All available layouts
- */
-export const layouts = {
-  section: sectionLayout,
-  title: titleLayout,
-  list: listLayout,
-  table: tableLayout,
-  "two-column": twoColumnLayout,
-  "image-right": imageRightLayout,
-  "image-center": imageLayout,
-} as const;
-
-/**
  * Get layout by name
  */
 export function getLayout(name: string): SlideLayout | null {
-  return (layouts[name as keyof typeof layouts] as SlideLayout) || null;
+  const theme = getActiveTheme();
+  return theme.layouts[name] ?? null;
 }
 
 /**
  * Get all layout names
  */
 export function getLayoutNames(): string[] {
-  return Object.keys(layouts);
+  const theme = getActiveTheme();
+  return Object.keys(theme.layouts);
 }
 
 /**
  * Get all layouts info
  */
 export function getAllLayoutsInfo() {
-  return Object.entries(layouts).map(([name, layout]) => ({
+  const theme = getActiveTheme();
+
+  return Object.entries(theme.layouts).map(([name, layout]) => ({
     name,
     description: layout.description,
     className: layout.className,
@@ -69,6 +54,7 @@ export function getAllLayoutsInfo() {
 export const listLayoutsSchema = z.object({});
 
 export async function listLayouts(): Promise<ToolResponse> {
+  const theme = getActiveTheme();
   const layoutsInfo = getAllLayoutsInfo();
 
   return {
@@ -77,7 +63,7 @@ export async function listLayouts(): Promise<ToolResponse> {
         type: "text",
         text: JSON.stringify(
           {
-            theme: "academic",
+            theme: theme.name,
             layouts: layoutsInfo,
           },
           null,

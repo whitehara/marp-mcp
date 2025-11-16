@@ -1,12 +1,12 @@
 /**
- * List slide layout - bullet points
+ * Academic theme - List layout
  */
 
-import type { SlideLayout } from "./types.js";
+import type { SlideLayout } from "../../types.js";
 import {
   formatLengthPrompt,
   withLengthPrompt,
-} from "../utils/text-length.js";
+} from "../../../utils/text-length.js";
 
 export const listLayout: SlideLayout = {
   name: "list",
@@ -40,12 +40,10 @@ export const listLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    // List items
     params.list.forEach((item: string) => {
       slide += `- ${item}\n`;
     });
 
-    // Citation (single, no line break)
     if (params.citations) {
       slide += `\n> ${params.citations}`;
     }

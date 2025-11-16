@@ -1,9 +1,9 @@
 /**
- * Section slide layout - centered title for section breaks
+ * Default theme - Section layout
  */
 
-import type { SlideLayout } from "./types.js";
-import { withLengthPrompt } from "../utils/text-length.js";
+import type { SlideLayout } from "../../types.js";
+import { withLengthPrompt } from "../../../utils/text-length.js";
 
 export const sectionLayout: SlideLayout = {
   name: "section",

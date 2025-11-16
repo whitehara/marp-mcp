@@ -1,16 +1,17 @@
 /**
- * Two-column layout for comparing or discussing two topics
+ * Academic theme - Two-column layout
  */
 
-import type { SlideLayout } from "./types.js";
+import type { SlideLayout } from "../../types.js";
 import {
   formatLengthPrompt,
   withLengthPrompt,
-} from "../utils/text-length.js";
+} from "../../../utils/text-length.js";
 
 export const twoColumnLayout: SlideLayout = {
   name: "two-column",
-  description: "Two-column layout for comparing or discussing two topics (different from list)",
+  description:
+    "Two-column layout for comparing or discussing two topics (different from list)",
   params: {
     heading: {
       type: "string",
@@ -63,7 +64,6 @@ export const twoColumnLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    // Column 1
     slide += `> > ### ${params.column1Heading}\n> > \n`;
     params.column1List.forEach((item: string) => {
       slide += `> > - ${item}\n`;
@@ -71,13 +71,11 @@ export const twoColumnLayout: SlideLayout = {
 
     slide += `>\n`;
 
-    // Column 2
     slide += `> > ### ${params.column2Heading}\n> > \n`;
     params.column2List.forEach((item: string) => {
       slide += `> > - ${item}\n`;
     });
 
-    // Citation (single, no line break)
     if (params.citations) {
       slide += `\n\n> ${params.citations}`;
     }

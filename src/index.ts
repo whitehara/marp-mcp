@@ -8,6 +8,12 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  getActiveTheme,
+  getAvailableThemeNames,
+  getTheme,
+  setActiveTheme,
+} from "./themes/index.js";
 
 // Import tools
 import {
@@ -57,10 +63,36 @@ server.tool(
 
 // Start the server
 async function main() {
+  const themeArg = parseThemeArgument(process.argv.slice(2));
+  if (themeArg) {
+    const theme = getTheme(themeArg.toLowerCase());
+    if (!theme) {
+      console.error(
+        `Unknown theme "${themeArg}". Available themes: ${getAvailableThemeNames().join(", ")}`,
+      );
+      process.exit(1);
+    }
+    setActiveTheme(theme.name);
+  }
+
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Marp MCP Server running on stdio");
+  console.error(`Marp MCP Server running on stdio (theme: ${getActiveTheme().name})`);
   console.error("Tools: list_layouts, generate_slide_ids, manage_slide");
+}
+
+function parseThemeArgument(args: string[]): string | undefined {
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === "-t" || arg === "--theme") {
+      return args[i + 1];
+    }
+    if (arg.startsWith("--theme=")) {
+      const [, value] = arg.split("=", 2);
+      return value;
+    }
+  }
+  return undefined;
 }
 
 main().catch((error) => {

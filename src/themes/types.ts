@@ -1,7 +1,3 @@
-/**
- * Type definitions for slide layouts
- */
-
 export interface SlideLayout {
   name: string;
   description: string;
@@ -16,4 +12,12 @@ export interface SlideLayout {
     };
   };
   template: (params: any) => string;
+}
+
+export type ThemeName = "academic" | "default";
+
+export interface ThemeDefinition {
+  name: ThemeName;
+  description: string;
+  layouts: Record<string, SlideLayout>;
 }

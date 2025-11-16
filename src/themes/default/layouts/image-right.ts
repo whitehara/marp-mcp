@@ -1,16 +1,17 @@
 /**
- * Image-right layout - content list with background image on right
+ * Default theme - Image-right layout
  */
 
-import type { SlideLayout } from "./types.js";
+import type { SlideLayout } from "../../types.js";
 import {
   formatLengthPrompt,
   withLengthPrompt,
-} from "../utils/text-length.js";
+} from "../../../utils/text-length.js";
 
 export const imageRightLayout: SlideLayout = {
   name: "image-right",
-  description: "Slide with image on right and content list (allows more explanation than image-center)",
+  description:
+    "Slide with image on right and content list (allows more explanation than image-center)",
   params: {
     heading: {
       type: "string",
@@ -27,7 +28,8 @@ export const imageRightLayout: SlideLayout = {
     },
     imagePath: {
       type: "string",
-      description: "Image file path (local paths supported, e.g., ./attachments/image.png)",
+      description:
+        "Image file path (local paths supported, e.g., ./attachments/image.png)",
       required: true,
     },
     citations: {
@@ -46,17 +48,14 @@ export const imageRightLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    // List items
     params.list.forEach((item: string) => {
       slide += `- ${item}\n`;
     });
 
-    // Fixed background image: bg right:50% contain
     slide += `\n![bg right:50% contain](${params.imagePath})`;
 
-    // Citation (single, no line break)
     if (params.citations) {
-      slide += `\n\n> ${params.citations}`;
+      slide += `\n\n<!-- footer: ${params.citations} -->`;
     }
 
     return slide;

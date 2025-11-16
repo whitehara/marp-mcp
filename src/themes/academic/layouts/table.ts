@@ -1,9 +1,9 @@
 /**
- * Table slide layout with various size/alignment options
+ * Academic theme - Table layout
  */
 
-import type { SlideLayout } from "./types.js";
-import { withLengthPrompt } from "../utils/text-length.js";
+import type { SlideLayout } from "../../types.js";
+import { withLengthPrompt } from "../../../utils/text-length.js";
 
 export const tableLayout: SlideLayout = {
   name: "table",
@@ -17,7 +17,8 @@ export const tableLayout: SlideLayout = {
     },
     tableMarkdown: {
       type: "string",
-      description: "Table in markdown format (max 7 rows excluding header, total ~40 chars/~23 Japanese chars across columns recommended)",
+      description:
+        "Table in markdown format (max 7 rows excluding header, total ~40 chars/~23 Japanese chars across columns recommended)",
       required: true,
     },
     description: {
@@ -45,15 +46,12 @@ export const tableLayout: SlideLayout = {
 
     slide += params.tableMarkdown;
 
-    // Table description (optional)
     if (params.description) {
       slide += `\n\n${params.description}`;
     }
 
-    // Fixed table class
     slide += `\n\n<!-- _class: table-center table-tiny -->`;
 
-    // Citation (single, no line break)
     if (params.citations) {
       slide += `\n\n> ${params.citations}`;
     }
