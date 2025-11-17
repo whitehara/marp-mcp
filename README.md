@@ -46,6 +46,7 @@ Gaia and Uncover reuse the default layout set, while Gaia's title layout automat
 | `list_layouts` | List all available slide layouts with parameters and descriptions |
 | `generate_slide_ids` | Generate slide IDs for every slide |
 | `manage_slide` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
+| `set_frontmatter` | Ensure `marp`, `theme`, `header`, and `paginate` frontmatter fields are present |
 
 ## Available Layouts
 

@@ -28,6 +28,10 @@ import {
   generateSlideIdsSchema,
   generateSlideIds,
 } from "./tools/generate_slide_ids.js";
+import {
+  setFrontmatterSchema,
+  setFrontmatter,
+} from "./tools/set_frontmatter.js";
 
 // Create server instance
 const server = new McpServer({
@@ -61,6 +65,13 @@ server.tool(
   manageSlide
 );
 
+server.tool(
+  "set_frontmatter",
+  "Add or update required Marp frontmatter fields (marp, theme, header, paginate)",
+  setFrontmatterSchema.shape,
+  setFrontmatter
+);
+
 // Start the server
 async function main() {
   const themeArg = parseThemeArgument(process.argv.slice(2));
@@ -78,7 +89,7 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error(`Marp MCP Server running on stdio (theme: ${getActiveTheme().name})`);
-  console.error("Tools: list_layouts, generate_slide_ids, manage_slide");
+  console.error("Tools: list_layouts, generate_slide_ids, manage_slide, set_frontmatter");
 }
 
 function parseThemeArgument(args: string[]): string | undefined {
