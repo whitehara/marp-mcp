@@ -26,36 +26,31 @@ export const manageSlideSchema = z.object({
 });
 
 /**
- * Parses frontmatter from content, separating it from the body
- * If no frontmatter exists, returns default frontmatter
+ * Parses frontmatter from content, separating it from the body.
+ * If no valid frontmatter exists, the entire file is treated as body content.
  */
 function parseFrontmatter(content: string): { frontmatter: string; body: string } {
   const lines = content.split('\n');
 
-  // No frontmatter case
-  if (lines.length === 0 || lines[0].trim() !== '---') {
-    return {
-      frontmatter: '---\nmarp: true\n---',
-      body: content.trim()
-    };
+  if (lines.length === 0) {
+    return { frontmatter: '', body: '' };
   }
 
-  // Find closing ---
+  if (lines[0].trim() !== '---') {
+    return { frontmatter: '', body: content };
+  }
+
   const endIndex = lines.slice(1).findIndex(line => line.trim() === '---');
   if (endIndex === -1) {
-    // No closing ---, treat entire content as body
-    return {
-      frontmatter: '---\nmarp: true\n---',
-      body: content.trim()
-    };
+    return { frontmatter: '', body: content };
   }
 
-  const frontmatterLines = lines.slice(0, endIndex + 2); // From opening --- to closing ---
+  const frontmatterLines = lines.slice(0, endIndex + 2);
   const bodyLines = lines.slice(endIndex + 2);
 
   return {
     frontmatter: frontmatterLines.join('\n'),
-    body: bodyLines.join('\n').trim()
+    body: bodyLines.join('\n')
   };
 }
 
@@ -64,20 +59,25 @@ function parseFrontmatter(content: string): { frontmatter: string; body: string 
  */
 function joinSlides(frontmatter: string, slides: string[]): string {
   if (slides.length === 0) {
-    return frontmatter;
+    return frontmatter.trim() ? frontmatter : '';
   }
 
-  // Trim all slides and filter out empty ones
   const processedSlides = slides
     .map(s => s.trim())
     .filter(s => s !== '');
 
   if (processedSlides.length === 0) {
-    return frontmatter;
+    return frontmatter.trim() ? frontmatter : '';
   }
 
-  // Frontmatter + 2 newlines + slides joined by separator
-  return frontmatter + '\n\n' + processedSlides.join('\n\n---\n\n');
+  const slidesContent = processedSlides.join('\n\n---\n\n');
+
+  if (!frontmatter.trim()) {
+    return slidesContent;
+  }
+
+  const cleanedFrontmatter = frontmatter.replace(/\s+$/, '');
+  return `${cleanedFrontmatter}\n\n${slidesContent}`;
 }
 
 /**
@@ -126,8 +126,9 @@ export async function manageSlide({
 
       // Parse frontmatter and body
       const { frontmatter, body } = parseFrontmatter(existingContent);
+      const trimmedBody = body.trim();
 
-      let slides = body ? body.split(/\n---\n/) : [];
+      let slides = trimmedBody ? trimmedBody.split(/\n---\n/) : [];
 
       // Ensure all slides have IDs
       slides = ensureAllSlidesHaveIds(slides);
@@ -299,8 +300,9 @@ export async function manageSlide({
 
     // Parse frontmatter and body
     const { frontmatter, body } = parseFrontmatter(existingContent);
+    const trimmedBody = body.trim();
 
-    let slides = body ? body.split(/\n---\n/) : [];
+    let slides = trimmedBody ? trimmedBody.split(/\n---\n/) : [];
 
     // Ensure all slides have IDs
     slides = ensureAllSlidesHaveIds(slides);
