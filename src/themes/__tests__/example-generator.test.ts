@@ -38,8 +38,6 @@ const sampleParams: Record<string, SampleParamsBuilder> = {
       "| Gamma | 58 |",
       "| Delta | 21 |",
       "| Epsilon | 73 |",
-      "| Zeta | 15 |",
-      "| Eta | 29 |",
     ].join("\n"),
     description: "Higher is better.",
     citations: "Source: Sample Stats",

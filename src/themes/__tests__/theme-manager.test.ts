@@ -4,7 +4,7 @@ import {
   getTheme,
   setActiveTheme,
 } from "../index.js";
-import { listLayouts } from "../../tools/list_layouts.js";
+import { getLayout, listLayouts } from "../../tools/list_layouts.js";
 
 describe("theme manager", () => {
   afterEach(() => {
@@ -17,8 +17,11 @@ describe("theme manager", () => {
 
   it("exposes all registered themes", () => {
     const names = getAvailableThemeNames();
-    expect(names).toEqual(expect.arrayContaining(["default", "academic"]));
-    expect(getTheme("academic")).toBeDefined();
+    const expectedThemes = ["default", "academic", "gaia", "uncover"];
+    expect(names).toEqual(expect.arrayContaining(expectedThemes));
+    for (const themeName of expectedThemes) {
+      expect(getTheme(themeName)).toBeDefined();
+    }
   });
 
   it("switches layouts based on active theme", async () => {
@@ -29,6 +32,13 @@ describe("theme manager", () => {
     setActiveTheme("default");
     const defaultLayouts = await getLayoutNamesFromTool();
     expect(defaultLayouts).not.toContain("two-column");
+  });
+
+  it("adds lead styling support in Gaia title layout", () => {
+    setActiveTheme("gaia");
+    const layout = getLayout("title");
+    expect(layout?.className).toBe("lead");
+    expect(layout?.template({ heading: "Hello" })).toContain("_class: lead");
   });
 });
 

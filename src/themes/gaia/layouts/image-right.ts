@@ -1,5 +1,5 @@
 /**
- * Default theme - List layout
+ * Gaia theme - Image-right layout
  */
 
 import type { SlideLayout } from "../../types.js";
@@ -8,34 +8,42 @@ import {
   withLengthPrompt,
 } from "../../../utils/text-length.js";
 
-export const listLayout: SlideLayout = {
-  name: "list",
-  description: "List slide with bullet points (max 8 items)",
+export const imageRightLayout: SlideLayout = {
+  name: "image-right",
+  description:
+    "Slide with image on right and content list (allows more explanation than image-center)",
   params: {
     heading: {
       type: "string",
-      description: withLengthPrompt("Slide heading", 54),
+      description: withLengthPrompt("Slide heading", 16),
       required: true,
-      maxLength: 54,
+      maxLength: 16,
     },
     list: {
       type: "array",
-      description: `List items (max 10 items, each ${formatLengthPrompt(70)})`,
+      description: `List items (max 8 items, each ${formatLengthPrompt(24)})`,
       required: true,
-      maxItems: 10,
-      maxLength: 70,
+      maxItems: 8,
+      maxLength: 24,
+    },
+    imagePath: {
+      type: "string",
+      description:
+        "Image file path (local paths supported, e.g., ./attachments/image.png)",
+      required: true,
     },
     citations: {
       type: "string",
-      description: withLengthPrompt("Citation", 130, {
+      description: withLengthPrompt("Citation", 45, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 130,
+      maxLength: 45,
     },
   },
   template: (params) => {
     let slide = "";
+
     if (params.heading) {
       slide += `## ${params.heading}\n\n`;
     }
@@ -43,6 +51,8 @@ export const listLayout: SlideLayout = {
     params.list.forEach((item: string) => {
       slide += `- ${item}\n`;
     });
+
+    slide += `\n![bg right:50% contain](${params.imagePath})`;
 
     if (params.citations) {
       slide += `\n\n<!-- _footer: ${params.citations} -->`;

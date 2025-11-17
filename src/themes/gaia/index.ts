@@ -6,10 +6,10 @@ import { tableLayout } from "./layouts/table.js";
 import { imageRightLayout } from "./layouts/image-right.js";
 import { imageCenterLayout } from "./layouts/image-center.js";
 
-export const defaultTheme: ThemeDefinition = {
-  name: "default",
+export const gaiaTheme: ThemeDefinition = {
+  name: "gaia",
   description:
-    "Standard Marp theme using directives for footers and built-in layouts",
+    "Marp Gaia theme using default layouts (title slide supports lead styling)",
   layouts: {
     title: titleLayout,
     section: sectionLayout,

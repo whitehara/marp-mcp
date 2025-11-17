@@ -14,7 +14,7 @@ export interface SlideLayout {
   template: (params: any) => string;
 }
 
-export type ThemeName = "academic" | "default";
+export type ThemeName = "academic" | "default" | "gaia" | "uncover";
 
 export interface ThemeDefinition {
   name: ThemeName;

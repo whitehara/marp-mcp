@@ -1,5 +1,5 @@
 /**
- * Default theme - List layout
+ * Gaia theme - List layout
  */
 
 import type { SlideLayout } from "../../types.js";
@@ -14,24 +14,24 @@ export const listLayout: SlideLayout = {
   params: {
     heading: {
       type: "string",
-      description: withLengthPrompt("Slide heading", 54),
+      description: withLengthPrompt("Slide heading", 38),
       required: true,
-      maxLength: 54,
+      maxLength: 38,
     },
     list: {
       type: "array",
-      description: `List items (max 10 items, each ${formatLengthPrompt(70)})`,
+      description: `List items (max 8 items, each ${formatLengthPrompt(55)})`,
       required: true,
-      maxItems: 10,
-      maxLength: 70,
+      maxItems: 8,
+      maxLength: 55,
     },
     citations: {
       type: "string",
-      description: withLengthPrompt("Citation", 130, {
+      description: withLengthPrompt("Citation", 90, {
         note: "no line break",
       }),
       required: false,
-      maxLength: 130,
+      maxLength: 90,
     },
   },
   template: (params) => {

@@ -11,8 +11,8 @@ export const academicTheme: ThemeDefinition = {
   name: "academic",
   description: "Academic theme with custom layouts and blockquote-style footers",
   layouts: {
-    section: sectionLayout,
     title: titleLayout,
+    section: sectionLayout,
     list: listLayout,
     table: tableLayout,
     "two-column": twoColumnLayout,

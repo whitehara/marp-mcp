@@ -1,7 +1,7 @@
 ---
 marp: true
-theme: academic
-header: Example Labs | academic walkthrough
+theme: uncover
+header: Example Labs | uncover walkthrough
 paginate: true
 ---
 
@@ -10,15 +10,11 @@ paginate: true
 
 Author Name · Example Org
 
-<!-- _class: lead -->
-
 ---
 
 <!-- layout: section -->
 # Section Header
 ## Supporting message
-
-<!-- _class: section -->
 
 ---
 
@@ -29,7 +25,8 @@ Author Name · Example Org
 - Insights discovered
 - Next steps
 
-> Source: Sample Dataset
+
+<!-- _footer: Source: Sample Dataset -->
 
 ---
 
@@ -46,29 +43,7 @@ Author Name · Example Org
 
 Higher is better.
 
-<!-- _class: table-center table-tiny -->
-
-> Source: Sample Stats
-
----
-
-<!-- layout: two-column -->
-## Strategy Comparison
-
-> > ### Option A
-> > 
-> > - Predictable
-> > - Lower risk
-> > - Gradual growth
->
-> > ### Option B
-> > 
-> > - Experimental
-> > - Higher upside
-> > - Needs research
-
-
-> Source: Sample Playbook
+<!-- _footer: Source: Sample Stats -->
 
 ---
 
@@ -81,15 +56,15 @@ Higher is better.
 
 ![bg right:50% contain](https://picsum.photos/1280/720)
 
-> Diagram credit: picsum.photos
+<!-- _footer: Diagram credit: picsum.photos -->
 
 ---
 
 <!-- layout: image-center -->
 ## Workflow Snapshot
 
-![center h:350](https://picsum.photos/1280/720)
+![h:380](https://picsum.photos/1280/720)
 
 Step-by-step overview.
 
-> Figure 1
+<!-- _footer: Figure 1 -->

@@ -21,7 +21,7 @@ export const imageRightLayout: SlideLayout = {
     },
     list: {
       type: "array",
-      description: `List items (max 8 items, each ${formatLengthPrompt(28)})`,
+      description: `List items (max 10 items, each ${formatLengthPrompt(28)})`,
       required: true,
       maxItems: 10,
       maxLength: 28,

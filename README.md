@@ -3,7 +3,7 @@
 ![NPM Downloads](https://img.shields.io/npm/dt/%40masaki39%2Fmarp-mcp)
 
 An MCP server for creating and editing Marp presentations with AI assistance.
-This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports both the default Marp theme and the [academic custom CSS](./assets/academic.css) in this repository.
+This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [academic custom CSS](./assets/academic.css) in this repository.
 
 <a href="https://glama.ai/mcp/servers/@masaki39/marp-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/@masaki39/marp-mcp/badge" alt="Marp Server MCP server" />
@@ -30,10 +30,14 @@ The server uses Marp's default theme unless you specify another one. To switch t
 
 ```bash
 npx @masaki39/marp-mcp -t academic
+npx @masaki39/marp-mcp -t gaia
+npx @masaki39/marp-mcp -t uncover
 npx @masaki39/marp-mcp --theme academic
 ```
 
 Future themes can be activated with the same flag once they are added.
+
+Gaia and Uncover reuse the default layout set, while Gaia's title layout automatically applies the `lead` class so you can opt into that styling without manual markup.
 
 ## Tools
 
@@ -70,6 +74,8 @@ Source: [example.md](./assets/example.md)
 Theme-specific layout references:
 - [Academic theme example](./assets/examples/example-academic-theme.md)
 - [Default theme example](./assets/examples/example-default-theme.md)
+- [Gaia theme example](./assets/examples/example-gaia-theme.md)
+- [Uncover theme example](./assets/examples/example-uncover-theme.md)
 
 ## License
 

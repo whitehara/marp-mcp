@@ -5,16 +5,16 @@ header: Example Labs | default walkthrough
 paginate: true
 ---
 
-<!-- layout: section -->
-# Section Header
-## Supporting message
-
----
-
 <!-- layout: title -->
 # Sample Presentation
 
 Author Name · Example Org
+
+---
+
+<!-- layout: section -->
+# Section Header
+## Supporting message
 
 ---
 
@@ -40,8 +40,6 @@ Author Name · Example Org
 | Gamma | 58 |
 | Delta | 21 |
 | Epsilon | 73 |
-| Zeta | 15 |
-| Eta | 29 |
 
 Higher is better.
 

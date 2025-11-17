@@ -6,10 +6,9 @@ import { tableLayout } from "./layouts/table.js";
 import { imageRightLayout } from "./layouts/image-right.js";
 import { imageCenterLayout } from "./layouts/image-center.js";
 
-export const defaultTheme: ThemeDefinition = {
-  name: "default",
-  description:
-    "Standard Marp theme using directives for footers and built-in layouts",
+export const uncoverTheme: ThemeDefinition = {
+  name: "uncover",
+  description: "Marp Uncover theme using the standard layout set",
   layouts: {
     title: titleLayout,
     section: sectionLayout,
