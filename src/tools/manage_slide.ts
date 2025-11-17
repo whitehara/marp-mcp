@@ -23,6 +23,10 @@ export const manageSlideSchema = z.object({
   mode: z.enum(["insert", "replace", "delete"]).optional().describe("Operation mode: insert (default), replace, or delete"),
   position: z.enum(["end", "start", "after", "before"]).optional().describe("Position for insertion: end (default), start, after, before"),
   slideId: z.string().optional().describe("Slide ID for 'after', 'before' position, 'replace' mode, or 'delete' mode"),
+  note: z
+    .string()
+    .optional()
+    .describe("Optional speaker notes appended to the slide as an HTML comment block"),
 });
 
 /**
@@ -87,6 +91,20 @@ function ensureAllSlidesHaveIds(slides: string[]): string[] {
   return slides.map(slide => ensureSlideId(slide).content);
 }
 
+/**
+ * Appends a speaker note block to the slide content when provided
+ */
+function appendSlideNote(slideContent: string, note?: string): string {
+  if (note === undefined || note.length === 0) {
+    return slideContent;
+  }
+
+  const normalizedNote = note.replace(/\r\n/g, "\n");
+  const trimmedContent = slideContent.trimEnd();
+  const separator = trimmedContent.length > 0 ? "\n\n" : "";
+  return `${trimmedContent}${separator}<!--\n${normalizedNote}\n-->`;
+}
+
 export async function manageSlide({
   filePath,
   layoutType,
@@ -94,6 +112,7 @@ export async function manageSlide({
   mode = "insert",
   position = "end",
   slideId,
+  note,
 }: z.infer<typeof manageSlideSchema>): Promise<ToolResponse> {
   // Handle delete mode separately
   if (mode === "delete") {
@@ -281,7 +300,7 @@ export async function manageSlide({
 
   // Generate slide content
   try {
-    const slideContent = layout.template(params);
+    const slideContent = appendSlideNote(layout.template(params), note);
 
     // Read existing file
     let existingContent: string;

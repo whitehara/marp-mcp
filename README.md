@@ -3,7 +3,7 @@
 ![NPM Downloads](https://img.shields.io/npm/dt/%40masaki39%2Fmarp-mcp)
 
 An MCP server for creating and editing Marp presentations with AI assistance.
-This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [academic custom CSS](./assets/themes/academic.css) in this repository.
+This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [Academic](./assets/themes/academic.css) in this repository.
 
 <a href="https://glama.ai/mcp/servers/@masaki39/marp-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/@masaki39/marp-mcp/badge" alt="Marp Server MCP server" />
@@ -26,18 +26,18 @@ Add to your MCP client configuration:
 
 ### Theme selection
 
-The server uses Marp's default theme unless you specify another one. To switch themes when launching the MCP server, pass `-t` or `--theme`:
+Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `uncover`, or `academic`:
 
-```bash
-npx @masaki39/marp-mcp -t academic
-npx @masaki39/marp-mcp -t gaia
-npx @masaki39/marp-mcp -t uncover
-npx @masaki39/marp-mcp --theme academic
+```json
+{
+  "command": "npx",
+  "args": [
+    "-y",
+    "@masaki39/marp-mcp",
+    "-t",
+    "default"]
+}
 ```
-
-Future themes can be activated with the same flag once they are added.
-
-Gaia and Uncover reuse the default layout set, while Gaia's title layout automatically applies the `lead` class so you can opt into that styling without manual markup.
 
 ## Tools
 
@@ -62,25 +62,11 @@ Gaia and Uncover reuse the default layout set, while Gaia's title layout automat
 
 ## Example
 
-See the [example presentation](https://filedn.com/lF97wFVWosQpHEoDAbvva0h/slides/%E2%96%B6%EF%B8%8F2025-10-04_marp-mcp-example.html) demonstrating all available layouts.
-
-The example was created entirely using this MCP server and showcases:
-- Title and section slides
-- List and table layouts
-- Two-column layout
-- Image layouts (center and right)
-
-Theme-specific layout references:
-- [Academic theme example](./assets/examples/md/example-academic-theme.md)
-- [Default theme example](./assets/examples/md/example-default-theme.md)
-- [Gaia theme example](./assets/examples/md/example-gaia-theme.md)
-- [Uncover theme example](./assets/examples/md/example-uncover-theme.md)
-
-HTML renderings:
-- [Academic theme HTML](./assets/examples/html/example-academic-theme.html)
-- [Default theme HTML](./assets/examples/html/example-default-theme.html)
-- [Gaia theme HTML](./assets/examples/html/example-gaia-theme.html)
-- [Uncover theme HTML](./assets/examples/html/example-uncover-theme.html)
+Rendered samples (GitHub Pages):
+- [Academic theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-academic-theme.html)
+- [Default theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-default-theme.html)
+- [Gaia theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-gaia-theme.html)
+- [Uncover theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-uncover-theme.html)
 
 ## License
 
