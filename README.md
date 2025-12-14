@@ -5,10 +5,6 @@
 An MCP server for creating and editing Marp presentations with AI assistance.
 This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [Academic](./assets/themes/academic.css) in this repository.
 
-<a href="https://glama.ai/mcp/servers/@masaki39/marp-mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@masaki39/marp-mcp/badge" alt="Marp Server MCP server" />
-</a>
-
 ## Setup
 
 Add to your MCP client configuration:
