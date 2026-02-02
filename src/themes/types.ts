@@ -11,7 +11,7 @@ export interface SlideLayout {
       maxItems?: number;
     };
   };
-  template: (params: any) => string;
+  template: (params: Record<string, unknown>) => string;
 }
 
 export type ThemeName = "academic" | "default" | "gaia" | "uncover";

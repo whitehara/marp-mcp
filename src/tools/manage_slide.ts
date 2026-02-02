@@ -7,14 +7,10 @@ import { z } from "zod";
 import { promises as fs } from "fs";
 import { getLayout, getLayoutNames } from "./list_layouts.js";
 import { ensureSlideId, findSlideIndexById, generateSlideId } from "../utils/slide-id.js";
+import { validateFilePath } from "../utils/path-validator.js";
+import type { ToolResponse } from "../types/common.js";
 
-interface ToolResponse {
-  [x: string]: unknown;
-  content: Array<{
-    type: "text";
-    text: string;
-  }>;
-}
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const manageSlideSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file"),
@@ -92,7 +88,11 @@ function ensureAllSlidesHaveIds(slides: string[]): string[] {
 }
 
 /**
- * Appends a speaker note block to the slide content when provided
+ * Appends speaker notes to slide content as an HTML comment block.
+ *
+ * @param slideContent - The slide content
+ * @param note - Optional speaker notes to append
+ * @returns The slide content with appended notes if provided, otherwise unchanged
  */
 function appendSlideNote(slideContent: string, note?: string): string {
   if (note === undefined || note.length === 0) {
@@ -105,6 +105,20 @@ function appendSlideNote(slideContent: string, note?: string): string {
   return `${trimmedContent}${separator}<!--\n${normalizedNote}\n-->`;
 }
 
+/**
+ * MCP Tool: Manages slides in a Marp presentation file.
+ * Supports inserting, replacing, and deleting slides using slide IDs.
+ *
+ * @param {object} options - The slide management options
+ * @param {string} options.filePath - Absolute path to the Marp markdown file
+ * @param {string} [options.layoutType] - Layout type to use (title, lead, content, etc.)
+ * @param {Record<string, any>} [options.params] - Parameters for the layout template
+ * @param {"insert" | "replace" | "delete"} [options.mode="insert"] - Operation mode
+ * @param {"end" | "start" | "after" | "before"} [options.position="end"] - Position for insertion
+ * @param {string} [options.slideId] - Slide ID for 'after', 'before', 'replace', or 'delete' operations
+ * @param {string} [options.note] - Optional speaker notes to append
+ * @returns {Promise<ToolResponse>} Operation result with slide information
+ */
 export async function manageSlide({
   filePath,
   layoutType,
@@ -114,6 +128,19 @@ export async function manageSlide({
   slideId,
   note,
 }: z.infer<typeof manageSlideSchema>): Promise<ToolResponse> {
+  // Validate file path
+  const pathError = validateFilePath(filePath);
+  if (pathError) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Error: ${pathError}`,
+        },
+      ],
+    };
+  }
+
   // Handle delete mode separately
   if (mode === "delete") {
     if (!slideId) {
@@ -137,7 +164,19 @@ export async function manageSlide({
           content: [
             {
               type: "text",
-              text: `Error: Could not read file at ${filePath}`,
+              text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+        };
+      }
+
+      // Check file size
+      if (existingContent.length > MAX_FILE_SIZE) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
             },
           ],
         };
@@ -300,7 +339,7 @@ export async function manageSlide({
 
   // Generate slide content
   try {
-    const slideContent = appendSlideNote(layout.template(params), note);
+    const slideContent = appendSlideNote(layout.template(params || {}), note);
 
     // Read existing file
     let existingContent: string;
@@ -311,7 +350,19 @@ export async function manageSlide({
         content: [
           {
             type: "text",
-            text: `Error: Could not read file at ${filePath}`,
+            text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+      };
+    }
+
+    // Check file size
+    if (existingContent.length > MAX_FILE_SIZE) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
           },
         ],
       };

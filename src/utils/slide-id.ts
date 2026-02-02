@@ -15,8 +15,10 @@ export function generateSlideId(): string {
 }
 
 /**
- * Extracts slide ID from slide content
- * Returns null if no ID is found
+ * Extracts slide ID from slide content by searching for the slide-id HTML comment.
+ *
+ * @param slideContent - The slide content to search
+ * @returns The slide ID if found, null otherwise
  */
 export function extractSlideId(slideContent: string): string | null {
   const match = slideContent.match(SLIDE_ID_REGEX);
@@ -24,8 +26,10 @@ export function extractSlideId(slideContent: string): string | null {
 }
 
 /**
- * Adds slide ID to content if it doesn't have one
- * Returns the content with ID and the ID itself
+ * Ensures a slide has a unique ID by adding one if it doesn't exist.
+ *
+ * @param slideContent - The slide content to process
+ * @returns Object containing the updated content and the slide ID
  */
 export function ensureSlideId(slideContent: string): { content: string; id: string } {
   const existingId = extractSlideId(slideContent);
@@ -42,8 +46,10 @@ export function ensureSlideId(slideContent: string): { content: string; id: stri
 }
 
 /**
- * Ensures all slides in an array have IDs
- * Returns updated slides and a map of slide IDs to their indices
+ * Ensures all slides in an array have unique IDs.
+ *
+ * @param slides - Array of slide content strings
+ * @returns Object containing updated slides and a map of slide IDs to indices
  */
 export function ensureAllSlideIds(slides: string[]): {
   slides: string[];
@@ -62,8 +68,11 @@ export function ensureAllSlideIds(slides: string[]): {
 }
 
 /**
- * Finds slide index by ID
- * Returns -1 if not found
+ * Finds the index of a slide by its ID.
+ *
+ * @param slides - Array of slide content strings
+ * @param slideId - The slide ID to search for
+ * @returns The index of the slide, or -1 if not found
  */
 export function findSlideIndexById(slides: string[], slideId: string): number {
   return slides.findIndex(slide => {

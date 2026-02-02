@@ -6,6 +6,9 @@
  * Optimized for Claude Code and Cursor
  */
 
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -14,6 +17,7 @@ import {
   getTheme,
   setActiveTheme,
 } from "./themes/index.js";
+import { info, error as logError } from "./utils/logger.js";
 
 // Import tools
 import {
@@ -33,10 +37,16 @@ import {
   setFrontmatter,
 } from "./tools/set_frontmatter.js";
 
+// Load version from package.json
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const packageJson = JSON.parse(
+  readFileSync(join(__dirname, "../package.json"), "utf-8")
+) as { version: string };
+
 // Create server instance
 const server = new McpServer({
   name: "marp-mcp",
-  version: "0.4.0",
+  version: packageJson.version,
   capabilities: {
     resources: {},
     tools: {},
@@ -78,8 +88,9 @@ async function main() {
   if (themeArg) {
     const theme = getTheme(themeArg.toLowerCase());
     if (!theme) {
-      console.error(
+      logError(
         `Unknown theme "${themeArg}". Available themes: ${getAvailableThemeNames().join(", ")}`,
+        { themeArg, availableThemes: getAvailableThemeNames() }
       );
       process.exit(1);
     }
@@ -88,10 +99,21 @@ async function main() {
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error(`Marp MCP Server running on stdio (theme: ${getActiveTheme().name})`);
-  console.error("Tools: list_layouts, generate_slide_ids, manage_slide, set_frontmatter");
+
+  info("Marp MCP Server running on stdio", {
+    theme: getActiveTheme().name,
+    version: packageJson.version,
+    tools: ["list_layouts", "generate_slide_ids", "manage_slide", "set_frontmatter"],
+  });
 }
 
+/**
+ * Parses theme argument from command line arguments.
+ * Theme names are case-insensitive and will be normalized to lowercase.
+ *
+ * @param args - Command line arguments
+ * @returns Theme name in lowercase, or undefined if not found
+ */
 function parseThemeArgument(args: string[]): string | undefined {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -106,7 +128,10 @@ function parseThemeArgument(args: string[]): string | undefined {
   return undefined;
 }
 
-main().catch((error) => {
-  console.error("Fatal error in main():", error);
+main().catch((err) => {
+  logError("Fatal error in main()", {
+    error: err instanceof Error ? err.message : String(err),
+    stack: err instanceof Error ? err.stack : undefined,
+  });
   process.exit(1);
 });

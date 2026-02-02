@@ -48,7 +48,8 @@ export const imageRightLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    params.list.forEach((item: string) => {
+    const list = params.list as string[];
+    list.forEach((item: string) => {
       slide += `- ${item}\n`;
     });
 

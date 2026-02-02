@@ -65,14 +65,16 @@ export const twoColumnLayout: SlideLayout = {
     }
 
     slide += `> > ### ${params.column1Heading}\n> > \n`;
-    params.column1List.forEach((item: string) => {
+    const column1List = params.column1List as string[];
+    column1List.forEach((item: string) => {
       slide += `> > - ${item}\n`;
     });
 
     slide += `>\n`;
 
     slide += `> > ### ${params.column2Heading}\n> > \n`;
-    params.column2List.forEach((item: string) => {
+    const column2List = params.column2List as string[];
+    column2List.forEach((item: string) => {
       slide += `> > - ${item}\n`;
     });
 

@@ -14,7 +14,7 @@ Add to your MCP client configuration:
   "mcpServers": {
     "marp-mcp": {
       "command": "npx",
-      "args": ["-y", "@masaki39/marp-mcp"]
+      "args": ["-y", "@masaki39/marp-mcp@latest"]
     }
   }
 }
@@ -29,7 +29,7 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
   "command": "npx",
   "args": [
     "-y",
-    "@masaki39/marp-mcp",
+    "@masaki39/marp-mcp@latest",
     "-t",
     "default"]
 }
@@ -59,6 +59,7 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 ## Example
 
 Rendered samples (GitHub Pages):
+
 - [Academic theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-academic-theme.html)
 - [Default theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-default-theme.html)
 - [Gaia theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-gaia-theme.html)

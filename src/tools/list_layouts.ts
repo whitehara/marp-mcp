@@ -5,17 +5,13 @@
 import { z } from "zod";
 import { getActiveTheme } from "../themes/index.js";
 import type { SlideLayout } from "../themes/types.js";
-
-interface ToolResponse {
-  [x: string]: unknown;
-  content: Array<{
-    type: "text";
-    text: string;
-  }>;
-}
+import type { ToolResponse } from "../types/common.js";
 
 /**
- * Get layout by name
+ * Retrieves a slide layout by name from the active theme.
+ *
+ * @param name - The name of the layout to retrieve
+ * @returns The slide layout if found, null otherwise
  */
 export function getLayout(name: string): SlideLayout | null {
   const theme = getActiveTheme();
@@ -23,7 +19,9 @@ export function getLayout(name: string): SlideLayout | null {
 }
 
 /**
- * Get all layout names
+ * Retrieves all available layout names from the active theme.
+ *
+ * @returns Array of layout names
  */
 export function getLayoutNames(): string[] {
   const theme = getActiveTheme();
@@ -31,7 +29,9 @@ export function getLayoutNames(): string[] {
 }
 
 /**
- * Get all layouts info
+ * Retrieves detailed information about all layouts from the active theme.
+ *
+ * @returns Array of layout information including name, description, and parameters
  */
 export function getAllLayoutsInfo() {
   const theme = getActiveTheme();
@@ -47,12 +47,15 @@ export function getAllLayoutsInfo() {
   }));
 }
 
-/**
- * Tool: list_layouts
- * List all available slide layouts with their parameters
- */
 export const listLayoutsSchema = z.object({});
 
+/**
+ * MCP Tool: Lists all available slide layouts with their parameters.
+ * This tool provides information about available layouts in the active theme,
+ * including their names, descriptions, and required parameters.
+ *
+ * @returns {Promise<ToolResponse>} Layout information for the active theme
+ */
 export async function listLayouts(): Promise<ToolResponse> {
   const theme = getActiveTheme();
   const layoutsInfo = getAllLayoutsInfo();

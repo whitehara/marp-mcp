@@ -7,14 +7,10 @@
 import { z } from "zod";
 import { promises as fs } from "fs";
 import { ensureAllSlideIds } from "../utils/slide-id.js";
+import { validateFilePath } from "../utils/path-validator.js";
+import type { ToolResponse } from "../types/common.js";
 
-interface ToolResponse {
-  [x: string]: unknown;
-  content: Array<{
-    type: "text";
-    text: string;
-  }>;
-}
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const generateSlideIdsSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file"),
@@ -65,9 +61,29 @@ function joinSlides(frontmatter: string, slides: string[]): string {
   return slidesContent ? `${cleanedFrontmatter}\n\n${slidesContent}` : cleanedFrontmatter;
 }
 
+/**
+ * Generates unique slide IDs for all slides in a Marp markdown file.
+ *
+ * @param {object} options - The generation options
+ * @param {string} options.filePath - Absolute path to the Marp markdown file
+ * @returns {Promise<ToolResponse>} Operation result with generated IDs
+ */
 export async function generateSlideIds({
   filePath,
 }: z.infer<typeof generateSlideIdsSchema>): Promise<ToolResponse> {
+  // Validate file path
+  const pathError = validateFilePath(filePath);
+  if (pathError) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Error: ${pathError}`,
+        },
+      ],
+    };
+  }
+
   try {
     // Read existing file
     let existingContent: string;
@@ -78,7 +94,19 @@ export async function generateSlideIds({
         content: [
           {
             type: "text",
-            text: `Error: Could not read file at ${filePath}`,
+            text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+      };
+    }
+
+    // Check file size
+    if (existingContent.length > MAX_FILE_SIZE) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
           },
         ],
       };

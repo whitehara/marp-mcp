@@ -5,19 +5,14 @@
 
 import { promises as fs } from "fs";
 import { z } from "zod";
+import matter from "gray-matter";
 import { getActiveTheme } from "../themes/index.js";
+import { validateFilePath } from "../utils/path-validator.js";
+import type { ToolResponse } from "../types/common.js";
 
-interface ToolResponse {
-  [x: string]: unknown;
-  content: Array<{
-    type: "text";
-    text: string;
-  }>;
-}
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 type TargetKey = "marp" | "theme" | "header" | "paginate";
-
-const TARGET_KEYS: TargetKey[] = ["marp", "theme", "header", "paginate"];
 
 export const setFrontmatterSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file"),
@@ -31,202 +26,101 @@ export const setFrontmatterSchema = z.object({
     .describe("Optional paginate flag. If omitted and no value exists, paginate defaults to false."),
 });
 
-function splitFrontmatter(content: string): {
-  frontmatterLines: string[] | null;
-  body: string;
-} {
-  const lines = content.split("\n");
-
-  if (lines.length === 0) {
-    return { frontmatterLines: null, body: "" };
-  }
-
-  if (lines[0].trim() !== "---") {
-    return { frontmatterLines: null, body: content };
-  }
-
-  const closingIndex = lines.slice(1).findIndex(line => line.trim() === "---");
-  if (closingIndex === -1) {
-    return { frontmatterLines: null, body: content };
-  }
-
-  const closingLine = closingIndex + 1;
-  const bodyLines = lines.slice(closingLine + 1);
-  return {
-    frontmatterLines: lines.slice(1, closingLine),
-    body: bodyLines.join("\n"),
-  };
-}
-
-function extractTargetValues(lines: string[]): {
-  existingValues: Partial<Record<TargetKey, string>>;
-  remainingLines: string[];
-} {
-  const existingValues: Partial<Record<TargetKey, string>> = {};
-  const remainingLines: string[] = [];
-
-  for (const line of lines) {
-    const normalized = parseKeyValue(line);
-    if (normalized && TARGET_KEYS.includes(normalized.key as TargetKey)) {
-      existingValues[normalized.key as TargetKey] = normalized.value;
-    } else {
-      remainingLines.push(line);
-    }
-  }
-
-  return { existingValues, remainingLines };
-}
-
-function parseKeyValue(line: string): { key: string; value: string } | undefined {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith("#")) {
-    return undefined;
-  }
-
-  const match = /^([^:]+):\s*(.*)$/.exec(trimmed);
-  if (!match) {
-    return undefined;
-  }
-
-  const key = match[1].trim().toLowerCase();
-  const value = match[2] ?? "";
-  return { key, value };
-}
-
-function formatNewHeaderValue(value: string): string {
-  if (value.length === 0) {
-    return '""';
-  }
-
-  if (needsQuoting(value)) {
-    return `"${escapeQuotes(value)}"`;
-  }
-
-  return value;
-}
-
-function needsQuoting(value: string): boolean {
-  return (
-    /^\s|\s$/.test(value) ||
-    /[:{}[\],&*#?|<>!=%@]/.test(value)
-  );
-}
-
-function escapeQuotes(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-}
-
-function normalizeExistingHeaderValue(value: string | undefined): string {
-  if (value === undefined) {
-    return '""';
-  }
-
-  const trimmed = value.trim();
-  return trimmed.length === 0 ? '""' : value;
-}
-
-function resolvePaginateValue(
-  provided: boolean | undefined,
-  existing: string | undefined,
-): { lineValue: string; summaryValue: boolean | string } {
-  if (typeof provided === "boolean") {
-    return {
-      lineValue: provided ? "true" : "false",
-      summaryValue: provided,
-    };
-  }
-
-  if (existing !== undefined) {
-    const parsed = parseBoolean(existing);
-    return {
-      lineValue: existing,
-      summaryValue: parsed ?? existing,
-    };
-  }
-
-  return {
-    lineValue: "false",
-    summaryValue: false,
-  };
-}
-
-function parseBoolean(value: string): boolean | undefined {
-  const normalized = value.split("#")[0].trim().toLowerCase();
-  if (normalized === "true") {
-    return true;
-  }
-  if (normalized === "false") {
-    return false;
-  }
-  return undefined;
-}
-
-function combineDocument(frontmatterLines: string[], body: string): string {
-  const frontmatterBlock = ["---", ...frontmatterLines, "---"].join("\n");
-  if (!body) {
-    return `${frontmatterBlock}\n`;
-  }
-  const hasLeadingNewline = body.startsWith("\n");
-  const separator = hasLeadingNewline ? "" : "\n\n";
-  return `${frontmatterBlock}${separator}${body}`;
-}
-
-function stripOuterQuotes(value: string): string {
-  if (value.length < 2) {
-    return value;
-  }
-  const first = value[0];
-  const last = value[value.length - 1];
-  if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
-    return value.slice(1, -1);
-  }
-  return value;
-}
-
+/**
+ * Sets or updates Marp frontmatter fields in a markdown file.
+ *
+ * @param {object} options - The frontmatter options
+ * @param {string} options.filePath - Absolute path to the Marp markdown file
+ * @param {string} [options.header] - Optional header text
+ * @param {boolean} [options.paginate] - Optional paginate flag
+ * @returns {Promise<ToolResponse>} Operation result
+ */
 export async function setFrontmatter({
   filePath,
   header,
   paginate,
 }: z.infer<typeof setFrontmatterSchema>): Promise<ToolResponse> {
-  let existingContent: string;
-  try {
-    existingContent = await fs.readFile(filePath, "utf-8");
-  } catch {
+  // Validate file path
+  const pathError = validateFilePath(filePath);
+  if (pathError) {
     return {
       content: [
         {
           type: "text",
-          text: `Error: Could not read file at ${filePath}`,
+          text: `Error: ${pathError}`,
         },
       ],
     };
   }
 
-  const { frontmatterLines, body } = splitFrontmatter(existingContent);
-  const baseLines = frontmatterLines ?? [];
-  const { existingValues, remainingLines } = extractTargetValues(baseLines);
+  let existingContent: string;
+  try {
+    existingContent = await fs.readFile(filePath, "utf-8");
+  } catch (error) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
+        },
+      ],
+    };
+  }
 
-  const headerLineValue =
-    header !== undefined
-      ? formatNewHeaderValue(header)
-      : normalizeExistingHeaderValue(existingValues.header);
+  // Check file size
+  if (existingContent.length > MAX_FILE_SIZE) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
+        },
+      ],
+    };
+  }
 
-  const { lineValue: paginateLineValue, summaryValue: paginateSummary } = resolvePaginateValue(
-    paginate,
-    existingValues.paginate,
-  );
+  // Parse existing frontmatter
+  let parsed;
+  try {
+    parsed = matter(existingContent);
+  } catch (error) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Error: Invalid YAML frontmatter: ${error instanceof Error ? error.message : String(error)}`,
+        },
+      ],
+    };
+  }
+  const data = parsed.data as Record<string, any>;
 
+  // Get active theme
   const activeTheme = getActiveTheme().name;
-  const newFrontmatterLines = [
-    "marp: true",
-    `theme: ${activeTheme}`,
-    `header: ${headerLineValue}`,
-    `paginate: ${paginateLineValue}`,
-    ...remainingLines,
-  ];
 
-  const updatedContent = combineDocument(newFrontmatterLines, body);
+  // Determine header value
+  const headerValue = header !== undefined
+    ? header
+    : (data.header !== undefined ? String(data.header) : "");
 
+  // Determine paginate value
+  const paginateValue = paginate !== undefined
+    ? paginate
+    : (data.paginate !== undefined ? Boolean(data.paginate) : false);
+
+  // Update frontmatter data
+  const newData = {
+    ...data,
+    marp: true,
+    theme: activeTheme,
+    header: headerValue,
+    paginate: paginateValue,
+  };
+
+  // Stringify with gray-matter
+  const updatedContent = matter.stringify(parsed.content, newData);
+
+  // Check if content actually changed
   if (updatedContent === existingContent) {
     return {
       content: [
@@ -240,8 +134,8 @@ export async function setFrontmatter({
               frontmatter: {
                 marp: true,
                 theme: activeTheme,
-                header: header ?? stripOuterQuotes(existingValues.header ?? ""),
-                paginate: paginate ?? paginateSummary,
+                header: headerValue,
+                paginate: paginateValue,
               },
             },
             null,
@@ -252,6 +146,7 @@ export async function setFrontmatter({
     };
   }
 
+  // Write updated content
   await fs.writeFile(filePath, updatedContent, "utf-8");
 
   return {
@@ -266,8 +161,8 @@ export async function setFrontmatter({
             frontmatter: {
               marp: true,
               theme: activeTheme,
-              header: header ?? stripOuterQuotes(existingValues.header ?? ""),
-              paginate: paginate ?? paginateSummary,
+              header: headerValue,
+              paginate: paginateValue,
             },
           },
           null,
