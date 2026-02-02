@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
   testMatch: ["**/?(*.)+(spec|test).ts"],
+  testTimeout: 30000, // 30 seconds for CI environments
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
