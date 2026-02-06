@@ -158,7 +158,9 @@ section blockquote:has(blockquote) {
 section blockquote > blockquote {
     flex: 1;
     margin: 0;
-    padding: 0;
+    padding: 10px;
+    background-color: #fef5e7;
+    border-radius:10px;
 }
 
 /* 内側blockquoteの中身を通常のブロック表示に */
