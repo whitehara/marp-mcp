@@ -159,7 +159,7 @@ section blockquote > blockquote {
     flex: 1;
     margin: 0;
     padding: 10px;
-    background-color: #fef5e7;
+    background-color: #fef5e7; /* ベージュ系の背景 */
     border-radius:10px;
 }
 
