@@ -4,6 +4,7 @@ import os from "os";
 import path from "path";
 import { setFrontmatter } from "../set_frontmatter.js";
 import { setActiveTheme } from "../../themes/index.js";
+import { setActiveStyle } from "../../styles/index.js";
 
 describe("setFrontmatter", () => {
   let tempDir: string;
@@ -11,6 +12,7 @@ describe("setFrontmatter", () => {
   beforeEach(async () => {
     tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marp-frontmatter-"));
     setActiveTheme("default");
+    setActiveStyle("default");
   });
 
   afterEach(async () => {
@@ -81,5 +83,36 @@ describe("setFrontmatter", () => {
     expect(updated).toMatch(/header:\s*['"]Kickoff: FY25['"]/);
     expect(updated).toContain("paginate: true");
     expect(updated).toContain("theme: academic");
+  });
+
+  it("injects style CSS when rich style is active", async () => {
+    const filePath = path.join(tempDir, "styled.md");
+    await fs.writeFile(filePath, "# Slide 1\n", "utf-8");
+    setActiveStyle("rich");
+
+    const result = await setFrontmatter({ filePath });
+
+    const updated = await fs.readFile(filePath, "utf-8");
+    expect(updated).toContain("style:");
+    // Check response includes style name
+    const responseText = result.content[0].text;
+    const response = JSON.parse(responseText);
+    expect(response.style).toBe("rich");
+  });
+
+  it("does not inject style CSS when default style is active", async () => {
+    const filePath = path.join(tempDir, "nostyle.md");
+    await fs.writeFile(filePath, "# Slide 1\n", "utf-8");
+    setActiveStyle("default");
+
+    const result = await setFrontmatter({ filePath });
+
+    const updated = await fs.readFile(filePath, "utf-8");
+    // style field should not be present (no CSS to inject)
+    expect(updated).not.toMatch(/^style:/m);
+    // Response should still include style name
+    const responseText = result.content[0].text;
+    const response = JSON.parse(responseText);
+    expect(response.style).toBe("default");
   });
 });

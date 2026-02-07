@@ -21,3 +21,13 @@ export interface ThemeDefinition {
   description: string;
   layouts: Record<string, SlideLayout>;
 }
+
+export type StyleName = "default" | "rich";
+
+export interface StyleDefinition {
+  name: StyleName;
+  description: string;
+  compatibleThemes: ThemeName[];
+  css: string;
+  layouts: Record<string, SlideLayout>;
+}

@@ -4,39 +4,50 @@
 
 import { z } from "zod";
 import { getActiveTheme } from "../themes/index.js";
+import { getActiveStyle } from "../styles/index.js";
 import type { SlideLayout } from "../themes/types.js";
 import type { ToolResponse } from "../types/common.js";
 
 /**
- * Retrieves a slide layout by name from the active theme.
+ * Returns merged layouts from the active theme and active style.
+ * Style layouts override theme layouts with the same name.
+ */
+function getMergedLayouts(): Record<string, SlideLayout> {
+  const theme = getActiveTheme();
+  const style = getActiveStyle();
+  return { ...theme.layouts, ...style.layouts };
+}
+
+/**
+ * Retrieves a slide layout by name from the merged theme+style layouts.
  *
  * @param name - The name of the layout to retrieve
  * @returns The slide layout if found, null otherwise
  */
 export function getLayout(name: string): SlideLayout | null {
-  const theme = getActiveTheme();
-  return theme.layouts[name] ?? null;
+  const layouts = getMergedLayouts();
+  return layouts[name] ?? null;
 }
 
 /**
- * Retrieves all available layout names from the active theme.
+ * Retrieves all available layout names from the merged theme+style layouts.
  *
  * @returns Array of layout names
  */
 export function getLayoutNames(): string[] {
-  const theme = getActiveTheme();
-  return Object.keys(theme.layouts);
+  const layouts = getMergedLayouts();
+  return Object.keys(layouts);
 }
 
 /**
- * Retrieves detailed information about all layouts from the active theme.
+ * Retrieves detailed information about all layouts from the merged theme+style layouts.
  *
  * @returns Array of layout information including name, description, and parameters
  */
 export function getAllLayoutsInfo() {
-  const theme = getActiveTheme();
+  const layouts = getMergedLayouts();
 
-  return Object.entries(theme.layouts).map(([name, layout]) => ({
+  return Object.entries(layouts).map(([name, layout]) => ({
     name,
     description: layout.description,
     className: layout.className,
@@ -58,6 +69,7 @@ export const listLayoutsSchema = z.object({});
  */
 export async function listLayouts(): Promise<ToolResponse> {
   const theme = getActiveTheme();
+  const style = getActiveStyle();
   const layoutsInfo = getAllLayoutsInfo();
 
   return {
@@ -67,6 +79,7 @@ export async function listLayouts(): Promise<ToolResponse> {
         text: JSON.stringify(
           {
             theme: theme.name,
+            style: style.name,
             layouts: layoutsInfo,
           },
           null,

@@ -7,12 +7,13 @@ import { promises as fs } from "fs";
 import { z } from "zod";
 import matter from "gray-matter";
 import { getActiveTheme } from "../themes/index.js";
+import { getActiveStyle } from "../styles/index.js";
 import { validateFilePath } from "../utils/path-validator.js";
 import type { ToolResponse } from "../types/common.js";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
-type TargetKey = "marp" | "theme" | "header" | "paginate";
+type TargetKey = "marp" | "theme" | "header" | "paginate" | "style";
 
 export const setFrontmatterSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file"),
@@ -95,8 +96,9 @@ export async function setFrontmatter({
   }
   const data = parsed.data as Record<string, any>;
 
-  // Get active theme
+  // Get active theme and style
   const activeTheme = getActiveTheme().name;
+  const activeStyleDef = getActiveStyle();
 
   // Determine header value
   const headerValue = header !== undefined
@@ -109,13 +111,18 @@ export async function setFrontmatter({
     : (data.paginate !== undefined ? Boolean(data.paginate) : false);
 
   // Update frontmatter data
-  const newData = {
+  const newData: Record<string, any> = {
     ...data,
     marp: true,
     theme: activeTheme,
     header: headerValue,
     paginate: paginateValue,
   };
+
+  // Inject style CSS if active style has CSS
+  if (activeStyleDef.css) {
+    newData.style = activeStyleDef.css;
+  }
 
   // Stringify with gray-matter
   const updatedContent = matter.stringify(parsed.content, newData);
@@ -131,6 +138,7 @@ export async function setFrontmatter({
               success: true,
               message: "Frontmatter already satisfied requirements",
               file: filePath,
+              style: activeStyleDef.name,
               frontmatter: {
                 marp: true,
                 theme: activeTheme,
@@ -158,6 +166,7 @@ export async function setFrontmatter({
             success: true,
             message: "Updated frontmatter successfully",
             file: filePath,
+            style: activeStyleDef.name,
             frontmatter: {
               marp: true,
               theme: activeTheme,

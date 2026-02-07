@@ -44,6 +44,21 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 | `manage_slide` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
 | `set_frontmatter` | Ensure `marp`, `theme`, `header`, and `paginate` frontmatter fields are present |
 
+### Style selection
+
+Use `-s` or `--style` args for style selection. Choose from `default` or `rich`. Styles are designed for the `default` theme:
+
+```json
+{
+  "command": "npx",
+  "args": [
+    "-y",
+    "@masaki39/marp-mcp@latest",
+    "-s",
+    "rich"]
+}
+```
+
 ## Available Layouts
 
 | Layout | Description |
@@ -56,12 +71,29 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 | `image-right` | Layout with image on the right side |
 | `image-center` | Centered image layout with adjustable dimensions |
 
+### Rich style additional layouts
+
+| Layout | Description |
+|--------|-------------|
+| `image-split` | Image with bullet points in a split view |
+| `timeline` | Vertical timeline with gradient line and dots |
+| `card-grid` | Grid of icon cards with title and description |
+| `statistics` | Large number statistics with labels |
+| `highlight-box` | Gradient-styled highlight callout box |
+| `two-column-panel` | Two styled panels side by side |
+| `three-column-panel` | Three styled panels in a row |
+| `image-comparison` | Side-by-side image comparison with labels |
+| `content` | Free-form markdown content slide |
+| `quote` | Styled blockquote with attribution |
+| `process` | Horizontal process flow with numbered steps and arrows |
+
 ## Example
 
 Rendered samples (GitHub Pages):
 
 - [Academic theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-academic-theme.html)
 - [Default theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-default-theme.html)
+- [Default theme, rich style](https://masaki39.github.io/marp-mcp/assets/examples/html/example-default-rich-style.html)
 - [Gaia theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-gaia-theme.html)
 - [Uncover theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-uncover-theme.html)
 
