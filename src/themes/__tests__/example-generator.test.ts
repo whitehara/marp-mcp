@@ -1,8 +1,6 @@
 import { describe, expect, it, afterAll } from "@jest/globals";
-import { execFile } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
-import { promisify } from "util";
 import {
   getAvailableThemeNames,
   getTheme,
@@ -12,13 +10,6 @@ import type { SlideLayout, ThemeDefinition, ThemeName } from "../types.js";
 
 const examplesDir = path.resolve(process.cwd(), "assets/examples");
 const examplesMarkdownDir = path.resolve(examplesDir, "md");
-const examplesHtmlDir = path.resolve(examplesDir, "html");
-const academicThemePath = path.resolve(process.cwd(), "assets/themes/academic.css");
-const marpCliBin = path.resolve(
-  process.cwd(),
-  process.platform === "win32" ? "node_modules/.bin/marp.cmd" : "node_modules/.bin/marp",
-);
-const execFileAsync = promisify(execFile);
 
 type SampleParamsBuilder = (themeName: ThemeName) => Record<string, unknown>;
 
@@ -79,13 +70,9 @@ describe("theme example generator", () => {
     setActiveTheme("default");
   });
 
-  it("writes markdown and html examples for every theme", async () => {
-    await Promise.all([
-      fs.mkdir(examplesMarkdownDir, { recursive: true }),
-      fs.mkdir(examplesHtmlDir, { recursive: true }),
-    ]);
+  it("writes markdown examples for every theme", async () => {
+    await fs.mkdir(examplesMarkdownDir, { recursive: true });
     const themeNames = getAvailableThemeNames();
-    const htmlFiles: string[] = [];
 
     for (const themeName of themeNames) {
       const markdown = buildExampleMarkdown(themeName);
@@ -96,22 +83,8 @@ describe("theme example generator", () => {
       await fs.writeFile(filePath, markdown, "utf-8");
       const savedMarkdown = await fs.readFile(filePath, "utf-8");
       expect(savedMarkdown).toBe(markdown);
-
-      const htmlFilePath = path.join(
-        examplesHtmlDir,
-        `example-${themeName}-theme.html`,
-      );
-
-      htmlFiles.push(htmlFilePath);
     }
-
-    await convertMarkdownToHtml();
-
-    for (const htmlFilePath of htmlFiles) {
-      const savedHtml = await fs.readFile(htmlFilePath, "utf-8");
-      expect(savedHtml.length).toBeGreaterThan(0);
-    }
-  }, 60000);
+  }, 30000);
 });
 
 function buildExampleMarkdown(themeName: ThemeName): string {
@@ -159,19 +132,4 @@ function buildSlideMarkup(
 
 function buildHeaderDirective(themeName: ThemeName): string {
   return `Example Labs | ${themeName} walkthrough`;
-}
-
-async function convertMarkdownToHtml(): Promise<void> {
-  const args = [
-    "--html",
-    "--input-dir",
-    examplesMarkdownDir,
-    "--output",
-    examplesHtmlDir,
-    "--theme-set",
-    academicThemePath,
-    "--no-config-file",
-  ];
-
-  await execFileAsync(marpCliBin, args, { cwd: process.cwd() });
 }

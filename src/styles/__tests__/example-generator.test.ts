@@ -1,8 +1,6 @@
 import { describe, expect, it, afterAll } from "@jest/globals";
-import { execFile } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
-import { promisify } from "util";
 import { setActiveTheme } from "../../themes/index.js";
 import {
   getAvailableStyleNames,
@@ -13,12 +11,6 @@ import type { StyleName } from "../../themes/types.js";
 
 const examplesDir = path.resolve(process.cwd(), "assets/examples");
 const examplesMarkdownDir = path.resolve(examplesDir, "md");
-const examplesHtmlDir = path.resolve(examplesDir, "html");
-const marpCliBin = path.resolve(
-  process.cwd(),
-  process.platform === "win32" ? "node_modules/.bin/marp.cmd" : "node_modules/.bin/marp",
-);
-const execFileAsync = promisify(execFile);
 
 const SAMPLE_IMAGE = "https://picsum.photos/1280/720";
 
@@ -141,14 +133,10 @@ describe("style example generator", () => {
     setActiveStyle("default");
   });
 
-  it("writes markdown and html examples for every style", async () => {
-    await Promise.all([
-      fs.mkdir(examplesMarkdownDir, { recursive: true }),
-      fs.mkdir(examplesHtmlDir, { recursive: true }),
-    ]);
+  it("writes markdown examples for every style", async () => {
+    await fs.mkdir(examplesMarkdownDir, { recursive: true });
 
     const styleNames = getAvailableStyleNames();
-    const htmlFiles: string[] = [];
 
     for (const styleName of styleNames) {
       const style = getStyle(styleName);
@@ -170,21 +158,8 @@ describe("style example generator", () => {
       await fs.writeFile(filePath, markdown, "utf-8");
       const savedMarkdown = await fs.readFile(filePath, "utf-8");
       expect(savedMarkdown).toBe(markdown);
-
-      const htmlFilePath = path.join(
-        examplesHtmlDir,
-        `example-default-${styleName}-style.html`,
-      );
-      htmlFiles.push(htmlFilePath);
     }
-
-    await convertMarkdownToHtml();
-
-    for (const htmlFilePath of htmlFiles) {
-      const savedHtml = await fs.readFile(htmlFilePath, "utf-8");
-      expect(savedHtml.length).toBeGreaterThan(0);
-    }
-  }, 60000);
+  }, 30000);
 });
 
 function buildExampleMarkdown(
@@ -240,17 +215,4 @@ function buildExampleMarkdown(
     slides.join("\n\n---\n\n"),
     "",
   ].join("\n");
-}
-
-async function convertMarkdownToHtml(): Promise<void> {
-  const args = [
-    "--html",
-    "--input-dir",
-    examplesMarkdownDir,
-    "--output",
-    examplesHtmlDir,
-    "--no-config-file",
-  ];
-
-  await execFileAsync(marpCliBin, args, { cwd: process.cwd() });
 }

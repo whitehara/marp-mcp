@@ -91,11 +91,34 @@ Use `-s` or `--style` args for style selection. Choose from `default` or `rich`.
 
 Rendered samples (GitHub Pages):
 
-- [Academic theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-academic-theme.html)
-- [Default theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-default-theme.html)
-- [Default theme, rich style](https://masaki39.github.io/marp-mcp/assets/examples/html/example-default-rich-style.html)
-- [Gaia theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-gaia-theme.html)
-- [Uncover theme](https://masaki39.github.io/marp-mcp/assets/examples/html/example-uncover-theme.html)
+- [Academic theme](https://masaki39.github.io/marp-mcp/example-academic-theme.html)
+- [Default theme](https://masaki39.github.io/marp-mcp/example-default-theme.html)
+- [Default theme, default style](https://masaki39.github.io/marp-mcp/example-default-default-style.html)
+- [Default theme, rich style](https://masaki39.github.io/marp-mcp/example-default-rich-style.html)
+- [Gaia theme](https://masaki39.github.io/marp-mcp/example-gaia-theme.html)
+- [Uncover theme](https://masaki39.github.io/marp-mcp/example-uncover-theme.html)
+
+## Development
+
+### Working with Examples
+
+Generate markdown examples:
+```bash
+npm run examples:generate
+```
+
+Generate HTML files locally:
+```bash
+npm run examples:html
+```
+
+Preview examples with live reload (recommended for testing):
+```bash
+npm run examples:server
+# Open http://localhost:8080 in your browser
+```
+
+**Note**: HTML files are automatically generated and deployed to GitHub Pages by CI/CD. They are not committed to git.
 
 ## License
 

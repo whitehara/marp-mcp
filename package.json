@@ -11,7 +11,12 @@
     "test": "jest",
     "build": "tsc && shx chmod 755 build/index.js",
     "prepublishOnly": "npm run build",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "examples:generate": "npm test -- --testPathPattern=example-generator",
+    "examples:html": "npm run examples:html:styles && npm run examples:html:themes",
+    "examples:html:styles": "marp --html --input-dir assets/examples/md --output assets/examples/html --no-config-file",
+    "examples:html:themes": "marp --html --input-dir assets/examples/md --output assets/examples/html --theme-set assets/themes/academic.css --no-config-file",
+    "examples:server": "marp --html --server --input-dir assets/examples/md --theme-set assets/themes/academic.css --no-config-file"
   },
   "files": [
     "build",

@@ -26,3 +26,6 @@ Thumbs.db
 
 # npm
 *.tgz
+
+# Generated HTML examples (built by CI/CD)
+assets/examples/html/
