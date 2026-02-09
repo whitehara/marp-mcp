@@ -35,7 +35,7 @@ export const imageCenterLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    slide += `<div class="image-center-wrap">\n\n![](${params.imagePath})\n\n</div>`;
+    slide += `<div class="image-center-wrap">\n\n![h:400](${params.imagePath})\n\n</div>`;
 
     if (params.description) {
       slide += `\n\n${params.description}`;

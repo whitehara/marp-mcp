@@ -294,6 +294,7 @@ section.rich-image-center {
   max-height: 400px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  object-fit: contain;
 }
 
 /* --- Image Comparison --- */
@@ -309,7 +310,7 @@ section.rich-image-center {
 .comparison-item img {
   width: 100%;
   border-radius: 12px;
-  object-fit: cover;
+  object-fit: contain;
 }
 .comparison-label {
   margin-top: 0.5rem;

@@ -14,7 +14,7 @@ export const cardGridLayout: SlideLayout = {
       type: "array",
       description: "Cards in 'Icon|Title|Description' format",
       required: true,
-      maxItems: 6,
+      maxItems: 5,
     },
   },
   template: (params) => {
