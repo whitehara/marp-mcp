@@ -43,7 +43,11 @@ export const imageCenterLayout: SlideLayout = {
       slide += `## ${params.heading}\n\n`;
     }
 
-    slide += `![center h:350](${params.imagePath})`;
+    if (params.description && params.citations) {
+      slide += `![center h:350](${params.imagePath})`;
+    } else {
+      slide += `![center h:400](${params.imagePath})`;
+    }
 
     if (params.description) {
       slide += `\n\n${params.description}`;

@@ -295,6 +295,7 @@ style: |
     max-height: 400px;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    object-fit: contain;
   }
   
   /* --- Image Comparison --- */
@@ -310,7 +311,7 @@ style: |
   .comparison-item img {
     width: 100%;
     border-radius: 12px;
-    object-fit: cover;
+    object-fit: contain;
   }
   .comparison-label {
     margin-top: 0.5rem;
@@ -460,7 +461,7 @@ Higher is better.
 
 <div class="image-center-wrap">
 
-![](https://picsum.photos/1280/720)
+![h:400](https://picsum.photos/1280/720)
 
 </div>
 
