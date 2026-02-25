@@ -46,7 +46,7 @@ Author Name · Example Org
 
 Higher is better.
 
-<!-- _class: table-center table-tiny -->
+<!-- _class: table-center -->
 
 > Source: Sample Stats
 

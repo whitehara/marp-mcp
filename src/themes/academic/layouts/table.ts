@@ -5,9 +5,22 @@
 import type { SlideLayout } from "../../types.js";
 import { withLengthPrompt } from "../../../utils/text-length.js";
 
+function countTableRows(tableMarkdown: string): number {
+  const lines = tableMarkdown.trim().split('\n');
+  const tableLines = lines.filter(line => line.trim().startsWith('|'));
+  return Math.max(0, tableLines.length - 2);
+}
+
+function getTableSizeClass(rowCount: number): string {
+  if (rowCount >= 7) return 'table-tiny';
+  if (rowCount >= 6) return 'table-small';
+  if (rowCount >= 5) return '';
+  return 'table-large';
+}
+
 export const tableLayout: SlideLayout = {
   name: "table",
-  description: "Table slide with fixed center-tiny layout",
+  description: "Table slide with auto font-size class",
   params: {
     heading: {
       type: "string",
@@ -50,7 +63,10 @@ export const tableLayout: SlideLayout = {
       slide += `\n\n${params.description}`;
     }
 
-    slide += `\n\n<!-- _class: table-center table-tiny -->`;
+    const rowCount = countTableRows(params.tableMarkdown as string);
+    const sizeClass = getTableSizeClass(rowCount);
+    const classList = ['table-center', sizeClass].filter(Boolean).join(' ');
+    slide += `\n\n<!-- _class: ${classList} -->`;
 
     if (params.citations) {
       slide += `\n\n> ${params.citations}`;
