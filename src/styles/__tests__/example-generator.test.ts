@@ -198,6 +198,84 @@ const richLayoutParams: Record<string, Record<string, unknown>> = {
       "Q&A|15 min",
     ],
   },
+  sidebar: {
+    heading: "Architecture Overview",
+    content: "The system uses a **microservices** architecture with event-driven communication.\n\n- API Gateway handles routing\n- Each service owns its data",
+    sidebarTitle: "Key Terms",
+    sidebarItems: ["API Gateway: Entry point", "Event Bus: Async messaging", "Service Mesh: Networking"],
+  },
+  "progress-bar": {
+    heading: "Project Completion",
+    metrics: [
+      "Frontend|85|100",
+      "Backend|70|100",
+      "Testing|45|100",
+      "Documentation|30|100",
+    ],
+    caption: "Updated weekly",
+  },
+  "chart-bar": {
+    heading: "Revenue by Region",
+    bars: [
+      "North America|450",
+      "Europe|380",
+      "Asia Pacific|290",
+      "Latin America|120",
+    ],
+    caption: "In millions USD, FY2025",
+  },
+  "timeline-horizontal": {
+    heading: "Product Roadmap",
+    items: [
+      "Q1: Research Phase",
+      "Q2: Alpha Release",
+      "Q3: Beta Launch",
+      "Q4: General Availability",
+    ],
+  },
+  "pull-quote": {
+    quote: "Design is not just what it looks like. Design is how it works.",
+    attribution: "Steve Jobs",
+    context: "From a 2003 New York Times interview",
+  },
+  "bento-grid": {
+    heading: "Feature Highlights",
+    cells: [
+      "large|Real-time Analytics|Monitor your data with live dashboards",
+      "small|Fast|Sub-100ms responses",
+      "small|Secure|Enterprise-grade encryption",
+      "medium|Easy Integration|Connect with 50+ services out of the box",
+    ],
+  },
+  "code-comparison": {
+    heading: "Migration Guide",
+    leftTitle: "Before",
+    leftCode: "const data = fetch(url)\\nconst json = data.json()\\nconsole.log(json)",
+    rightTitle: "After",
+    rightCode: "const data = await fetch(url)\\nconst json = await data.json()\\nconsole.log(json)",
+    language: "js",
+  },
+  quadrant: {
+    heading: "Priority Matrix",
+    topLeftTitle: "High Impact / Low Effort",
+    topLeftItems: ["Quick wins", "Automation tasks"],
+    topRightTitle: "High Impact / High Effort",
+    topRightItems: ["Major features", "Platform migration"],
+    bottomLeftTitle: "Low Impact / Low Effort",
+    bottomLeftItems: ["Minor fixes", "UI tweaks"],
+    bottomRightTitle: "Low Impact / High Effort",
+    bottomRightItems: ["Legacy cleanup", "Over-engineering"],
+  },
+  "results-table": {
+    heading: "Model Performance",
+    headers: ["Model", "Accuracy", "F1 Score", "Latency"],
+    rows: [
+      "Baseline|88.2|85.1|120ms",
+      "Model A|92.5|*90.3|95ms",
+      "Model B|*94.1|89.7|*80ms",
+    ],
+    caption: "Table 1: Comparison on benchmark dataset. * indicates best value.",
+  },
 };
 
 describe("style example generator", () => {

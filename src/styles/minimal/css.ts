@@ -181,4 +181,104 @@ section.min-statement p {
   font-size: 1.1em;
   margin-top: 0.5rem;
 }
+
+/* --- Minimal Statistics --- */
+.min-stat-box {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.min-stat-box > div {
+  text-align: center;
+  min-width: 140px;
+  flex: 1 1 calc(33.333% - 1.5rem);
+  max-width: calc(50% - 1rem);
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid #111827;
+}
+.min-stat-number {
+  font-size: 2.4em;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.1;
+}
+.min-stat-label {
+  font-size: 0.85em;
+  color: #6b7280;
+  margin-top: 0.3rem;
+}
+
+/* --- Minimal Highlight Box --- */
+.min-highlight {
+  background: #111827;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  margin: 1.5rem auto;
+  max-width: 80%;
+}
+.min-highlight h3 {
+  margin-top: 0;
+  font-size: 1.3em;
+  color: #ffffff;
+}
+.min-highlight p {
+  margin-bottom: 0;
+  font-size: 1.05em;
+  color: rgba(255,255,255,0.85);
+}
+
+/* --- Minimal Pull Quote --- */
+section.min-pull-quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #ffffff;
+}
+.min-pull-quote-wrap {
+  max-width: 80%;
+  position: relative;
+  padding: 2rem 1rem;
+}
+.min-pull-quote-wrap::before {
+  content: '\\201C';
+  font-size: 6em;
+  color: rgba(17,24,39,0.08);
+  position: absolute;
+  top: -0.3em;
+  left: -0.1em;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+.min-pull-quote-text {
+  font-size: 1.6em;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.3;
+  font-style: italic;
+}
+.min-pull-quote-attr {
+  font-size: 1em;
+  color: #111827;
+  margin-top: 0.8rem;
+  font-weight: 600;
+}
+.min-pull-quote-ctx {
+  font-size: 0.85em;
+  color: #6b7280;
+  margin-top: 0.3rem;
+}
+
+/* --- Minimal Image Caption --- */
+.min-image-caption {
+  font-size: 0.8em;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 0.5rem;
+}
 `;

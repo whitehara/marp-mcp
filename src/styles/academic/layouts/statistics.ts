@@ -2,7 +2,7 @@ import type { SlideLayout } from "../../../themes/types.js";
 
 export const statisticsLayout: SlideLayout = {
   name: "statistics",
-  description: "Dark statistics display with large indigo numbers (use 'Number|Label' format)",
+  description: "Academic statistics display with maroon numbers (use 'Number|Label' format)",
   params: {
     heading: {
       type: "string",
@@ -12,7 +12,7 @@ export const statisticsLayout: SlideLayout = {
     },
     stats: {
       type: "array",
-      description: "Statistics in 'Number|Label' or 'Number|Label|Trend' format (e.g. '95%|Accuracy|+5% from Q1')",
+      description: "Statistics in 'Number|Label' format",
       required: true,
       maxItems: 5,
     },
@@ -31,19 +31,14 @@ export const statisticsLayout: SlideLayout = {
         if (parts.length >= 2) {
           const number = parts[0].trim();
           const label = parts[1].trim();
-          const trend = parts[2]?.trim();
-          let inner = `<div class="dk-stat-number">${number}</div>\n<div class="dk-stat-label">${label}</div>`;
-          if (trend) {
-            inner += `\n<div class="dk-stat-trend">${trend}</div>`;
-          }
-          return `<div>\n${inner}\n</div>`;
+          return `<div>\n<div class="acad-stat-number">${number}</div>\n<div class="acad-stat-label">${label}</div>\n</div>`;
         }
-        return `<div>\n<div class="dk-stat-number">${stat}</div>\n</div>`;
+        return `<div>\n<div class="acad-stat-number">${stat}</div>\n</div>`;
       })
       .join("\n");
-    let slide = `## ${params.heading}\n\n<div class="dk-stat-box">\n${statItems}\n</div>`;
+    let slide = `## ${params.heading}\n\n<div class="acad-stat-box">\n${statItems}\n</div>`;
     if (params.caption) {
-      slide += `\n\n<p>${params.caption}</p>`;
+      slide += `\n\n<p style="text-align:center;color:#475569;font-size:0.85em;">${params.caption}</p>`;
     }
     return slide;
   },

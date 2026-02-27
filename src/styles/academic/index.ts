@@ -12,6 +12,9 @@ import { figureCaptionLayout } from "./layouts/figure-caption.js";
 import { keyMessageLayout } from "./layouts/key-message.js";
 import { methodologyLayout } from "./layouts/methodology.js";
 import { comparisonLayout } from "./layouts/comparison.js";
+import { statisticsLayout } from "./layouts/statistics.js";
+import { sidebarLayout } from "./layouts/sidebar.js";
+import { resultsTableLayout } from "./layouts/results-table.js";
 
 export const academicStyle: StyleDefinition = {
   name: "academic",
@@ -32,5 +35,8 @@ export const academicStyle: StyleDefinition = {
     "key-message": keyMessageLayout,
     methodology: methodologyLayout,
     comparison: comparisonLayout,
+    statistics: statisticsLayout,
+    sidebar: sidebarLayout,
+    "results-table": resultsTableLayout,
   },
 };

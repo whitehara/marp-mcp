@@ -165,6 +165,11 @@ style: |
     color: #475569;
     margin-top: 0.3rem;
   }
+  .corp-stat-trend {
+    font-size: 0.75em;
+    color: #0ea5e9;
+    margin-top: 0.2rem;
+  }
   
   /* --- Corporate Process --- */
   .corp-process-steps {
@@ -285,6 +290,262 @@ style: |
     font-size: 1.05em;
     color: rgba(255,255,255,0.9);
   }
+  
+  /* --- Corporate Quote --- */
+  section.corp-quote {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  section.corp-quote blockquote {
+    border-left: 4px solid #1e3a8a;
+    padding: 1.5rem 2rem;
+    margin: 1rem auto;
+    max-width: 80%;
+    background: #f8fafc;
+    border-radius: 0 8px 8px 0;
+    font-size: 1.2em;
+    font-style: italic;
+    color: #334155;
+  }
+  section.corp-quote blockquote p:last-child {
+    font-style: normal;
+    font-size: 0.85em;
+    color: #64748b;
+    margin-top: 0.5rem;
+  }
+  
+  /* --- Corporate Image Center --- */
+  section.corp-img-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .corp-image-center-wrap {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  .corp-image-center-wrap img {
+    max-height: 400px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    object-fit: contain;
+  }
+  
+  /* --- Corporate Big Statement --- */
+  section.corp-statement {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  }
+  section.corp-statement h1 {
+    color: #ffffff;
+    font-size: 2.8em;
+    font-weight: 700;
+    line-height: 1.1;
+    max-width: 80%;
+  }
+  section.corp-statement p {
+    color: rgba(255,255,255,0.85);
+    font-size: 1.1em;
+    margin-top: 0.5rem;
+  }
+  
+  /* --- Corporate Sidebar --- */
+  .corp-sidebar-layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .corp-sidebar {
+    border-left: 3px solid #1e3a8a;
+    padding-left: 1rem;
+    font-size: 0.85em;
+  }
+  .corp-sidebar h4 {
+    margin-top: 0;
+    color: #1e3a8a;
+    font-size: 0.95em;
+    margin-bottom: 0.5rem;
+  }
+  .corp-sidebar ul {
+    padding-left: 1rem;
+    margin: 0;
+  }
+  .corp-sidebar li {
+    margin-bottom: 0.3rem;
+    color: #475569;
+  }
+  
+  /* --- Corporate Progress Bar --- */
+  .corp-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .corp-progress-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .corp-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+  }
+  .corp-progress-label {
+    font-weight: 600;
+    color: #1e293b;
+  }
+  .corp-progress-value {
+    color: #64748b;
+  }
+  .corp-progress-track {
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .corp-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1e3a8a, #0ea5e9);
+    border-radius: 6px;
+  }
+  
+  /* --- Corporate Chart Bar --- */
+  .corp-chart-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+  .corp-chart-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .corp-chart-bar-label {
+    width: 120px;
+    flex-shrink: 0;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #1e293b;
+    text-align: right;
+  }
+  .corp-chart-bar-track {
+    flex: 1;
+    height: 24px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .corp-chart-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+    border-radius: 4px;
+  }
+  .corp-chart-bar-value {
+    width: 50px;
+    flex-shrink: 0;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+  
+  /* --- Corporate Pull Quote --- */
+  section.corp-pull-quote {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .corp-pull-quote-wrap {
+    max-width: 80%;
+    position: relative;
+    padding: 2rem 1rem;
+  }
+  .corp-pull-quote-wrap::before {
+    content: '\201C';
+    font-size: 6em;
+    color: rgba(30,58,138,0.1);
+    position: absolute;
+    top: -0.3em;
+    left: -0.1em;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .corp-pull-quote-text {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+    font-style: italic;
+  }
+  .corp-pull-quote-attr {
+    font-size: 1em;
+    color: #1e3a8a;
+    margin-top: 0.8rem;
+    font-weight: 600;
+  }
+  .corp-pull-quote-ctx {
+    font-size: 0.85em;
+    color: #64748b;
+    margin-top: 0.3rem;
+  }
+  
+  /* --- Corporate Quadrant --- */
+  .corp-quadrant {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+  .corp-quad {
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .corp-quad h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95em;
+  }
+  .corp-quad ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .corp-quad li {
+    margin-bottom: 0.2rem;
+    font-size: 0.85em;
+    color: #334155;
+  }
+  .corp-quad-tl {
+    background: #dbeafe;
+    border: 1px solid #93c5fd;
+  }
+  .corp-quad-tl h4 { color: #1e3a8a; }
+  .corp-quad-tr {
+    background: #dcfce7;
+    border: 1px solid #86efac;
+  }
+  .corp-quad-tr h4 { color: #166534; }
+  .corp-quad-bl {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+  }
+  .corp-quad-bl h4 { color: #92400e; }
+  .corp-quad-br {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+  }
+  .corp-quad-br h4 { color: #991b1b; }
   
 ---
 
@@ -505,4 +766,168 @@ Higher is better.
 <div class="corp-highlight">
 <h3>Key Takeaway</h3>
 <p>Simplicity and clarity are the foundations of effective communication.</p>
+</div>
+
+---
+
+<!-- layout: quote -->
+<!-- _class: corp-quote -->
+
+> The best way to predict the future is to invent it.
+>
+> — Alan Kay
+
+A guiding principle for innovation.
+
+---
+
+<!-- layout: image-center -->
+<!-- _class: corp-img-center -->
+
+## Workflow Snapshot
+
+<div class="corp-image-center-wrap">
+
+![h:400](https://picsum.photos/1280/720)
+
+</div>
+
+Step-by-step overview.
+
+<!-- _footer: Figure 1 -->
+
+---
+
+<!-- layout: big-statement -->
+<!-- _class: corp-statement -->
+
+# Less is More
+
+The power of simplicity in design
+
+---
+
+<!-- layout: sidebar -->
+## Architecture Overview
+
+<div class="corp-sidebar-layout">
+<div class="corp-sidebar-main">
+
+The system uses a **microservices** architecture with event-driven communication.
+
+- API Gateway handles routing
+- Each service owns its data
+
+</div>
+<div class="corp-sidebar">
+<h4>Key Terms</h4>
+<ul>
+<li>API Gateway: Entry point</li>
+<li>Event Bus: Async messaging</li>
+<li>Service Mesh: Networking</li>
+</ul>
+</div>
+</div>
+
+---
+
+<!-- layout: progress-bar -->
+## Project Completion
+
+<div class="corp-progress-container">
+<div class="corp-progress-item">
+<div class="corp-progress-header"><span class="corp-progress-label">Frontend</span><span class="corp-progress-value">85/100</span></div>
+<div class="corp-progress-track"><div class="corp-progress-fill" style="width:85%"></div></div>
+</div>
+<div class="corp-progress-item">
+<div class="corp-progress-header"><span class="corp-progress-label">Backend</span><span class="corp-progress-value">70/100</span></div>
+<div class="corp-progress-track"><div class="corp-progress-fill" style="width:70%"></div></div>
+</div>
+<div class="corp-progress-item">
+<div class="corp-progress-header"><span class="corp-progress-label">Testing</span><span class="corp-progress-value">45/100</span></div>
+<div class="corp-progress-track"><div class="corp-progress-fill" style="width:45%"></div></div>
+</div>
+<div class="corp-progress-item">
+<div class="corp-progress-header"><span class="corp-progress-label">Documentation</span><span class="corp-progress-value">30/100</span></div>
+<div class="corp-progress-track"><div class="corp-progress-fill" style="width:30%"></div></div>
+</div>
+</div>
+
+<p>Updated weekly</p>
+
+---
+
+<!-- layout: chart-bar -->
+## Revenue by Region
+
+<div class="corp-chart-bar-container">
+<div class="corp-chart-bar-row">
+<span class="corp-chart-bar-label">North America</span>
+<div class="corp-chart-bar-track"><div class="corp-chart-bar-fill" style="width:100%"></div></div>
+<span class="corp-chart-bar-value">450</span>
+</div>
+<div class="corp-chart-bar-row">
+<span class="corp-chart-bar-label">Europe</span>
+<div class="corp-chart-bar-track"><div class="corp-chart-bar-fill" style="width:84%"></div></div>
+<span class="corp-chart-bar-value">380</span>
+</div>
+<div class="corp-chart-bar-row">
+<span class="corp-chart-bar-label">Asia Pacific</span>
+<div class="corp-chart-bar-track"><div class="corp-chart-bar-fill" style="width:64%"></div></div>
+<span class="corp-chart-bar-value">290</span>
+</div>
+<div class="corp-chart-bar-row">
+<span class="corp-chart-bar-label">Latin America</span>
+<div class="corp-chart-bar-track"><div class="corp-chart-bar-fill" style="width:27%"></div></div>
+<span class="corp-chart-bar-value">120</span>
+</div>
+</div>
+
+<p>In millions USD, FY2025</p>
+
+---
+
+<!-- layout: pull-quote -->
+<!-- _class: corp-pull-quote -->
+
+<div class="corp-pull-quote-wrap">
+<p class="corp-pull-quote-text">Design is not just what it looks like. Design is how it works.</p>
+<p class="corp-pull-quote-attr">— Steve Jobs</p>
+<p class="corp-pull-quote-ctx">From a 2003 New York Times interview</p>
+</div>
+
+---
+
+<!-- layout: quadrant -->
+## Priority Matrix
+
+<div class="corp-quadrant">
+<div class="corp-quad corp-quad-tl">
+<h4>High Impact / Low Effort</h4>
+<ul>
+<li>Quick wins</li>
+<li>Automation tasks</li>
+</ul>
+</div>
+<div class="corp-quad corp-quad-tr">
+<h4>High Impact / High Effort</h4>
+<ul>
+<li>Major features</li>
+<li>Platform migration</li>
+</ul>
+</div>
+<div class="corp-quad corp-quad-bl">
+<h4>Low Impact / Low Effort</h4>
+<ul>
+<li>Minor fixes</li>
+<li>UI tweaks</li>
+</ul>
+</div>
+<div class="corp-quad corp-quad-br">
+<h4>Low Impact / High Effort</h4>
+<ul>
+<li>Legacy cleanup</li>
+<li>Over-engineering</li>
+</ul>
+</div>
 </div>

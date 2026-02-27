@@ -95,6 +95,14 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `content` | Free-form markdown content slide |
 | `quote` | Quote slide with attribution |
 | `process` | Horizontal process flow with numbered steps and arrows |
+| `two-column` | Simple two-column layout with headings and lists |
+| `big-statement` | Large impactful statement slide with bold centered text |
+| `sidebar` | Main content with sidebar for supplementary info, definitions, or references |
+| `progress-bar` | Horizontal progress bars for metrics visualization (use 'Label|Value|MaxValue' format) |
+| `chart-bar` | Pure CSS horizontal bar chart for data visualization (use 'Label|Value' format) |
+| `timeline-horizontal` | Horizontal timeline with labeled events (use 'Label: Description' format) |
+| `pull-quote` | Decorative impact quote with large quotation marks, centered layout |
+| `bento-grid` | Bento Box modular grid for mixed content (use 'Size|Title|Content' format, Size: small/medium/large) |
 
 #### `minimal` — Clean, flat design with typography focus and minimal decoration
 
@@ -110,6 +118,9 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `quote` | Quote slide with left border accent, no extra decoration |
 | `two-column` | Two-column layout with a thin divider line |
 | `big-statement` | Large impactful statement slide with bold centered text |
+| `statistics` | Minimal statistics display with black numbers and thin underline (use 'Number|Label' format) |
+| `highlight-box` | Minimal message box for key takeaways |
+| `pull-quote` | Minimal decorative impact quote with large quotation marks |
 
 #### `dark` — Dark mode style with indigo and emerald accents, developer-friendly
 
@@ -125,6 +136,16 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `statistics` | Dark statistics display with large indigo numbers (use 'Number|Label' format) |
 | `image-right` | Text on left, image on right on dark background (60:40 split) |
 | `terminal` | Terminal-style command display on dark background (prefix lines with '$ ' for commands) |
+| `quote` | Dark quote slide with attribution |
+| `image-center` | Dark centered image slide |
+| `process` | Dark horizontal process flow with numbered steps and arrows |
+| `two-column` | Dark two-column layout with panels |
+| `big-statement` | Dark large impactful statement slide with bold centered text |
+| `highlight-box` | Dark gradient message box for key takeaways or announcements |
+| `progress-bar` | Dark horizontal progress bars for metrics visualization (use 'Label|Value|MaxValue' format) |
+| `chart-bar` | Dark CSS horizontal bar chart for data visualization (use 'Label|Value' format) |
+| `timeline-horizontal` | Dark horizontal timeline with labeled events (use 'Label: Description' format) |
+| `code-comparison` | Side-by-side code comparison (Before/After or two languages) |
 
 #### `corporate` — Professional business style with navy color scheme, structured layouts
 
@@ -142,6 +163,14 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `agenda` | Agenda slide with numbered items and optional duration (use 'Item name|Duration' format) |
 | `image-right` | Text on left, image on right, professional business style (60:40 split) |
 | `highlight-box` | Navy key message box for important announcements or takeaways |
+| `quote` | Corporate quote slide with attribution |
+| `image-center` | Corporate centered image slide |
+| `big-statement` | Corporate large impactful statement slide with bold centered text |
+| `sidebar` | Main content with sidebar for supplementary info or references |
+| `progress-bar` | Corporate horizontal progress bars for metrics visualization (use 'Label|Value|MaxValue' format) |
+| `chart-bar` | Corporate CSS horizontal bar chart for data visualization (use 'Label|Value' format) |
+| `pull-quote` | Corporate decorative impact quote with large quotation marks |
+| `quadrant` | 2x2 matrix for SWOT, risk analysis, or priority grids |
 
 #### `academic` — Academic conference presentation style with maroon color scheme, structured for scholarly talks
 
@@ -159,6 +188,9 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `key-message` | Conclusion or key takeaway box with maroon highlight |
 | `methodology` | Method step flow diagram (use 'Label|Description' format for steps) |
 | `comparison` | Side-by-side comparison (e.g., conventional vs proposed method) |
+| `statistics` | Academic statistics display with maroon numbers (use 'Number|Label' format) |
+| `sidebar` | Main content with sidebar for definitions, notes, or references |
+| `results-table` | Results table with best-value highlighting (prefix cell with * to highlight) |
 
 ## Example
 

@@ -17,9 +17,18 @@ export const titleLayout: SlideLayout = {
       required: false,
       maxLength: 500,
     },
+    backgroundImage: {
+      type: "string",
+      description: "Optional background image path or URL",
+      required: false,
+    },
   },
   template: (params) => {
-    let slide = `<!-- _class: title-hero -->\n\n# ${params.heading}`;
+    let slide = `<!-- _class: title-hero -->\n`;
+    if (params.backgroundImage) {
+      slide += `\n![bg brightness:0.4](${params.backgroundImage})\n`;
+    }
+    slide += `\n# ${params.heading}`;
     if (params.content) {
       slide += `\n\n${params.content}`;
     }

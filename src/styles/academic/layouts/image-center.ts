@@ -41,6 +41,12 @@ export const imageCenterLayout: SlideLayout = {
       required: false,
       maxLength: 75,
     },
+    caption: {
+      type: "string",
+      description: "Image caption displayed below",
+      required: false,
+      maxLength: 120,
+    },
     citations: {
       type: "string",
       description: "Citation (no line break)",
@@ -60,6 +66,9 @@ export const imageCenterLayout: SlideLayout = {
       slide += `![center ${getImageConstraint(params.imagePath as string, 480)}](${params.imagePath})`;
     }
 
+    if (params.caption) {
+      slide += `\n\n<p class="acad-image-caption">${params.caption}</p>`;
+    }
     if (params.description) {
       slide += `\n\n${params.description}`;
     }

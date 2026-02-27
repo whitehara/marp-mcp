@@ -183,6 +183,106 @@ style: |
     margin-top: 0.5rem;
   }
   
+  /* --- Minimal Statistics --- */
+  .min-stat-box {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .min-stat-box > div {
+    text-align: center;
+    min-width: 140px;
+    flex: 1 1 calc(33.333% - 1.5rem);
+    max-width: calc(50% - 1rem);
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid #111827;
+  }
+  .min-stat-number {
+    font-size: 2.4em;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.1;
+  }
+  .min-stat-label {
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-top: 0.3rem;
+  }
+  
+  /* --- Minimal Highlight Box --- */
+  .min-highlight {
+    background: #111827;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin: 1.5rem auto;
+    max-width: 80%;
+  }
+  .min-highlight h3 {
+    margin-top: 0;
+    font-size: 1.3em;
+    color: #ffffff;
+  }
+  .min-highlight p {
+    margin-bottom: 0;
+    font-size: 1.05em;
+    color: rgba(255,255,255,0.85);
+  }
+  
+  /* --- Minimal Pull Quote --- */
+  section.min-pull-quote {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #ffffff;
+  }
+  .min-pull-quote-wrap {
+    max-width: 80%;
+    position: relative;
+    padding: 2rem 1rem;
+  }
+  .min-pull-quote-wrap::before {
+    content: '\201C';
+    font-size: 6em;
+    color: rgba(17,24,39,0.08);
+    position: absolute;
+    top: -0.3em;
+    left: -0.1em;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .min-pull-quote-text {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.3;
+    font-style: italic;
+  }
+  .min-pull-quote-attr {
+    font-size: 1em;
+    color: #111827;
+    margin-top: 0.8rem;
+    font-weight: 600;
+  }
+  .min-pull-quote-ctx {
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-top: 0.3rem;
+  }
+  
+  /* --- Minimal Image Caption --- */
+  .min-image-caption {
+    font-size: 0.8em;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  
 ---
 
 <!-- layout: title -->
@@ -321,3 +421,48 @@ A guiding principle for innovation.
 # Less is More
 
 The power of simplicity in design
+
+---
+
+<!-- layout: statistics -->
+## Impact at a Glance
+
+<div class="min-stat-box">
+<div>
+<div class="min-stat-number">99.9%</div>
+<div class="min-stat-label">Uptime</div>
+</div>
+<div>
+<div class="min-stat-number">2.5M</div>
+<div class="min-stat-label">Users</div>
+</div>
+<div>
+<div class="min-stat-number">150ms</div>
+<div class="min-stat-label">Avg Latency</div>
+</div>
+<div>
+<div class="min-stat-number">4.8★</div>
+<div class="min-stat-label">Rating</div>
+</div>
+</div>
+
+<p style="text-align:center;color:#6b7280;font-size:0.9em;">Data as of Q4 2025</p>
+
+---
+
+<!-- layout: highlight-box -->
+<div class="min-highlight">
+<h3>Key Takeaway</h3>
+<p>Simplicity and clarity are the foundations of effective communication.</p>
+</div>
+
+---
+
+<!-- layout: pull-quote -->
+<!-- _class: min-pull-quote -->
+
+<div class="min-pull-quote-wrap">
+<p class="min-pull-quote-text">Design is not just what it looks like. Design is how it works.</p>
+<p class="min-pull-quote-attr">— Steve Jobs</p>
+<p class="min-pull-quote-ctx">From a 2003 New York Times interview</p>
+</div>

@@ -12,7 +12,7 @@ export const statisticsLayout: SlideLayout = {
     },
     stats: {
       type: "array",
-      description: "Statistics in 'Number|Label' format",
+      description: "Statistics in 'Number|Label' or 'Number|Label|Trend' format (e.g. '95%|Accuracy|+5% from Q1')",
       required: true,
       maxItems: 5,
     },
@@ -31,7 +31,12 @@ export const statisticsLayout: SlideLayout = {
         if (parts.length >= 2) {
           const number = parts[0].trim();
           const label = parts[1].trim();
-          return `<div>\n<div class="stat-number">${number}</div>\n<div class="stat-label">${label}</div>\n</div>`;
+          const trend = parts[2]?.trim();
+          let inner = `<div class="stat-number">${number}</div>\n<div class="stat-label">${label}</div>`;
+          if (trend) {
+            inner += `\n<div class="stat-trend">${trend}</div>`;
+          }
+          return `<div>\n${inner}\n</div>`;
         }
         return `<div>\n<div class="stat-number">${stat}</div>\n</div>`;
       })

@@ -22,6 +22,12 @@ export const imageCenterLayout: SlideLayout = {
       required: false,
       maxLength: 75,
     },
+    caption: {
+      type: "string",
+      description: "Image caption displayed below",
+      required: false,
+      maxLength: 120,
+    },
     citations: {
       type: "string",
       description: "Citation (no line break)",
@@ -36,6 +42,10 @@ export const imageCenterLayout: SlideLayout = {
     }
 
     slide += `<div class="min-image-center-wrap">\n\n![h:380](${params.imagePath})\n\n</div>`;
+
+    if (params.caption) {
+      slide += `\n\n<p class="min-image-caption">${params.caption}</p>`;
+    }
 
     if (params.description) {
       slide += `\n\n${params.description}`;

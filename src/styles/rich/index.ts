@@ -17,6 +17,14 @@ import { imageComparisonLayout } from "./layouts/image-comparison.js";
 import { contentLayout } from "./layouts/content.js";
 import { quoteLayout } from "./layouts/quote.js";
 import { processLayout } from "./layouts/process.js";
+import { twoColumnLayout } from "./layouts/two-column.js";
+import { bigStatementLayout } from "./layouts/big-statement.js";
+import { sidebarLayout } from "./layouts/sidebar.js";
+import { progressBarLayout } from "./layouts/progress-bar.js";
+import { chartBarLayout } from "./layouts/chart-bar.js";
+import { timelineHorizontalLayout } from "./layouts/timeline-horizontal.js";
+import { pullQuoteLayout } from "./layouts/pull-quote.js";
+import { bentoGridLayout } from "./layouts/bento-grid.js";
 
 export const richStyle: StyleDefinition = {
   name: "rich",
@@ -41,5 +49,13 @@ export const richStyle: StyleDefinition = {
     content: contentLayout,
     quote: quoteLayout,
     process: processLayout,
+    "two-column": twoColumnLayout,
+    "big-statement": bigStatementLayout,
+    sidebar: sidebarLayout,
+    "progress-bar": progressBarLayout,
+    "chart-bar": chartBarLayout,
+    "timeline-horizontal": timelineHorizontalLayout,
+    "pull-quote": pullQuoteLayout,
+    "bento-grid": bentoGridLayout,
   },
 };

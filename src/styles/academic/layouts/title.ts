@@ -39,9 +39,18 @@ export const titleLayout: SlideLayout = {
       required: false,
       maxLength: 100,
     },
+    backgroundImage: {
+      type: "string",
+      description: "Optional background image path or URL",
+      required: false,
+    },
   },
   template: (params) => {
-    let slide = `<!-- _class: acad-title -->\n\n# ${params.heading}`;
+    let slide = `<!-- _class: acad-title -->\n`;
+    if (params.backgroundImage) {
+      slide += `\n![bg brightness:0.4 opacity:0.3](${params.backgroundImage})\n`;
+    }
+    slide += `\n# ${params.heading}`;
     if (params.subtitle) {
       slide += `\n\n${params.subtitle}`;
     }

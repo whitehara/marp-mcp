@@ -10,6 +10,9 @@ import { imageCenterLayout } from "./layouts/image-center.js";
 import { quoteLayout } from "./layouts/quote.js";
 import { twoColumnLayout } from "./layouts/two-column.js";
 import { bigStatementLayout } from "./layouts/big-statement.js";
+import { statisticsLayout } from "./layouts/statistics.js";
+import { highlightBoxLayout } from "./layouts/highlight-box.js";
+import { pullQuoteLayout } from "./layouts/pull-quote.js";
 
 export const minimalStyle: StyleDefinition = {
   name: "minimal",
@@ -27,5 +30,8 @@ export const minimalStyle: StyleDefinition = {
     quote: quoteLayout,
     "two-column": twoColumnLayout,
     "big-statement": bigStatementLayout,
+    statistics: statisticsLayout,
+    "highlight-box": highlightBoxLayout,
+    "pull-quote": pullQuoteLayout,
   },
 };

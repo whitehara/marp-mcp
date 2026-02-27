@@ -12,6 +12,14 @@ import { processLayout } from "./layouts/process.js";
 import { agendaLayout } from "./layouts/agenda.js";
 import { imageRightLayout } from "./layouts/image-right.js";
 import { highlightBoxLayout } from "./layouts/highlight-box.js";
+import { quoteLayout } from "./layouts/quote.js";
+import { imageCenterLayout } from "./layouts/image-center.js";
+import { bigStatementLayout } from "./layouts/big-statement.js";
+import { sidebarLayout } from "./layouts/sidebar.js";
+import { progressBarLayout } from "./layouts/progress-bar.js";
+import { chartBarLayout } from "./layouts/chart-bar.js";
+import { pullQuoteLayout } from "./layouts/pull-quote.js";
+import { quadrantLayout } from "./layouts/quadrant.js";
 
 export const corporateStyle: StyleDefinition = {
   name: "corporate",
@@ -31,5 +39,13 @@ export const corporateStyle: StyleDefinition = {
     agenda: agendaLayout,
     "image-right": imageRightLayout,
     "highlight-box": highlightBoxLayout,
+    quote: quoteLayout,
+    "image-center": imageCenterLayout,
+    "big-statement": bigStatementLayout,
+    sidebar: sidebarLayout,
+    "progress-bar": progressBarLayout,
+    "chart-bar": chartBarLayout,
+    "pull-quote": pullQuoteLayout,
+    quadrant: quadrantLayout,
   },
 };

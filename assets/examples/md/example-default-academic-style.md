@@ -312,6 +312,110 @@ style: |
     color: #64748b;
   }
   
+  /* --- Academic Statistics --- */
+  .acad-stat-box {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .acad-stat-box > div {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-top: 3px solid #800000;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    min-width: 130px;
+    flex: 1 1 calc(33.333% - 1.5rem);
+    max-width: calc(50% - 1rem);
+  }
+  .acad-stat-number {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #800000;
+    line-height: 1.1;
+  }
+  .acad-stat-label {
+    font-size: 0.8em;
+    color: #475569;
+    margin-top: 0.3rem;
+  }
+  
+  /* --- Academic Sidebar --- */
+  .acad-sidebar-layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1.5rem;
+    margin-top: 0.8rem;
+  }
+  .acad-sidebar {
+    border-left: 3px solid #800000;
+    padding-left: 1rem;
+    font-size: 0.8em;
+  }
+  .acad-sidebar h4 {
+    margin-top: 0;
+    color: #800000;
+    font-size: 0.95em;
+    margin-bottom: 0.5rem;
+  }
+  .acad-sidebar ul {
+    padding-left: 1rem;
+    margin: 0;
+  }
+  .acad-sidebar li {
+    margin-bottom: 0.25rem;
+    color: #475569;
+  }
+  
+  /* --- Academic Results Table --- */
+  .acad-results-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.5rem auto;
+    font-size: 0.85em;
+  }
+  .acad-results-table thead th {
+    background: #800000;
+    color: #ffffff;
+    padding: 0.6rem 0.8rem;
+    font-weight: 600;
+    border: 1px solid #800000;
+    text-align: left;
+  }
+  .acad-results-table tbody td {
+    padding: 0.5rem 0.8rem;
+    color: #1e293b;
+    border: 1px solid #dee2e6;
+    text-align: left;
+  }
+  .acad-results-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  .acad-highlight-cell {
+    font-weight: 700;
+    color: #800000;
+  }
+  .acad-table-caption {
+    font-size: 0.8em;
+    color: #475569;
+    text-align: center;
+    margin-bottom: 0.3rem;
+  }
+  .acad-table-caption strong {
+    color: #800000;
+  }
+  
+  /* --- Academic Image Caption --- */
+  .acad-image-caption {
+    font-size: 0.8em;
+    color: #475569;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  
 ---
 
 <!-- layout: title -->
@@ -511,3 +615,69 @@ Step-by-step overview.
 </div>
 
 > Based on benchmark results from Dataset X
+
+---
+
+<!-- layout: statistics -->
+## Impact at a Glance
+
+<div class="acad-stat-box">
+<div>
+<div class="acad-stat-number">99.9%</div>
+<div class="acad-stat-label">Uptime</div>
+</div>
+<div>
+<div class="acad-stat-number">2.5M</div>
+<div class="acad-stat-label">Users</div>
+</div>
+<div>
+<div class="acad-stat-number">150ms</div>
+<div class="acad-stat-label">Avg Latency</div>
+</div>
+<div>
+<div class="acad-stat-number">4.8★</div>
+<div class="acad-stat-label">Rating</div>
+</div>
+</div>
+
+<p style="text-align:center;color:#475569;font-size:0.85em;">Data as of Q4 2025</p>
+
+---
+
+<!-- layout: sidebar -->
+## Architecture Overview
+
+<div class="acad-sidebar-layout">
+<div class="acad-sidebar-main">
+
+The system uses a **microservices** architecture with event-driven communication.
+
+- API Gateway handles routing
+- Each service owns its data
+
+</div>
+<div class="acad-sidebar">
+<h4>Key Terms</h4>
+<ul>
+<li>API Gateway: Entry point</li>
+<li>Event Bus: Async messaging</li>
+<li>Service Mesh: Networking</li>
+</ul>
+</div>
+</div>
+
+---
+
+<!-- layout: results-table -->
+## Model Performance
+
+<p class="acad-table-caption">Table 1: Comparison on benchmark dataset. * indicates best value.</p>
+
+<table class="acad-results-table">
+<thead><tr><th>Model</th><th>Accuracy</th><th>F1 Score</th><th>Latency</th></tr></thead>
+<tbody>
+<tr><td>Baseline</td><td>88.2</td><td>85.1</td><td>120ms</td></tr>
+<tr><td>Model A</td><td>92.5</td><td class="acad-highlight-cell">90.3</td><td>95ms</td></tr>
+<tr><td>Model B</td><td class="acad-highlight-cell">94.1</td><td>89.7</td><td class="acad-highlight-cell">80ms</td></tr>
+</tbody>
+</table>
