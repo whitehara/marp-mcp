@@ -8,6 +8,7 @@ import { listLayouts } from "../tools/list_layouts.js";
 import { generateSlideIds } from "../tools/generate_slide_ids.js";
 import { manageSlide } from "../tools/manage_slide.js";
 import { setFrontmatter } from "../tools/set_frontmatter.js";
+import { readSlide } from "../tools/read_slide.js";
 
 /**
  * Registers all CLI subcommands on the given commander program.
@@ -82,6 +83,20 @@ export function registerCommands(program: Command): void {
         filePath: resolveFilePath(file),
         header: opts.header,
         paginate: opts.paginate,
+      });
+      outputResult(result);
+    });
+
+  program
+    .command("read <file>")
+    .description("Read slide content from a Marp file")
+    .option("--slide-id <id>", "Read a specific slide by ID")
+    .action(async (file: string, opts: {
+      slideId?: string;
+    }) => {
+      const result = await readSlide({
+        filePath: resolveFilePath(file),
+        slideId: opts.slideId,
       });
       outputResult(result);
     });

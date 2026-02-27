@@ -27,6 +27,10 @@ import {
   setFrontmatterSchema,
   setFrontmatter,
 } from "./tools/set_frontmatter.js";
+import {
+  readSlideSchema,
+  readSlide,
+} from "./tools/read_slide.js";
 
 // Load version from package.json
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -75,6 +79,13 @@ export async function startMcpServer(): Promise<void> {
     setFrontmatter
   );
 
+  server.tool(
+    "read_slide",
+    "Read slide content from a Marp file - returns a specific slide by ID or all slides with their IDs and positions",
+    readSlideSchema.shape,
+    readSlide
+  );
+
   const transport = new StdioServerTransport();
   await server.connect(transport);
 
@@ -82,6 +93,6 @@ export async function startMcpServer(): Promise<void> {
     theme: getActiveTheme().name,
     style: getActiveStyle().name,
     version: packageJson.version,
-    tools: ["list_layouts", "generate_slide_ids", "manage_slide", "set_frontmatter"],
+    tools: ["list_layouts", "generate_slide_ids", "manage_slide", "set_frontmatter", "read_slide"],
   });
 }

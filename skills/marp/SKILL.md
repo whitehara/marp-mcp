@@ -94,6 +94,18 @@ Options:
 - `--slide-id <id>` — Target slide ID (required for `after`, `before`, `replace`, `delete`)
 - `--note <text>` — Speaker notes
 
+#### `read <file>`
+
+Read slide content from a Marp file.
+
+```bash
+marp-mcp read slides.md
+marp-mcp read slides.md --slide-id <id>
+```
+
+Options:
+- `--slide-id <id>` — Read a specific slide by ID (omit to list all slides)
+
 #### `generate-ids <file>`
 
 Generate slide IDs for every slide in a Marp markdown file.

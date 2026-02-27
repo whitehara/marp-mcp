@@ -9,6 +9,7 @@ import matter from "gray-matter";
 import { getActiveTheme } from "../themes/index.js";
 import { getActiveStyle } from "../styles/index.js";
 import { validateFilePath } from "../utils/path-validator.js";
+import { createErrorResponse, createSuccessResponse } from "../utils/response.js";
 import type { ToolResponse } from "../types/common.js";
 
 import { MAX_FILE_SIZE } from "../utils/constants.js";
@@ -44,40 +45,23 @@ export async function setFrontmatter({
   // Validate file path
   const pathError = validateFilePath(filePath);
   if (pathError) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: ${pathError}`,
-        },
-      ],
-    };
+    return createErrorResponse(pathError);
   }
 
   let existingContent: string;
   try {
     existingContent = await fs.readFile(filePath, "utf-8");
   } catch (error) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 
   // Check file size
   if (existingContent.length > MAX_FILE_SIZE) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`
+    );
   }
 
   // Parse existing frontmatter
@@ -85,14 +69,9 @@ export async function setFrontmatter({
   try {
     parsed = matter(existingContent);
   } catch (error) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: Invalid YAML frontmatter: ${error instanceof Error ? error.message : String(error)}`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `Invalid YAML frontmatter: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
   const data = parsed.data as Record<string, any>;
 
@@ -129,55 +108,31 @@ export async function setFrontmatter({
 
   // Check if content actually changed
   if (updatedContent === existingContent) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(
-            {
-              success: true,
-              message: "Frontmatter already satisfied requirements",
-              file: filePath,
-              style: activeStyleDef.name,
-              frontmatter: {
-                marp: true,
-                theme: activeTheme,
-                header: headerValue,
-                paginate: paginateValue,
-              },
-            },
-            null,
-            2,
-          ),
-        },
-      ],
-    };
+    return createSuccessResponse({
+      message: "Frontmatter already satisfied requirements",
+      file: filePath,
+      style: activeStyleDef.name,
+      frontmatter: {
+        marp: true,
+        theme: activeTheme,
+        header: headerValue,
+        paginate: paginateValue,
+      },
+    });
   }
 
   // Write updated content
   await fs.writeFile(filePath, updatedContent, "utf-8");
 
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(
-          {
-            success: true,
-            message: "Updated frontmatter successfully",
-            file: filePath,
-            style: activeStyleDef.name,
-            frontmatter: {
-              marp: true,
-              theme: activeTheme,
-              header: headerValue,
-              paginate: paginateValue,
-            },
-          },
-          null,
-          2,
-        ),
-      },
-    ],
-  };
+  return createSuccessResponse({
+    message: "Updated frontmatter successfully",
+    file: filePath,
+    style: activeStyleDef.name,
+    frontmatter: {
+      marp: true,
+      theme: activeTheme,
+      header: headerValue,
+      paginate: paginateValue,
+    },
+  });
 }

@@ -52,6 +52,7 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 | `generate_slide_ids` | Generate slide IDs for every slide |
 | `manage_slide` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
 | `set_frontmatter` | Ensure `marp`, `theme`, `header`, and `paginate` frontmatter fields are present |
+| `read_slide` | Read slide content by ID or list all slides with their IDs and positions |
 
 ### Style selection
 

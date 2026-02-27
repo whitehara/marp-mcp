@@ -10,6 +10,7 @@ import { ensureAllSlideIds } from "../utils/slide-id.js";
 import { validateFilePath } from "../utils/path-validator.js";
 import { parseFrontmatter, splitSlides, joinSlides } from "../utils/frontmatter.js";
 import { MAX_FILE_SIZE } from "../utils/constants.js";
+import { createErrorResponse, createSuccessResponse } from "../utils/response.js";
 import type { ToolResponse } from "../types/common.js";
 
 export const generateSlideIdsSchema = z.object({
@@ -29,14 +30,7 @@ export async function generateSlideIds({
   // Validate file path
   const pathError = validateFilePath(filePath);
   if (pathError) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: ${pathError}`,
-        },
-      ],
-    };
+    return createErrorResponse(pathError);
   }
 
   try {
@@ -45,26 +39,16 @@ export async function generateSlideIds({
     try {
       existingContent = await fs.readFile(filePath, "utf-8");
     } catch (error) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
-          },
-        ],
-      };
+      return createErrorResponse(
+        `Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     // Check file size
     if (existingContent.length > MAX_FILE_SIZE) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
-          },
-        ],
-      };
+      return createErrorResponse(
+        `File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`
+      );
     }
 
     const { frontmatter, body } = parseFrontmatter(existingContent);
@@ -76,23 +60,11 @@ export async function generateSlideIds({
     // Check if any changes were made
     const slidesChanged = slides.some((slide, index) => slide !== updatedSlides[index]);
     if (!slidesChanged) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
-              {
-                success: true,
-                message: "All slides already have IDs",
-                totalSlides: slides.length,
-                file: filePath,
-              },
-              null,
-              2
-            ),
-          },
-        ],
-      };
+      return createSuccessResponse({
+        message: "All slides already have IDs",
+        totalSlides: slides.length,
+        file: filePath,
+      });
     }
 
     // Write updated content
@@ -105,32 +77,15 @@ export async function generateSlideIds({
       slideId: id,
     }));
 
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(
-            {
-              success: true,
-              message: "Generated slide IDs successfully",
-              totalSlides: updatedSlides.length,
-              idsGenerated: idSummary.length,
-              file: filePath,
-            },
-            null,
-            2
-          ),
-        },
-      ],
-    };
+    return createSuccessResponse({
+      message: "Generated slide IDs successfully",
+      totalSlides: updatedSlides.length,
+      idsGenerated: idSummary.length,
+      file: filePath,
+    });
   } catch (error) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error generating slide IDs: ${error instanceof Error ? error.message : String(error)}`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `Error generating slide IDs: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }

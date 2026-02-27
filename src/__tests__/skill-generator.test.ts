@@ -24,16 +24,12 @@ function buildSkillFile(): string {
   const themeNames = getAvailableThemeNames();
   const themeList = themeNames.map((n) => `\`${n}\``).join(", ");
 
-  // --- Dynamic: style list with compatible themes ---
+  // --- Dynamic: style list ---
   const styleRows = getAvailableStyleNames()
     .filter((n) => n !== "default")
     .map((name) => {
       const style = getStyle(name)!;
-      const compat =
-        style.compatibleThemes.length > 0
-          ? style.compatibleThemes.map((t) => `\`${t}\``).join(", ")
-          : "all themes";
-      return `| \`${name}\` | ${style.description} | ${compat} |`;
+      return `| \`${name}\` | ${style.description} |`;
     })
     .join("\n");
 
@@ -63,14 +59,17 @@ npx @masaki39/marp-mcp@latest --version
 
 ## Available Themes and Styles
 
+- **Theme** (\`-t\`): Base CSS that defines the slide foundation. Each theme is a standalone CSS file in the repository.
+- **Style** (\`-s\`): Additional CSS layouts and components layered on top of a theme. Styles are designed for the \`default\` theme, so \`-s\` implies \`-t default\` unless explicitly overridden.
+
 ### Themes
 
 ${themeList}
 
 ### Styles
 
-| Style | Description | Compatible Themes |
-|-------|-------------|-------------------|
+| Style | Description |
+|-------|-------------|
 ${styleRows}
 
 ## CLI Command Reference
@@ -100,7 +99,7 @@ Add or update Marp frontmatter fields.
 
 \`\`\`bash
 marp-mcp set-frontmatter slides.md --header "My Presentation" --paginate
-marp-mcp -t academic set-frontmatter slides.md --header "Research Talk"
+marp-mcp -s academic set-frontmatter slides.md --header "Research Talk"
 \`\`\`
 
 Options:
@@ -126,6 +125,18 @@ Options:
 - \`--slide-id <id>\` — Target slide ID (required for \`after\`, \`before\`, \`replace\`, \`delete\`)
 - \`--note <text>\` — Speaker notes
 
+#### \`read <file>\`
+
+Read slide content from a Marp file.
+
+\`\`\`bash
+marp-mcp read slides.md
+marp-mcp read slides.md --slide-id <id>
+\`\`\`
+
+Options:
+- \`--slide-id <id>\` — Read a specific slide by ID (omit to list all slides)
+
 #### \`generate-ids <file>\`
 
 Generate slide IDs for every slide in a Marp markdown file.
@@ -140,7 +151,7 @@ Follow this order when creating a new presentation:
 
 1. **Set frontmatter** — Initialize the file with theme, header, and pagination
    \`\`\`bash
-   marp-mcp -t default -s rich set-frontmatter slides.md --header "Title" --paginate
+   marp-mcp -s rich set-frontmatter slides.md --header "Title" --paginate
    \`\`\`
 
 2. **Manage slides** — Add slides one by one using layouts

@@ -10,6 +10,7 @@ import { ensureSlideId, findSlideIndexById, generateSlideId } from "../utils/sli
 import { validateFilePath } from "../utils/path-validator.js";
 import { parseFrontmatter, splitSlides, joinSlides } from "../utils/frontmatter.js";
 import { MAX_FILE_SIZE } from "../utils/constants.js";
+import { createErrorResponse, createSuccessResponse } from "../utils/response.js";
 import type { ToolResponse } from "../types/common.js";
 
 export const manageSlideSchema = z.object({
@@ -30,6 +31,43 @@ export const manageSlideSchema = z.object({
  */
 function ensureAllSlidesHaveIds(slides: string[]): string[] {
   return slides.map(slide => ensureSlideId(slide).content);
+}
+
+/**
+ * Reads a Marp file and returns parsed frontmatter and slides with IDs.
+ * Handles file read errors and size validation.
+ */
+async function readAndParseSlides(filePath: string): Promise<
+  | { ok: true; frontmatter: string; slides: string[] }
+  | { ok: false; response: ToolResponse }
+> {
+  let existingContent: string;
+
+  try {
+    existingContent = await fs.readFile(filePath, "utf-8");
+  } catch (error) {
+    return {
+      ok: false,
+      response: createErrorResponse(
+        `Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`
+      ),
+    };
+  }
+
+  if (existingContent.length > MAX_FILE_SIZE) {
+    return {
+      ok: false,
+      response: createErrorResponse(
+        `File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`
+      ),
+    };
+  }
+
+  const { frontmatter, body } = parseFrontmatter(existingContent);
+  let slides = splitSlides(body);
+  slides = ensureAllSlidesHaveIds(slides);
+
+  return { ok: true, frontmatter, slides };
 }
 
 /**
@@ -76,75 +114,24 @@ export async function manageSlide({
   // Validate file path
   const pathError = validateFilePath(filePath);
   if (pathError) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: ${pathError}`,
-        },
-      ],
-    };
+    return createErrorResponse(pathError);
   }
 
   // Handle delete mode separately
   if (mode === "delete") {
     if (!slideId) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error: slideId is required for delete mode`,
-          },
-        ],
-      };
+      return createErrorResponse("slideId is required for delete mode");
     }
 
     try {
-      let existingContent: string;
+      const result = await readAndParseSlides(filePath);
+      if (!result.ok) return result.response;
 
-      try {
-        existingContent = await fs.readFile(filePath, "utf-8");
-      } catch (error) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
-            },
-          ],
-        };
-      }
-
-      // Check file size
-      if (existingContent.length > MAX_FILE_SIZE) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
-            },
-          ],
-        };
-      }
-
-      // Parse frontmatter and body
-      const { frontmatter, body } = parseFrontmatter(existingContent);
-      let slides = splitSlides(body);
-
-      // Ensure all slides have IDs
-      slides = ensureAllSlidesHaveIds(slides);
-
+      const { frontmatter, slides } = result;
       const slideIndex = findSlideIndexById(slides, slideId);
 
       if (slideIndex === -1) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: Slide with ID "${slideId}" not found`,
-            },
-          ],
-        };
+        return createErrorResponse(`Slide with ID "${slideId}" not found`);
       }
 
       // Remove the slide
@@ -152,58 +139,29 @@ export async function manageSlide({
       const newContent = joinSlides(frontmatter, slides);
       await fs.writeFile(filePath, newContent, "utf-8");
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
-              {
-                success: true,
-                operation: `Deleted slide with ID ${slideId}`,
-                totalSlides: slides.length,
-                file: filePath,
-              },
-              null,
-              2
-            ),
-          },
-        ],
-      };
+      return createSuccessResponse({
+        operation: `Deleted slide with ID ${slideId}`,
+        totalSlides: slides.length,
+        file: filePath,
+      });
     } catch (error) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error deleting slide: ${error instanceof Error ? error.message : String(error)}`,
-          },
-        ],
-      };
+      return createErrorResponse(
+        `Error deleting slide: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
   // For insert/replace modes, layoutType and params are required
   if (!layoutType) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: layoutType is required for insert/replace modes`,
-        },
-      ],
-    };
+    return createErrorResponse("layoutType is required for insert/replace modes");
   }
 
   const layout = getLayout(layoutType);
 
   if (!layout) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: Unknown layout type "${layoutType}". Available layouts: ${getLayoutNames().join(", ")}`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `Unknown layout type "${layoutType}". Available layouts: ${getLayoutNames().join(", ")}`
+    );
   }
 
   // Validate required parameters
@@ -215,54 +173,40 @@ export async function manageSlide({
   }
 
   if (missingParams.length > 0) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: Missing required parameters: ${missingParams.join(", ")}`,
-        },
-      ],
-    };
+    return createErrorResponse(`Missing required parameters: ${missingParams.join(", ")}`);
   }
 
-  // Validate parameter types and lengths
+  // Validate parameter types and constraints
   if (params) {
     for (const [paramName, value] of Object.entries(params)) {
       const paramDef = layout.params[paramName];
       if (!paramDef) continue;
 
       if (paramDef.type === "string" && typeof value !== "string") {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: Parameter "${paramName}" must be a string`,
-            },
-          ],
-        };
+        return createErrorResponse(`Parameter "${paramName}" must be a string`);
       }
 
       if (paramDef.type === "array" && !Array.isArray(value)) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: Parameter "${paramName}" must be an array`,
-            },
-          ],
-        };
+        return createErrorResponse(`Parameter "${paramName}" must be an array`);
+      }
+
+      if (paramDef.type === "number" && typeof value !== "number") {
+        return createErrorResponse(`Parameter "${paramName}" must be a number`);
       }
 
       if (paramDef.type === "string" && paramDef.maxLength && typeof value === "string") {
         if (value.length > paramDef.maxLength) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: Parameter "${paramName}" exceeds maximum length of ${paramDef.maxLength} characters (current: ${value.length})`,
-              },
-            ],
-          };
+          return createErrorResponse(
+            `Parameter "${paramName}" exceeds maximum length of ${paramDef.maxLength} characters (current: ${value.length})`
+          );
+        }
+      }
+
+      if (paramDef.type === "array" && paramDef.maxItems && Array.isArray(value)) {
+        if (value.length > paramDef.maxItems) {
+          return createErrorResponse(
+            `Parameter "${paramName}" exceeds maximum items of ${paramDef.maxItems} (current: ${value.length})`
+          );
         }
       }
     }
@@ -270,55 +214,19 @@ export async function manageSlide({
 
   // Validate slideId for operations that require it
   if ((position === "after" || position === "before" || mode === "replace") && !slideId) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error: slideId is required for position "${position}" or mode "${mode}"`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `slideId is required for position "${position}" or mode "${mode}"`
+    );
   }
 
   // Generate slide content
   try {
     const slideContent = appendSlideNote(layout.template(params || {}), note);
 
-    // Read existing file
-    let existingContent: string;
-    try {
-      existingContent = await fs.readFile(filePath, "utf-8");
-    } catch (error) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error: Could not read file at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
-          },
-        ],
-      };
-    }
+    const result = await readAndParseSlides(filePath);
+    if (!result.ok) return result.response;
 
-    // Check file size
-    if (existingContent.length > MAX_FILE_SIZE) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error: File too large (${existingContent.length} bytes, max ${MAX_FILE_SIZE} bytes)`,
-          },
-        ],
-      };
-    }
-
-    // Parse frontmatter and body
-    const { frontmatter, body } = parseFrontmatter(existingContent);
-    const trimmedBody = body.trim();
-
-    let slides = trimmedBody ? trimmedBody.split(/\n---\n/) : [];
-
-    // Ensure all slides have IDs
-    slides = ensureAllSlidesHaveIds(slides);
+    const { frontmatter, slides } = result;
 
     let newContent: string;
     let operation: string;
@@ -326,27 +234,13 @@ export async function manageSlide({
 
     if (mode === "replace") {
       if (!slideId) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: slideId is required for replace mode`,
-            },
-          ],
-        };
+        return createErrorResponse("slideId is required for replace mode");
       }
 
       const slideIndex = findSlideIndexById(slides, slideId);
 
       if (slideIndex === -1) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: Slide with ID "${slideId}" not found`,
-            },
-          ],
-        };
+        return createErrorResponse(`Slide with ID "${slideId}" not found`);
       }
 
       // Keep the same ID for replaced slide
@@ -368,51 +262,23 @@ export async function manageSlide({
         insertIndex = slides.length;
       } else if (position === "after") {
         if (!slideId) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: slideId is required for position "after"`,
-              },
-            ],
-          };
+          return createErrorResponse('slideId is required for position "after"');
         }
 
         const refIndex = findSlideIndexById(slides, slideId);
         if (refIndex === -1) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: Slide with ID "${slideId}" not found`,
-              },
-            ],
-          };
+          return createErrorResponse(`Slide with ID "${slideId}" not found`);
         }
 
         insertIndex = refIndex + 1;
       } else if (position === "before") {
         if (!slideId) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: slideId is required for position "before"`,
-              },
-            ],
-          };
+          return createErrorResponse('slideId is required for position "before"');
         }
 
         const refIndex = findSlideIndexById(slides, slideId);
         if (refIndex === -1) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: Slide with ID "${slideId}" not found`,
-              },
-            ],
-          };
+          return createErrorResponse(`Slide with ID "${slideId}" not found`);
         }
 
         insertIndex = refIndex;
@@ -429,33 +295,16 @@ export async function manageSlide({
     // Write updated content
     await fs.writeFile(filePath, newContent, "utf-8");
 
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(
-            {
-              success: true,
-              operation,
-              slideId: resultSlideId,
-              layoutType,
-              totalSlides: slides.length,
-              file: filePath,
-            },
-            null,
-            2
-          ),
-        },
-      ],
-    };
+    return createSuccessResponse({
+      operation,
+      slideId: resultSlideId,
+      layoutType,
+      totalSlides: slides.length,
+      file: filePath,
+    });
   } catch (error) {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error managing slide: ${error instanceof Error ? error.message : String(error)}`,
-        },
-      ],
-    };
+    return createErrorResponse(
+      `Error managing slide: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }
