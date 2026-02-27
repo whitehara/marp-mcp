@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "marp",
-      "source": ".",
+      "source": "./",
       "description": "Create and edit Marp presentations using marp-mcp CLI",
       "author": { "name": "masaki39" }
     }
