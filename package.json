@@ -13,6 +13,7 @@
     "prepublishOnly": "npm run build",
     "prepare": "npm run build",
     "readme:generate": "npm test -- --testPathPattern=readme-generator",
+    "skills:generate": "npm test -- --testPathPattern=skill-generator",
     "examples:generate": "npm test -- --testPathPattern=example-generator",
     "examples:html": "npm run examples:html:styles && npm run examples:html:themes",
     "examples:html:styles": "marp --html --input-dir assets/examples/md --output assets/examples/html --no-config-file",
@@ -21,6 +22,7 @@
   },
   "files": [
     "build",
+    ".claude/skills",
     "README.md",
     "LICENSE"
   ],

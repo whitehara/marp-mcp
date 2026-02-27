@@ -20,8 +20,9 @@ Thumbs.db
 *.swo
 *~
 
-# Claude Code settings
-.claude/
+# Claude Code settings (keep skills tracked)
+.claude/*
+!.claude/skills/
 .mcp.json
 
 # npm

@@ -2,6 +2,9 @@
 
 ![NPM Downloads](https://img.shields.io/npm/dt/%40masaki39%2Fmarp-mcp)
 
+> [!TIP]
+> This package includes a [Claude Code Skill](./.claude/skills/marp/SKILL.md). After installing, Claude Code can create Marp presentations via the `/marp` command using the built-in CLI — no MCP server configuration required!
+
 An MCP server for creating and editing Marp presentations with AI assistance.
 This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [Academic](./assets/themes/academic.css) in this repository.
 
