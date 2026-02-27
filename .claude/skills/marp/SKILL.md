@@ -24,19 +24,22 @@ npx @masaki39/marp-mcp@latest --version
 
 ## Available Themes and Styles
 
+- **Theme** (`-t`): Base CSS that defines the slide foundation. Each theme is a standalone CSS file in the repository.
+- **Style** (`-s`): Additional CSS layouts and components layered on top of a theme. Styles are designed for the `default` theme, so `-s` implies `-t default` unless explicitly overridden.
+
 ### Themes
 
 `academic`, `default`, `gaia`, `uncover`
 
 ### Styles
 
-| Style | Description | Compatible Themes |
-|-------|-------------|-------------------|
-| `rich` | Rich visual style with cards, timelines, grids, gradients, and more | all themes |
-| `minimal` | Clean, flat design with typography focus and minimal decoration | all themes |
-| `dark` | Dark mode style with indigo and emerald accents, developer-friendly | all themes |
-| `corporate` | Professional business style with navy color scheme, structured layouts | all themes |
-| `academic` | Academic conference presentation style with maroon color scheme, structured for scholarly talks | all themes |
+| Style | Description |
+|-------|-------------|
+| `rich` | Rich visual style with cards, timelines, grids, gradients, and more |
+| `minimal` | Clean, flat design with typography focus and minimal decoration |
+| `dark` | Dark mode style with indigo and emerald accents, developer-friendly |
+| `corporate` | Professional business style with navy color scheme, structured layouts |
+| `academic` | Academic conference presentation style with maroon color scheme, structured for scholarly talks |
 
 ## CLI Command Reference
 
@@ -65,7 +68,7 @@ Add or update Marp frontmatter fields.
 
 ```bash
 marp-mcp set-frontmatter slides.md --header "My Presentation" --paginate
-marp-mcp -t academic set-frontmatter slides.md --header "Research Talk"
+marp-mcp -s academic set-frontmatter slides.md --header "Research Talk"
 ```
 
 Options:
@@ -105,7 +108,7 @@ Follow this order when creating a new presentation:
 
 1. **Set frontmatter** — Initialize the file with theme, header, and pagination
    ```bash
-   marp-mcp -t default -s rich set-frontmatter slides.md --header "Title" --paginate
+   marp-mcp -s rich set-frontmatter slides.md --header "Title" --paginate
    ```
 
 2. **Manage slides** — Add slides one by one using layouts
