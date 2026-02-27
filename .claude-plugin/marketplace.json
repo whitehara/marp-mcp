@@ -1,0 +1,15 @@
+{
+  "name": "marp-mcp",
+  "owner": { "name": "masaki39" },
+  "metadata": {
+    "description": "Marp presentation plugin for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "marp",
+      "source": ".",
+      "description": "Create and edit Marp presentations using marp-mcp CLI",
+      "author": { "name": "masaki39" }
+    }
+  ]
+}
