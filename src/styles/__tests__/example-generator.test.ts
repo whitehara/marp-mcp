@@ -136,6 +136,40 @@ const richLayoutParams: Record<string, Record<string, unknown>> = {
     statement: "Less is More",
     subtitle: "The power of simplicity in design",
   },
+  "figure-caption": {
+    heading: "Experimental Results",
+    imagePath: SAMPLE_IMAGE,
+    figNumber: "1",
+    caption: "Comparison of treatment groups over 12-week period",
+    source: "Adapted from Smith et al., 2024",
+    citations: "Smith J, et al. J Exp Med. 2024;15(3):102-110.",
+  },
+  "key-message": {
+    heading: "Conclusions",
+    title: "Key Finding",
+    message:
+      "Our proposed method demonstrates a 35% improvement in accuracy compared to the baseline approach.",
+    note: "Further validation with larger datasets is recommended.",
+  },
+  methodology: {
+    heading: "Study Design",
+    steps: [
+      "Recruitment|N=120 participants",
+      "Randomization|Double-blind RCT",
+      "Intervention|12-week protocol",
+      "Assessment|Pre/post measures",
+      "Analysis|Mixed-effects model",
+    ],
+    citations: "Protocol registered: UMIN000012345",
+  },
+  comparison: {
+    heading: "Method Comparison",
+    leftTitle: "Conventional Method",
+    leftList: ["Manual feature extraction", "Linear classifier", "Limited scalability"],
+    rightTitle: "Proposed Method",
+    rightList: ["Automated feature learning", "Deep neural network", "Highly scalable"],
+    citations: "Based on benchmark results from Dataset X",
+  },
   terminal: {
     heading: "Quick Start",
     terminalTitle: "bash",

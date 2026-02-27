@@ -46,7 +46,7 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 
 ### Style selection
 
-Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `minimal`, `dark`, `corporate`. Styles are designed for the `default` theme:
+Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `minimal`, `dark`, `corporate`, `academic`. Styles are designed for the `default` theme:
 
 ```json
 {
@@ -143,6 +143,23 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `image-right` | Text on left, image on right, professional business style (60:40 split) |
 | `highlight-box` | Navy key message box for important announcements or takeaways |
 
+#### `academic` — Academic conference presentation style with maroon color scheme, structured for scholarly talks
+
+| Layout | Description |
+|--------|-------------|
+| `title` | Academic title slide with author, affiliation, and date |
+| `section` | Maroon section divider with optional number |
+| `content` | Free-form markdown content slide |
+| `list` | Bullet point list with optional citations |
+| `table` | Table with maroon header |
+| `two-column` | Two-column panel layout for comparisons or parallel content |
+| `image-right` | Content on left, image on right (60:40 split) |
+| `image-center` | Centered image with description |
+| `figure-caption` | Figure with numbered caption and source attribution |
+| `key-message` | Conclusion or key takeaway box with maroon highlight |
+| `methodology` | Method step flow diagram (use 'Label|Description' format for steps) |
+| `comparison` | Side-by-side comparison (e.g., conventional vs proposed method) |
+
 ## Example
 
 Rendered samples (GitHub Pages):
@@ -155,6 +172,7 @@ Rendered samples (GitHub Pages):
 - [Default theme, minimal style](https://masaki39.github.io/marp-mcp/example-default-minimal-style.html)
 - [Default theme, dark style](https://masaki39.github.io/marp-mcp/example-default-dark-style.html)
 - [Default theme, corporate style](https://masaki39.github.io/marp-mcp/example-default-corporate-style.html)
+- [Default theme, academic style](https://masaki39.github.io/marp-mcp/example-default-academic-style.html)
 
 ## Development
 
