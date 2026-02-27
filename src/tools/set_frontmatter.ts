@@ -11,7 +11,7 @@ import { getActiveStyle } from "../styles/index.js";
 import { validateFilePath } from "../utils/path-validator.js";
 import type { ToolResponse } from "../types/common.js";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+import { MAX_FILE_SIZE } from "../utils/constants.js";
 
 type TargetKey = "marp" | "theme" | "header" | "paginate" | "style";
 

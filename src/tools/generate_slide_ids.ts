@@ -8,58 +8,13 @@ import { z } from "zod";
 import { promises as fs } from "fs";
 import { ensureAllSlideIds } from "../utils/slide-id.js";
 import { validateFilePath } from "../utils/path-validator.js";
+import { parseFrontmatter, splitSlides, joinSlides } from "../utils/frontmatter.js";
+import { MAX_FILE_SIZE } from "../utils/constants.js";
 import type { ToolResponse } from "../types/common.js";
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const generateSlideIdsSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file"),
 });
-
-function splitFrontmatter(content: string): { frontmatter: string; body: string } {
-  const lines = content.split("\n");
-
-  if (lines.length === 0) {
-    return { frontmatter: "", body: "" };
-  }
-
-  if (lines[0].trim() !== "---") {
-    return { frontmatter: "", body: content };
-  }
-
-  const closingIndex = lines.slice(1).findIndex(line => line.trim() === "---");
-  if (closingIndex === -1) {
-    return { frontmatter: "", body: content };
-  }
-
-  const closingLine = closingIndex + 1;
-  const frontmatterLines = lines.slice(0, closingLine + 1);
-  const bodyLines = lines.slice(closingLine + 1);
-
-  return {
-    frontmatter: frontmatterLines.join("\n"),
-    body: bodyLines.join("\n"),
-  };
-}
-
-function joinSlides(frontmatter: string, slides: string[]): string {
-  if (slides.length === 0) {
-    return frontmatter.trim() ? frontmatter : "";
-  }
-
-  const processedSlides = slides
-    .map(slide => slide.trim())
-    .filter(slide => slide.length > 0);
-
-  const slidesContent = processedSlides.join("\n\n---\n\n");
-
-  if (!frontmatter.trim()) {
-    return slidesContent;
-  }
-
-  const cleanedFrontmatter = frontmatter.replace(/\s+$/, "");
-  return slidesContent ? `${cleanedFrontmatter}\n\n${slidesContent}` : cleanedFrontmatter;
-}
 
 /**
  * Generates unique slide IDs for all slides in a Marp markdown file.
@@ -112,9 +67,8 @@ export async function generateSlideIds({
       };
     }
 
-    const { frontmatter, body } = splitFrontmatter(existingContent);
-    const trimmedBody = body.trim();
-    const slides = trimmedBody ? trimmedBody.split(/\n---\n/) : [];
+    const { frontmatter, body } = parseFrontmatter(existingContent);
+    const slides = splitSlides(body);
 
     // Ensure all slides have IDs
     const { slides: updatedSlides, idToIndex } = ensureAllSlideIds(slides);

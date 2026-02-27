@@ -8,9 +8,9 @@ import { promises as fs } from "fs";
 import { getLayout, getLayoutNames } from "./list_layouts.js";
 import { ensureSlideId, findSlideIndexById, generateSlideId } from "../utils/slide-id.js";
 import { validateFilePath } from "../utils/path-validator.js";
+import { parseFrontmatter, splitSlides, joinSlides } from "../utils/frontmatter.js";
+import { MAX_FILE_SIZE } from "../utils/constants.js";
 import type { ToolResponse } from "../types/common.js";
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const manageSlideSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file"),
@@ -24,61 +24,6 @@ export const manageSlideSchema = z.object({
     .optional()
     .describe("Optional speaker notes appended to the slide as an HTML comment block"),
 });
-
-/**
- * Parses frontmatter from content, separating it from the body.
- * If no valid frontmatter exists, the entire file is treated as body content.
- */
-function parseFrontmatter(content: string): { frontmatter: string; body: string } {
-  const lines = content.split('\n');
-
-  if (lines.length === 0) {
-    return { frontmatter: '', body: '' };
-  }
-
-  if (lines[0].trim() !== '---') {
-    return { frontmatter: '', body: content };
-  }
-
-  const endIndex = lines.slice(1).findIndex(line => line.trim() === '---');
-  if (endIndex === -1) {
-    return { frontmatter: '', body: content };
-  }
-
-  const frontmatterLines = lines.slice(0, endIndex + 2);
-  const bodyLines = lines.slice(endIndex + 2);
-
-  return {
-    frontmatter: frontmatterLines.join('\n'),
-    body: bodyLines.join('\n')
-  };
-}
-
-/**
- * Joins frontmatter and slides together
- */
-function joinSlides(frontmatter: string, slides: string[]): string {
-  if (slides.length === 0) {
-    return frontmatter.trim() ? frontmatter : '';
-  }
-
-  const processedSlides = slides
-    .map(s => s.trim())
-    .filter(s => s !== '');
-
-  if (processedSlides.length === 0) {
-    return frontmatter.trim() ? frontmatter : '';
-  }
-
-  const slidesContent = processedSlides.join('\n\n---\n\n');
-
-  if (!frontmatter.trim()) {
-    return slidesContent;
-  }
-
-  const cleanedFrontmatter = frontmatter.replace(/\s+$/, '');
-  return `${cleanedFrontmatter}\n\n${slidesContent}`;
-}
 
 /**
  * Ensures all slides in the array have IDs
@@ -184,9 +129,7 @@ export async function manageSlide({
 
       // Parse frontmatter and body
       const { frontmatter, body } = parseFrontmatter(existingContent);
-      const trimmedBody = body.trim();
-
-      let slides = trimmedBody ? trimmedBody.split(/\n---\n/) : [];
+      let slides = splitSlides(body);
 
       // Ensure all slides have IDs
       slides = ensureAllSlidesHaveIds(slides);
