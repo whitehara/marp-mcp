@@ -12,6 +12,7 @@
     "build": "tsc && shx chmod 755 build/index.js",
     "prepublishOnly": "npm run build",
     "prepare": "npm run build",
+    "readme:generate": "npm test -- --testPathPattern=readme-generator",
     "examples:generate": "npm test -- --testPathPattern=example-generator",
     "examples:html": "npm run examples:html:styles && npm run examples:html:themes",
     "examples:html:styles": "marp --html --input-dir assets/examples/md --output assets/examples/html --no-config-file",

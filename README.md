@@ -46,7 +46,7 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 
 ### Style selection
 
-Use `-s` or `--style` args for style selection. Choose from `default` or `rich`. Styles are designed for the `default` theme:
+Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `minimal`, `dark`, `corporate`. Styles are designed for the `default` theme:
 
 ```json
 {
@@ -61,31 +61,87 @@ Use `-s` or `--style` args for style selection. Choose from `default` or `rich`.
 
 ## Available Layouts
 
-| Layout | Description |
-|--------|-------------|
-| `title` | Title slide with left-aligned heading and metadata |
-| `section` | Section divider with centered title and subtitle |
-| `list` | Content slide with heading and bullet points or text |
-| `table` | Table layout with customizable size and alignment |
-| `two-column` | Two-column layout for side-by-side content *(academic theme only)* |
-| `image-right` | Layout with image on the right side |
-| `image-center` | Centered image layout with adjustable dimensions |
-
-### Rich style additional layouts
+### Default theme
 
 | Layout | Description |
 |--------|-------------|
-| `image-split` | Image with bullet points in a split view |
-| `timeline` | Vertical timeline with gradient line and dots |
-| `card-grid` | Grid of icon cards with title and description |
-| `statistics` | Large number statistics with labels |
-| `highlight-box` | Gradient-styled highlight callout box |
-| `two-column-panel` | Two styled panels side by side |
-| `three-column-panel` | Three styled panels in a row |
-| `image-comparison` | Side-by-side image comparison with labels |
+| `title` | Title slide with heading and content |
+| `section` | Section break slide with centered title and subtitle |
+| `list` | List slide with bullet points (max 8 items) |
+| `table` | Table slide with description (max 7 rows) |
+| `image-right` | Slide with image on right and content list (allows more explanation than image-center) |
+| `image-center` | Slide with centered image (fixed h:350) |
+
+### Styles
+
+#### `rich` — Rich visual style with cards, timelines, grids, gradients, and more
+
+| Layout | Description |
+|--------|-------------|
+| `title` | Hero title slide with dark gradient background |
+| `section` | Section divider slide with gradient background |
+| `list` | List slide with bullet points |
+| `table` | Rich table slide with styled header and zebra stripes |
+| `image-right` | Rich image-right slide with content on left and image on right (60:40 split) |
+| `image-center` | Rich centered image slide with rounded corners and shadow |
+| `image-split` | Image on the left with content list on the right (40:60 split) |
+| `timeline` | Vertical timeline with labeled events (use 'Label: Description' format) |
+| `card-grid` | Grid of cards with icon, title, and description (use 'Icon|Title|Description' format) |
+| `statistics` | Statistics display with large numbers and labels (use 'Number|Label' format) |
+| `highlight-box` | Centered gradient message box for key takeaways or announcements |
+| `two-column-panel` | Two-column layout with styled panels, optional accent highlight on one panel |
+| `three-column-panel` | Three-column layout with styled panels (use 'Title|Content' format) |
+| `image-comparison` | Two images side by side with labels for comparison |
 | `content` | Free-form markdown content slide |
-| `quote` | Styled blockquote with attribution |
+| `quote` | Quote slide with attribution |
 | `process` | Horizontal process flow with numbered steps and arrows |
+
+#### `minimal` — Clean, flat design with typography focus and minimal decoration
+
+| Layout | Description |
+|--------|-------------|
+| `title` | Clean black title slide with white text |
+| `section` | Simple black section divider slide |
+| `content` | Pure markdown content slide |
+| `list` | Simple bullet list slide |
+| `table` | Minimal table with black header and clean borders |
+| `image-right` | Text on left, image on right (60:40 split), clean design |
+| `image-center` | Centered image slide, clean and minimal |
+| `quote` | Quote slide with left border accent, no extra decoration |
+| `two-column` | Two-column layout with a thin divider line |
+| `big-statement` | Large impactful statement slide with bold centered text |
+
+#### `dark` — Dark mode style with indigo and emerald accents, developer-friendly
+
+| Layout | Description |
+|--------|-------------|
+| `title` | Dark title slide with indigo-violet gradient |
+| `section` | Dark section divider with slate-to-indigo gradient |
+| `content` | Free-form markdown content slide on dark background |
+| `list` | Bullet list slide on dark background |
+| `table` | Dark table with indigo header |
+| `card-grid` | Dark card grid with icon, title, and description (use 'Icon|Title|Description' format) |
+| `timeline` | Dark vertical timeline with indigo-to-emerald gradient line (use 'Label: Description' format) |
+| `statistics` | Dark statistics display with large indigo numbers (use 'Number|Label' format) |
+| `image-right` | Text on left, image on right on dark background (60:40 split) |
+| `terminal` | Terminal-style command display on dark background (prefix lines with '$ ' for commands) |
+
+#### `corporate` — Professional business style with navy color scheme, structured layouts
+
+| Layout | Description |
+|--------|-------------|
+| `title` | Professional navy gradient title slide |
+| `section` | Corporate navy-to-sky section divider slide |
+| `content` | Standard business content slide with markdown |
+| `list` | Business bullet list slide |
+| `table` | Business table with navy header and clean rows |
+| `two-column` | Two-column comparison layout with navy-accented panels |
+| `three-column` | Three-column layout with sky-accented panels |
+| `statistics` | Business metrics display with large navy numbers (use 'Number|Label' format) |
+| `process` | Horizontal business process flow with numbered steps |
+| `agenda` | Agenda slide with numbered items and optional duration (use 'Item name|Duration' format) |
+| `image-right` | Text on left, image on right, professional business style (60:40 split) |
+| `highlight-box` | Navy key message box for important announcements or takeaways |
 
 ## Example
 
@@ -93,10 +149,12 @@ Rendered samples (GitHub Pages):
 
 - [Academic theme](https://masaki39.github.io/marp-mcp/example-academic-theme.html)
 - [Default theme](https://masaki39.github.io/marp-mcp/example-default-theme.html)
-- [Default theme, default style](https://masaki39.github.io/marp-mcp/example-default-default-style.html)
-- [Default theme, rich style](https://masaki39.github.io/marp-mcp/example-default-rich-style.html)
 - [Gaia theme](https://masaki39.github.io/marp-mcp/example-gaia-theme.html)
 - [Uncover theme](https://masaki39.github.io/marp-mcp/example-uncover-theme.html)
+- [Default theme, rich style](https://masaki39.github.io/marp-mcp/example-default-rich-style.html)
+- [Default theme, minimal style](https://masaki39.github.io/marp-mcp/example-default-minimal-style.html)
+- [Default theme, dark style](https://masaki39.github.io/marp-mcp/example-default-dark-style.html)
+- [Default theme, corporate style](https://masaki39.github.io/marp-mcp/example-default-corporate-style.html)
 
 ## Development
 

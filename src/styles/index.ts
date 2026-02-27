@@ -1,10 +1,16 @@
 import { defaultStyle } from "./default/index.js";
 import { richStyle } from "./rich/index.js";
+import { minimalStyle } from "./minimal/index.js";
+import { darkStyle } from "./dark/index.js";
+import { corporateStyle } from "./corporate/index.js";
 import type { StyleDefinition, StyleName } from "../themes/types.js";
 
 const styles = {
   default: defaultStyle,
   rich: richStyle,
+  minimal: minimalStyle,
+  dark: darkStyle,
+  corporate: corporateStyle,
 } satisfies Record<StyleName, StyleDefinition>;
 
 let activeStyle: StyleDefinition = defaultStyle;

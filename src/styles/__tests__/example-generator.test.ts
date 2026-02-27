@@ -125,6 +125,45 @@ const richLayoutParams: Record<string, Record<string, unknown>> = {
     heading: "Development Workflow",
     steps: ["Plan", "Develop", "Test", "Deploy"],
   },
+  "two-column": {
+    heading: "Comparison",
+    leftTitle: "Option A",
+    leftList: ["Fast setup", "Low cost", "Community support"],
+    rightTitle: "Option B",
+    rightList: ["Enterprise features", "SLA guarantee", "Dedicated support"],
+  },
+  "big-statement": {
+    statement: "Less is More",
+    subtitle: "The power of simplicity in design",
+  },
+  terminal: {
+    heading: "Quick Start",
+    terminalTitle: "bash",
+    lines: [
+      "$ npm install my-package",
+      "added 42 packages in 1.2s",
+      "$ npm run dev",
+      "Server running on http://localhost:3000",
+    ],
+  },
+  "three-column": {
+    heading: "Three Pillars",
+    col1Title: "People",
+    col1List: ["Collaboration", "Empowerment", "Growth"],
+    col2Title: "Process",
+    col2List: ["Agile", "CI/CD", "Automation"],
+    col3Title: "Technology",
+    col3List: ["Cloud-native", "Microservices", "AI-powered"],
+  },
+  agenda: {
+    heading: "Today's Agenda",
+    items: [
+      "Introduction|10 min",
+      "Market Analysis|20 min",
+      "Product Roadmap|30 min",
+      "Q&A|15 min",
+    ],
+  },
 };
 
 describe("style example generator", () => {

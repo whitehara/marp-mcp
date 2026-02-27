@@ -48,6 +48,9 @@ describe("Style Registry", () => {
     const names = getAvailableStyleNames();
     expect(names).toContain("default");
     expect(names).toContain("rich");
+    expect(names).toContain("minimal");
+    expect(names).toContain("dark");
+    expect(names).toContain("corporate");
   });
 });
 
