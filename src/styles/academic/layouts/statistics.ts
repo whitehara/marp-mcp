@@ -14,7 +14,7 @@ export const statisticsLayout: SlideLayout = {
       type: "array",
       description: "Statistics in 'Number|Label' format",
       required: true,
-      maxItems: 5,
+      maxItems: 4,
     },
     caption: {
       type: "string",
