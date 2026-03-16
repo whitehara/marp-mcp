@@ -4,5 +4,8 @@
   "author": { "name": "masaki39" },
   "homepage": "https://github.com/masaki39/marp-mcp",
   "repository": "https://github.com/masaki39/marp-mcp",
-  "license": "MIT"
+  "license": "MIT",
+  "skills": [
+    "./skills/marp"
+  ]
 }

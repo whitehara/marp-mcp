@@ -1,15 +1,18 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "marp-mcp",
+  "description": "Marp presentation plugin for Claude Code",
   "owner": { "name": "masaki39" },
-  "metadata": {
-    "description": "Marp presentation plugin for Claude Code"
-  },
   "plugins": [
     {
       "name": "marp",
-      "source": "./",
       "description": "Create and edit Marp presentations using marp-mcp CLI",
-      "author": { "name": "masaki39" }
+      "author": { "name": "masaki39" },
+      "source": "./",
+      "skills": [
+        "./skills/marp"
+      ],
+      "homepage": "https://github.com/masaki39/marp-mcp"
     }
   ]
 }
