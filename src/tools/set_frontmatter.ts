@@ -17,15 +17,20 @@ import { MAX_FILE_SIZE } from "../utils/constants.js";
 type TargetKey = "marp" | "theme" | "header" | "paginate" | "style";
 
 export const setFrontmatterSchema = z.object({
-  filePath: z.string().describe("Absolute path to the Marp markdown file"),
+  filePath: z.string().describe("Absolute path to the Marp markdown file (must end in .md)"),
   header: z
     .string()
     .optional()
-    .describe("Optional header text. If omitted and no header exists, a blank header entry is created."),
+    .describe(
+      "Text displayed in the slide header on every slide (e.g. presentation title or section name). " +
+        'Omit to keep existing value, or pass empty string "" to show a blank header.'
+    ),
   paginate: z
     .boolean()
     .optional()
-    .describe("Optional paginate flag. If omitted and no value exists, paginate defaults to false."),
+    .describe(
+      "Show slide page numbers (true/false). Omit to keep existing value; defaults to false on first call."
+    ),
 });
 
 /**

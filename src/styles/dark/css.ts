@@ -555,4 +555,56 @@ section.dk-statement p {
 .dk-card {
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
+/* --- Code Showcase --- */
+.dk-code-showcase {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+.dk-code-header {
+  background: #1e293b;
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  min-height: 1.8rem;
+  border-bottom: 1px solid #334155;
+}
+.dk-code-lang-badge {
+  font-size: 0.75em;
+  font-family: monospace;
+  color: #818cf8;
+  background: rgba(129,140,248,0.12);
+  padding: 0.1rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid rgba(129,140,248,0.25);
+}
+.dk-code-body {
+  padding: 0.8rem 1rem;
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.82em;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.dk-code-line {
+  color: #e2e8f0;
+  white-space: pre;
+}
+.dk-code-explanation {
+  font-size: 0.9em;
+  color: #94a3b8;
+  margin-top: 0.6rem;
+  line-height: 1.5;
+}
+.dk-code-highlights {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+}
+.dk-code-highlights li {
+  font-size: 0.88em;
+  color: #a5b4fc;
+  margin-bottom: 0.25rem;
+}
 `;

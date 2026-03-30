@@ -9,11 +9,22 @@ import { generateSlideIds } from "../tools/generate_slide_ids.js";
 import { manageSlide } from "../tools/manage_slide.js";
 import { setFrontmatter } from "../tools/set_frontmatter.js";
 import { readSlide } from "../tools/read_slide.js";
+import { exportSlide } from "../tools/export_slide.js";
+import { createPresentation } from "../tools/create_presentation.js";
+import { listThemesAndStyles } from "../tools/list_themes_and_styles.js";
 
 /**
  * Registers all CLI subcommands on the given commander program.
  */
 export function registerCommands(program: Command): void {
+  program
+    .command("list-themes-and-styles")
+    .description("List all available themes and styles with descriptions and layout counts")
+    .action(async () => {
+      const result = await listThemesAndStyles();
+      outputResult(result);
+    });
+
   program
     .command("list-layouts")
     .description("List all available slide layouts (JSON output)")
@@ -97,6 +108,52 @@ export function registerCommands(program: Command): void {
       const result = await readSlide({
         filePath: resolveFilePath(file),
         slideId: opts.slideId,
+      });
+      outputResult(result);
+    });
+
+  program
+    .command("export <file>")
+    .description("Export a Marp markdown file to HTML or PDF")
+    .requiredOption("-f, --format <format>", "Output format: html | pdf")
+    .option("-o, --output <path>", "Output file path (default: same dir as input)")
+    .option("--allow-local-files", "Allow local file access in HTML export")
+    .option("--theme-set <path>", "Path to custom theme CSS file")
+    .action(async (file: string, opts: {
+      format: string;
+      output?: string;
+      allowLocalFiles?: boolean;
+      themeSet?: string;
+    }) => {
+      const result = await exportSlide({
+        filePath: resolveFilePath(file),
+        format: opts.format as "html" | "pdf",
+        outputPath: opts.output ? resolveFilePath(opts.output) : undefined,
+        allowLocalFiles: opts.allowLocalFiles,
+        themeSet: opts.themeSet,
+      });
+      outputResult(result);
+    });
+
+  program
+    .command("create <file>")
+    .description("Create a new Marp presentation with frontmatter and title slide")
+    .requiredOption("--title <text>", "Presentation title")
+    .option("--subtitle <text>", "Optional subtitle for the title slide")
+    .option("--no-paginate", "Disable slide page numbers")
+    .option("--slides <n>", "Number of blank content placeholder slides to add", "0")
+    .action(async (file: string, opts: {
+      title: string;
+      subtitle?: string;
+      paginate?: boolean;
+      slides: string;
+    }) => {
+      const result = await createPresentation({
+        filePath: resolveFilePath(file),
+        title: opts.title,
+        subtitle: opts.subtitle,
+        paginate: opts.paginate !== false,
+        slideCount: parseInt(opts.slides, 10) || 0,
       });
       outputResult(result);
     });

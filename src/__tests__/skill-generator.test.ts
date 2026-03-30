@@ -106,19 +106,34 @@ Options:
 - \`--header <text>\` — Header text
 - \`--paginate / --no-paginate\` — Enable or disable pagination
 
+#### \`create <file>\`
+
+Create a new Marp presentation with frontmatter and a title slide in one step.
+
+\`\`\`bash
+marp-mcp create slides.md --title "My Talk"
+marp-mcp -s tech create slides.md --title "Product Demo" --subtitle "Q3 2025" --slides 5
+\`\`\`
+
+Options:
+- \`--title <text>\` — Presentation title (required)
+- \`--subtitle <text>\` — Optional subtitle for the title slide
+- \`--no-paginate\` — Disable slide page numbers
+- \`--slides <n>\` — Number of blank content placeholder slides to add (default: \`0\`)
+
 #### \`manage <file>\`
 
 Insert, replace, or delete slides using slide IDs.
 
 \`\`\`bash
-marp-mcp manage slides.md -l title -p '{"title":"Hello","subtitle":"World"}'
-marp-mcp manage slides.md -l content -p '{"title":"Agenda","body":"- Item 1\\n- Item 2"}' --position after --slide-id slide-1
-marp-mcp manage slides.md -l content --mode replace --slide-id slide-2 -p '{"title":"Updated"}'
-marp-mcp manage slides.md -l content --mode delete --slide-id slide-3
+marp-mcp manage slides.md -l title -p '{"heading":"Hello","content":"World"}'
+marp-mcp manage slides.md -l content -p '{"heading":"Agenda","body":"- Item 1\\n- Item 2"}' --position after --slide-id <id>
+marp-mcp manage slides.md -l content --mode replace --slide-id <id> -p '{"heading":"Updated","body":"New content"}'
+marp-mcp manage slides.md --mode delete --slide-id <id>
 \`\`\`
 
 Options:
-- \`-l, --layout <type>\` — Layout type (required)
+- \`-l, --layout <type>\` — Layout type (required for insert/replace)
 - \`-p, --params <json>\` — Parameters as JSON string (default: \`{}\`)
 - \`-m, --mode <mode>\` — Operation mode: \`insert\` | \`replace\` | \`delete\` (default: \`insert\`)
 - \`--position <pos>\` — Position: \`end\` | \`start\` | \`after\` | \`before\` (default: \`end\`)
@@ -135,19 +150,47 @@ marp-mcp read slides.md --slide-id <id>
 \`\`\`
 
 Options:
-- \`--slide-id <id>\` — Read a specific slide by ID (omit to list all slides)
+- \`--slide-id <id>\` — Read a specific slide by ID (omit to list all slides with their IDs)
 
 #### \`generate-ids <file>\`
 
-Generate slide IDs for every slide in a Marp markdown file.
+Generate slide IDs for every slide in a Marp markdown file. Safe to run multiple times — existing IDs are never changed.
 
 \`\`\`bash
 marp-mcp generate-ids slides.md
 \`\`\`
 
+#### \`export <file>\`
+
+Export a Marp presentation to HTML or PDF.
+
+\`\`\`bash
+marp-mcp export slides.md -f html
+marp-mcp export slides.md -f pdf -o /tmp/presentation.pdf
+\`\`\`
+
+Options:
+- \`-f, --format <format>\` — Output format: \`html\` | \`pdf\` (required)
+- \`-o, --output <path>\` — Output file path (default: same directory as input)
+- \`--allow-local-files\` — Allow local image file access in HTML export
+- \`--theme-set <path>\` — Path to a custom theme CSS file
+
 ## Workflow
 
-Follow this order when creating a new presentation:
+### Quick Start (Recommended)
+
+Use \`create\` to initialize a new presentation in one step, then add slides:
+
+\`\`\`bash
+marp-mcp -s rich create slides.md --title "My Talk" --subtitle "Author · Event" --slides 3
+marp-mcp -s rich list-layouts
+marp-mcp -s rich manage slides.md -l content --mode replace --slide-id <id> -p '{"heading":"Intro","body":"Hello world"}'
+marp-mcp export slides.md -f html
+\`\`\`
+
+### Manual Workflow
+
+Follow this order when building a presentation from scratch:
 
 1. **Set frontmatter** — Initialize the file with theme, header, and pagination
    \`\`\`bash
@@ -156,8 +199,8 @@ Follow this order when creating a new presentation:
 
 2. **Manage slides** — Add slides one by one using layouts
    \`\`\`bash
-   marp-mcp -s rich manage slides.md -l title -p '{"title":"My Talk","subtitle":"Subtitle"}'
-   marp-mcp -s rich manage slides.md -l content -p '{"title":"Intro","body":"Hello world"}'
+   marp-mcp -s rich manage slides.md -l title -p '{"heading":"My Talk","content":"Subtitle"}'
+   marp-mcp -s rich manage slides.md -l content -p '{"heading":"Intro","body":"Hello world"}'
    \`\`\`
 
 3. **Generate IDs** — Assign IDs for future editing
@@ -167,7 +210,12 @@ Follow this order when creating a new presentation:
 
 4. **Edit slides** — Use replace/delete modes with slide IDs
    \`\`\`bash
-   marp-mcp -s rich manage slides.md -l content --mode replace --slide-id slide-1 -p '{"title":"Updated"}'
+   marp-mcp -s rich manage slides.md -l content --mode replace --slide-id <id> -p '{"heading":"Updated","body":"New content"}'
+   \`\`\`
+
+5. **Export** — Export to HTML or PDF
+   \`\`\`bash
+   marp-mcp export slides.md -f html
    \`\`\`
 
 ## Layout Information
@@ -188,11 +236,12 @@ marp-mcp -t <theme> -s <style> list-layouts
 
 ## Best Practices
 
-- Always run \`set-frontmatter\` before adding slides to ensure correct theme/style setup
-- Use \`list-layouts\` to check available layouts and required parameters for the current theme/style
+- Use \`create\` for new presentations — it handles frontmatter, title slide, and IDs in one call
+- Use \`list-layouts\` before \`manage\` to check available layouts and required parameters
 - Run \`generate-ids\` after adding all initial slides, then use IDs for subsequent edits
-- When replacing slides, always specify the correct \`--slide-id\`
+- When replacing slides, always specify the correct \`--slide-id\` (use \`read\` to discover IDs)
 - Use \`--note\` to add speaker notes to any slide
 - Prefer \`--position after --slide-id <id>\` for precise slide placement
+- Use \`export -f html\` to preview the presentation in a browser
 `;
 }

@@ -13,6 +13,8 @@ import { bigStatementLayout } from "./layouts/big-statement.js";
 import { statisticsLayout } from "./layouts/statistics.js";
 import { highlightBoxLayout } from "./layouts/highlight-box.js";
 import { pullQuoteLayout } from "./layouts/pull-quote.js";
+import { agendaLayout } from "./layouts/agenda.js";
+import { comparisonLayout } from "./layouts/comparison.js";
 
 export const minimalStyle: StyleDefinition = {
   name: "minimal",
@@ -33,5 +35,7 @@ export const minimalStyle: StyleDefinition = {
     statistics: statisticsLayout,
     "highlight-box": highlightBoxLayout,
     "pull-quote": pullQuoteLayout,
+    agenda: agendaLayout,
+    comparison: comparisonLayout,
   },
 };

@@ -255,6 +255,37 @@ const richLayoutParams: Record<string, Record<string, unknown>> = {
     rightCode: "const data = await fetch(url)\\nconst json = await data.json()\\nconsole.log(json)",
     language: "js",
   },
+  "code-showcase": {
+    heading: "Async/Await Pattern",
+    code: "async function fetchUser(id: string) {\\n  const res = await fetch(`/api/users/${id}`)\\n  if (!res.ok) throw new Error('Not found')\\n  return res.json() as Promise<User>\\n}",
+    language: "TypeScript",
+    explanation: "Using async/await keeps asynchronous code readable and avoids callback hell.",
+    highlights: [
+      "await suspends execution without blocking the thread",
+      "Error handling with try/catch works naturally",
+    ],
+  },
+  "feature-grid": {
+    heading: "Core Capabilities",
+    features: [
+      "🚀|Fast Deployment|Ship to production in minutes, not days",
+      "🔒|Enterprise Security|SOC 2 Type II compliant infrastructure",
+      "📊|Real-time Analytics|Live dashboards with sub-second latency",
+      "🔌|Integrations|Connect with 100+ services out of the box",
+      "🤖|AI-Powered|Built-in intelligence for smart automation",
+    ],
+  },
+  roadmap: {
+    heading: "Product Roadmap",
+    subtitle: "FY2025–2026",
+    milestones: [
+      "Q1|Foundation|done",
+      "Q2|Beta Launch|done",
+      "Q3|GA Release|current",
+      "Q4|Enterprise Tier|future",
+      "Q1 2026|AI Features|future",
+    ],
+  },
   quadrant: {
     heading: "Priority Matrix",
     topLeftTitle: "High Impact / Low Effort",

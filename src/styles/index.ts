@@ -4,6 +4,7 @@ import { minimalStyle } from "./minimal/index.js";
 import { darkStyle } from "./dark/index.js";
 import { corporateStyle } from "./corporate/index.js";
 import { academicStyle } from "./academic/index.js";
+import { techStyle } from "./tech/index.js";
 import type { StyleDefinition, StyleName } from "../themes/types.js";
 
 const styles = {
@@ -13,6 +14,7 @@ const styles = {
   dark: darkStyle,
   corporate: corporateStyle,
   academic: academicStyle,
+  tech: techStyle,
 } satisfies Record<StyleName, StyleDefinition>;
 
 let activeStyle: StyleDefinition = defaultStyle;
