@@ -48,15 +48,18 @@ Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `
 
 | Tool | Description |
 |------|-------------|
+| `list_themes_and_styles` | List all available themes and styles with descriptions and layout counts |
 | `list_layouts` | List all available slide layouts with parameters and descriptions |
-| `generate_slide_ids` | Generate slide IDs for every slide |
+| `create_presentation` | Create a new presentation with frontmatter and title slide in one step |
 | `manage_slide` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
 | `set_frontmatter` | Ensure `marp`, `theme`, `header`, and `paginate` frontmatter fields are present |
 | `read_slide` | Read slide content by ID or list all slides with their IDs and positions |
+| `generate_slide_ids` | Generate stable UUIDs for every slide (safe to re-run) |
+| `export_slide` | Export to HTML or PDF using marp-cli |
 
 ### Style selection
 
-Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `minimal`, `dark`, `corporate`, `academic`. Styles are designed for the `default` theme:
+Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `minimal`, `dark`, `corporate`, `academic`, `tech`. Styles are designed for the `default` theme:
 
 ```json
 {
@@ -81,6 +84,7 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `table` | Table slide with description (max 7 rows) |
 | `image-right` | Slide with image on right and content list (allows more explanation than image-center) |
 | `image-center` | Slide with centered image (fixed h:350) |
+| `content` | Standard content slide with heading and free-form markdown body (supports bullets with -, bold with **, code with backticks) |
 
 ### Styles
 
@@ -131,6 +135,8 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `statistics` | Minimal statistics display with black numbers and thin underline (use 'Number|Label' format) |
 | `highlight-box` | Minimal message box for key takeaways |
 | `pull-quote` | Minimal decorative impact quote with large quotation marks |
+| `agenda` | Clean agenda slide with numbered items and optional time durations (use 'Item name|Duration' format) |
+| `comparison` | Side-by-side comparison with explicit left/right titles and list items, separated by a thin divider |
 
 #### `dark` — Dark mode style with indigo and emerald accents, developer-friendly
 
@@ -156,6 +162,7 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `chart-bar` | Dark CSS horizontal bar chart for data visualization (use 'Label|Value' format) |
 | `timeline-horizontal` | Dark horizontal timeline with labeled events (use 'Label: Description' format) |
 | `code-comparison` | Side-by-side code comparison (Before/After or two languages) |
+| `code-showcase` | Code block with language badge, optional explanation text, and optional highlight bullet points |
 
 #### `corporate` — Professional business style with navy color scheme, structured layouts
 
@@ -202,6 +209,21 @@ Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `
 | `sidebar` | Main content with sidebar for definitions, notes, or references |
 | `results-table` | Results table with best-value highlighting (prefix cell with * to highlight) |
 
+#### `tech` — Modern tech/startup style with violet-cyan gradient accents, strong typography for product demos and engineering talks
+
+| Layout | Description |
+|--------|-------------|
+| `title` | Gradient title slide with optional tagline and event/company name |
+| `section` | Dark full-bleed section divider with cyan eyebrow label and bold heading |
+| `content` | Standard content slide with heading and free-form markdown body, accented with a violet left border |
+| `list` | Bullet list slide with violet arrow markers and thin dividers between items |
+| `two-column` | Two-panel layout with violet top borders, ideal for comparing options or features |
+| `statistics` | Large gradient metric numbers with optional trend indicators. Use 'Value|Label|Trend' format (trend is optional). |
+| `quote` | Stylized pull quote with violet left border, large quote mark, and attribution |
+| `highlight-box` | Alert/callout box with color-coded variants: 'info' (cyan), 'warning' (amber), 'success' (green) |
+| `feature-grid` | Grid of feature cards, each with an icon, title, and description. Use 'Icon|Title|Description' format. |
+| `roadmap` | Horizontal milestone timeline with status indicators. Use 'Phase|Label|Status' format. Status: 'done', 'current', or 'future'. |
+
 ## Example
 
 Rendered samples (GitHub Pages):
@@ -215,6 +237,7 @@ Rendered samples (GitHub Pages):
 - [Default theme, dark style](https://masaki39.github.io/marp-mcp/example-default-dark-style.html)
 - [Default theme, corporate style](https://masaki39.github.io/marp-mcp/example-default-corporate-style.html)
 - [Default theme, academic style](https://masaki39.github.io/marp-mcp/example-default-academic-style.html)
+- [Default theme, tech style](https://masaki39.github.io/marp-mcp/example-default-tech-style.html)
 
 ## Development
 

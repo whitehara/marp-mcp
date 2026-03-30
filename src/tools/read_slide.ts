@@ -13,11 +13,15 @@ import { createErrorResponse, createSuccessResponse } from "../utils/response.js
 import type { ToolResponse } from "../types/common.js";
 
 export const readSlideSchema = z.object({
-  filePath: z.string().describe("Absolute path to the Marp markdown file"),
+  filePath: z.string().describe("Absolute path to the Marp markdown file (must end in .md)"),
   slideId: z
     .string()
     .optional()
-    .describe("Optional slide ID to read a specific slide. If omitted, returns all slides."),
+    .describe(
+      "The UUID slide ID from a '<!-- slide-id: ... -->' comment. " +
+        "Omit to list all slides with their IDs and positions. " +
+        "Use the returned slideId values with manage_slide for replace/delete/after/before operations."
+    ),
 });
 
 /**

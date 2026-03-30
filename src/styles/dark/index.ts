@@ -20,6 +20,7 @@ import { progressBarLayout } from "./layouts/progress-bar.js";
 import { chartBarLayout } from "./layouts/chart-bar.js";
 import { timelineHorizontalLayout } from "./layouts/timeline-horizontal.js";
 import { codeComparisonLayout } from "./layouts/code-comparison.js";
+import { codeShowcaseLayout } from "./layouts/code-showcase.js";
 
 export const darkStyle: StyleDefinition = {
   name: "dark",
@@ -47,5 +48,6 @@ export const darkStyle: StyleDefinition = {
     "chart-bar": chartBarLayout,
     "timeline-horizontal": timelineHorizontalLayout,
     "code-comparison": codeComparisonLayout,
+    "code-showcase": codeShowcaseLayout,
   },
 };

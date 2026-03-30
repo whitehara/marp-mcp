@@ -5,6 +5,7 @@ import { listLayout } from "./layouts/list.js";
 import { tableLayout } from "./layouts/table.js";
 import { imageRightLayout } from "./layouts/image-right.js";
 import { imageCenterLayout } from "./layouts/image-center.js";
+import { contentLayout } from "./layouts/content.js";
 
 export const defaultTheme: ThemeDefinition = {
   name: "default",
@@ -17,5 +18,6 @@ export const defaultTheme: ThemeDefinition = {
     table: tableLayout,
     "image-right": imageRightLayout,
     "image-center": imageCenterLayout,
+    content: contentLayout,
   },
 };

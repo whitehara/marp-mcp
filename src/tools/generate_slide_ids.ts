@@ -14,7 +14,13 @@ import { createErrorResponse, createSuccessResponse } from "../utils/response.js
 import type { ToolResponse } from "../types/common.js";
 
 export const generateSlideIdsSchema = z.object({
-  filePath: z.string().describe("Absolute path to the Marp markdown file"),
+  filePath: z
+    .string()
+    .describe(
+      "Absolute path to the Marp markdown file (must end in .md). " +
+        "This tool adds '<!-- slide-id: UUID -->' comments to any slides that lack them. " +
+        "Safe to call multiple times — existing IDs are never changed."
+    ),
 });
 
 /**

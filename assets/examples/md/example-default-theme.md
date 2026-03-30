@@ -68,3 +68,16 @@ Higher is better.
 Step-by-step overview.
 
 <!-- _footer: Figure 1 -->
+
+---
+
+<!-- layout: content -->
+## Summary
+
+This is a **free-form** markdown slide.
+
+- Key point one
+- Key point two
+- Key point three
+
+<!-- _footer: Source: Sample Report -->

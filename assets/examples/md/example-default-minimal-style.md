@@ -283,6 +283,86 @@ style: |
     margin-top: 0.5rem;
   }
   
+  /* --- Minimal Agenda --- */
+  .min-agenda-subtitle {
+    color: #6b7280;
+    font-size: 0.9em;
+    margin: -0.5rem 0 0.5rem 0;
+  }
+  .min-agenda {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .min-agenda-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .min-agenda-item:last-child {
+    border-bottom: none;
+  }
+  .min-agenda-num {
+    font-family: monospace;
+    font-size: 1em;
+    font-weight: 700;
+    color: #111827;
+    min-width: 2rem;
+    flex-shrink: 0;
+  }
+  .min-agenda-title {
+    flex: 1;
+    font-size: 0.95em;
+    color: #1f2937;
+  }
+  .min-agenda-dur {
+    font-size: 0.8em;
+    color: #6b7280;
+    flex-shrink: 0;
+    background: #f3f4f6;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+  }
+  
+  /* --- Minimal Comparison --- */
+  .min-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .min-compare-panel {
+    padding: 1rem 1.2rem;
+  }
+  .min-compare-panel:first-child {
+    border-right: 1px solid #e5e7eb;
+  }
+  .min-compare-title {
+    font-size: 0.85em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #374151;
+    margin: 0 0 0.7rem 0;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #111827;
+  }
+  .min-compare-panel ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+  .min-compare-panel li {
+    font-size: 0.9em;
+    color: #374151;
+    margin-bottom: 0.3rem;
+  }
+  
 ---
 
 <!-- layout: title -->
@@ -465,4 +545,56 @@ The power of simplicity in design
 <p class="min-pull-quote-text">Design is not just what it looks like. Design is how it works.</p>
 <p class="min-pull-quote-attr">— Steve Jobs</p>
 <p class="min-pull-quote-ctx">From a 2003 New York Times interview</p>
+</div>
+
+---
+
+<!-- layout: agenda -->
+## Today's Agenda
+
+<div class="min-agenda">
+<div class="min-agenda-item">
+<span class="min-agenda-num">01</span>
+<span class="min-agenda-title">Introduction</span>
+<span class="min-agenda-dur">10 min</span>
+</div>
+<div class="min-agenda-item">
+<span class="min-agenda-num">02</span>
+<span class="min-agenda-title">Market Analysis</span>
+<span class="min-agenda-dur">20 min</span>
+</div>
+<div class="min-agenda-item">
+<span class="min-agenda-num">03</span>
+<span class="min-agenda-title">Product Roadmap</span>
+<span class="min-agenda-dur">30 min</span>
+</div>
+<div class="min-agenda-item">
+<span class="min-agenda-num">04</span>
+<span class="min-agenda-title">Q&A</span>
+<span class="min-agenda-dur">15 min</span>
+</div>
+</div>
+
+---
+
+<!-- layout: comparison -->
+## Method Comparison
+
+<div class="min-compare">
+<div class="min-compare-panel">
+<h3 class="min-compare-title">Conventional Method</h3>
+<ul>
+<li>Manual feature extraction</li>
+<li>Linear classifier</li>
+<li>Limited scalability</li>
+</ul>
+</div>
+<div class="min-compare-panel">
+<h3 class="min-compare-title">Proposed Method</h3>
+<ul>
+<li>Automated feature learning</li>
+<li>Deep neural network</li>
+<li>Highly scalable</li>
+</ul>
+</div>
 </div>

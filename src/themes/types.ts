@@ -22,7 +22,7 @@ export interface ThemeDefinition {
   layouts: Record<string, SlideLayout>;
 }
 
-export type StyleName = "default" | "rich" | "minimal" | "dark" | "corporate" | "academic";
+export type StyleName = "default" | "rich" | "minimal" | "dark" | "corporate" | "academic" | "tech";
 
 export interface StyleDefinition {
   name: StyleName;

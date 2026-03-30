@@ -63,6 +63,11 @@ const sampleParams: Record<string, SampleParamsBuilder> = {
     description: "Step-by-step overview.",
     citations: "Figure 1",
   }),
+  content: () => ({
+    heading: "Summary",
+    body: "This is a **free-form** markdown slide.\n\n- Key point one\n- Key point two\n- Key point three",
+    citations: "Source: Sample Report",
+  }),
 };
 
 describe("theme example generator", () => {

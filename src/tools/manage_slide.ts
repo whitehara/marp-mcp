@@ -14,16 +14,51 @@ import { createErrorResponse, createSuccessResponse } from "../utils/response.js
 import type { ToolResponse } from "../types/common.js";
 
 export const manageSlideSchema = z.object({
-  filePath: z.string().describe("Absolute path to the Marp markdown file"),
-  layoutType: z.string().optional().describe("Layout type to use (title, lead, content, table, multi-column, quote). Not required for delete mode."),
-  params: z.record(z.any()).optional().describe("Parameters for the layout template. Not required for delete mode."),
-  mode: z.enum(["insert", "replace", "delete"]).optional().describe("Operation mode: insert (default), replace, or delete"),
-  position: z.enum(["end", "start", "after", "before"]).optional().describe("Position for insertion: end (default), start, after, before"),
-  slideId: z.string().optional().describe("Slide ID for 'after', 'before' position, 'replace' mode, or 'delete' mode"),
+  filePath: z.string().describe("Absolute path to the Marp markdown file (must end in .md)"),
+  layoutType: z
+    .string()
+    .optional()
+    .describe(
+      "Layout type to use for this slide. Call list_layouts first to see all available layouts for the active theme/style. " +
+        "Common values: 'title', 'section', 'content', 'list', 'table', 'two-column', 'statistics', 'quote'. " +
+        "Not required for delete mode."
+    ),
+  params: z
+    .record(z.any())
+    .optional()
+    .describe(
+      "Parameters for the layout template as a key-value object. " +
+        "Call list_layouts to get required and optional parameter names and types for each layout. " +
+        'Example: {"heading": "My Title", "body": "Some content"}. Not required for delete mode.'
+    ),
+  mode: z
+    .enum(["insert", "replace", "delete"])
+    .optional()
+    .describe(
+      "Operation mode: 'insert' (default) adds a new slide, 'replace' overwrites an existing slide keeping its ID, " +
+        "'delete' removes a slide. replace and delete both require slideId."
+    ),
+  position: z
+    .enum(["end", "start", "after", "before"])
+    .optional()
+    .describe(
+      "Insertion position (insert mode only): 'end' (default) appends to deck, 'start' prepends, " +
+        "'after' inserts after slideId, 'before' inserts before slideId. Requires slideId for after/before."
+    ),
+  slideId: z
+    .string()
+    .optional()
+    .describe(
+      "Slide ID (the UUID from a '<!-- slide-id: ... -->' comment). Required for: position 'after', " +
+        "position 'before', mode 'replace', mode 'delete'. Use read_slide to discover existing slide IDs."
+    ),
   note: z
     .string()
     .optional()
-    .describe("Optional speaker notes appended to the slide as an HTML comment block"),
+    .describe(
+      "Speaker notes appended as an HTML comment block (<!-- ... -->) at the end of the slide. " +
+        'Supports multiple lines. Example: "Key point to emphasize\\nRemember to pause here"'
+    ),
 });
 
 /**
@@ -120,7 +155,9 @@ export async function manageSlide({
   // Handle delete mode separately
   if (mode === "delete") {
     if (!slideId) {
-      return createErrorResponse("slideId is required for delete mode");
+      return createErrorResponse(
+        "slideId is required for delete mode. Use read_slide to list all slides and their IDs."
+      );
     }
 
     try {
@@ -131,7 +168,9 @@ export async function manageSlide({
       const slideIndex = findSlideIndexById(slides, slideId);
 
       if (slideIndex === -1) {
-        return createErrorResponse(`Slide with ID "${slideId}" not found`);
+        return createErrorResponse(
+          `Slide with ID "${slideId}" not found in ${filePath}. Call read_slide on this file to see all current slide IDs.`
+        );
       }
 
       // Remove the slide
@@ -160,7 +199,8 @@ export async function manageSlide({
 
   if (!layout) {
     return createErrorResponse(
-      `Unknown layout type "${layoutType}". Available layouts: ${getLayoutNames().join(", ")}`
+      `Unknown layout type "${layoutType}". Available layouts: ${getLayoutNames().join(", ")}. ` +
+        "Call list_layouts to see full parameter details for each layout."
     );
   }
 
@@ -173,7 +213,10 @@ export async function manageSlide({
   }
 
   if (missingParams.length > 0) {
-    return createErrorResponse(`Missing required parameters: ${missingParams.join(", ")}`);
+    return createErrorResponse(
+      `Missing required parameters for layout "${layoutType}": ${missingParams.join(", ")}. ` +
+        "Call list_layouts to see all required and optional parameters."
+    );
   }
 
   // Validate parameter types and constraints
@@ -215,7 +258,8 @@ export async function manageSlide({
   // Validate slideId for operations that require it
   if ((position === "after" || position === "before" || mode === "replace") && !slideId) {
     return createErrorResponse(
-      `slideId is required for position "${position}" or mode "${mode}"`
+      `slideId is required for position "${position}" or mode "${mode}". ` +
+        "Call read_slide to list all slides and their IDs, then pass the target slideId."
     );
   }
 
@@ -240,7 +284,9 @@ export async function manageSlide({
       const slideIndex = findSlideIndexById(slides, slideId);
 
       if (slideIndex === -1) {
-        return createErrorResponse(`Slide with ID "${slideId}" not found`);
+        return createErrorResponse(
+          `Slide with ID "${slideId}" not found in ${filePath}. Call read_slide on this file to see all current slide IDs.`
+        );
       }
 
       // Keep the same ID for replaced slide
@@ -267,7 +313,9 @@ export async function manageSlide({
 
         const refIndex = findSlideIndexById(slides, slideId);
         if (refIndex === -1) {
-          return createErrorResponse(`Slide with ID "${slideId}" not found`);
+          return createErrorResponse(
+            `Slide with ID "${slideId}" not found in ${filePath}. Call read_slide on this file to see all current slide IDs.`
+          );
         }
 
         insertIndex = refIndex + 1;
@@ -278,7 +326,9 @@ export async function manageSlide({
 
         const refIndex = findSlideIndexById(slides, slideId);
         if (refIndex === -1) {
-          return createErrorResponse(`Slide with ID "${slideId}" not found`);
+          return createErrorResponse(
+            `Slide with ID "${slideId}" not found in ${filePath}. Call read_slide on this file to see all current slide IDs.`
+          );
         }
 
         insertIndex = refIndex;

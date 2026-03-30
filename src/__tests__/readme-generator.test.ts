@@ -110,11 +110,14 @@ Use \`-t\` or \`--theme\` args for theme selection. Choose from \`default\`, \`g
 
 | Tool | Description |
 |------|-------------|
+| \`list_themes_and_styles\` | List all available themes and styles with descriptions and layout counts |
 | \`list_layouts\` | List all available slide layouts with parameters and descriptions |
-| \`generate_slide_ids\` | Generate slide IDs for every slide |
+| \`create_presentation\` | Create a new presentation with frontmatter and title slide in one step |
 | \`manage_slide\` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
 | \`set_frontmatter\` | Ensure \`marp\`, \`theme\`, \`header\`, and \`paginate\` frontmatter fields are present |
 | \`read_slide\` | Read slide content by ID or list all slides with their IDs and positions |
+| \`generate_slide_ids\` | Generate stable UUIDs for every slide (safe to re-run) |
+| \`export_slide\` | Export to HTML or PDF using marp-cli |
 
 ### Style selection
 
