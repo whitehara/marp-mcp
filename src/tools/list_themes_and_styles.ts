@@ -5,8 +5,8 @@
  */
 
 import { z } from "zod";
-import { getAvailableThemeNames, getTheme } from "../themes/index.js";
-import { getAvailableStyleNames, getStyle } from "../styles/index.js";
+import { getAvailableThemeNames, getTheme, getActiveTheme } from "../themes/index.js";
+import { getAvailableStyleNames, getStyle, getActiveStyle } from "../styles/index.js";
 import type { ToolResponse } from "../types/common.js";
 
 export const listThemesAndStylesSchema = z.object({});
@@ -52,10 +52,15 @@ export async function listThemesAndStyles(): Promise<ToolResponse> {
         type: "text",
         text: JSON.stringify(
           {
+            currentDefaults: {
+              theme: getActiveTheme().name,
+              style: getActiveStyle().name,
+            },
             usage: {
-              theme: "Pass theme name via --theme flag or -t (e.g. marp-mcp -t gaia)",
-              style:
-                "Pass style name via --style flag or -s (e.g. marp-mcp -s rich). Styles are compatible with all themes unless listed in compatibleThemes.",
+              serverDefaults:
+                "Set server defaults via -t / -s CLI flags at startup (e.g. marp-mcp -t gaia -s rich). Omitting flags defaults to 'default'.",
+              perCall:
+                "Override per call by passing 'theme' and/or 'style' params to list_layouts, manage_slide, or set_frontmatter. Omit to use server defaults.",
               combining:
                 "Styles add layouts on top of themes. Use list_layouts to see the merged layout list for a specific theme+style combination.",
             },

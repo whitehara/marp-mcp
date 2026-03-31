@@ -29,7 +29,7 @@ export function registerCommands(program: Command): void {
     .command("list-layouts")
     .description("List all available slide layouts (JSON output)")
     .action(async () => {
-      const result = await listLayouts();
+      const result = await listLayouts({});
       outputResult(result);
     });
 

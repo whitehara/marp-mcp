@@ -16,7 +16,9 @@ This MCP server allows LLMs to edit Markdown files according to a specified layo
 
 ## Setup
 
-Add to your MCP client configuration:
+### Claude Code
+
+Add to `~/.claude/settings.json` (or run `/mcp add` in Claude Code):
 
 ```json
 {
@@ -29,48 +31,54 @@ Add to your MCP client configuration:
 }
 ```
 
-### Theme selection
+### Other MCP clients
 
-Use `-t` or `--theme` args for theme selection. Choose from `default`, `gaia`, `uncover`, or `academic`:
+```json
+{
+  "mcpServers": {
+    "marp-mcp": {
+      "command": "npx",
+      "args": ["-y", "@masaki39/marp-mcp@latest"]
+    }
+  }
+}
+```
+
+### Setting server default theme/style
+
+Use `-t` / `--theme` and `-s` / `--style` args to set the server-wide default. Choose from themes: `default`, `gaia`, `uncover`, `academic`. Styles: `default`, `rich`, `minimal`, `dark`, `corporate`, `academic`, `tech`:
 
 ```json
 {
   "command": "npx",
-  "args": [
-    "-y",
-    "@masaki39/marp-mcp@latest",
-    "-t",
-    "default"]
+  "args": ["-y", "@masaki39/marp-mcp@latest", "-t", "gaia", "-s", "rich"]
 }
 ```
+
+Omitting these flags defaults to `default` theme and `default` style.
 
 ## Tools
 
 | Tool | Description |
 |------|-------------|
-| `list_themes_and_styles` | List all available themes and styles with descriptions and layout counts |
-| `list_layouts` | List all available slide layouts with parameters and descriptions |
+| `list_themes_and_styles` | List all available themes and styles; shows current server defaults |
+| `list_layouts` | List available slide layouts for a theme/style combination |
 | `create_presentation` | Create a new presentation with frontmatter and title slide in one step |
 | `manage_slide` | Insert, replace, or delete slides using slide IDs (ID-based operations) |
 | `set_frontmatter` | Ensure `marp`, `theme`, `header`, and `paginate` frontmatter fields are present |
 | `read_slide` | Read slide content by ID or list all slides with their IDs and positions |
 | `generate_slide_ids` | Generate stable UUIDs for every slide (safe to re-run) |
-| `export_slide` | Export to HTML or PDF using marp-cli |
+| `export_slide` | Export to HTML, PDF, or PPTX using marp-cli |
 
-### Style selection
+### Per-call theme/style override
 
-Use `-s` or `--style` args for style selection. Choose from `default`, `rich`, `minimal`, `dark`, `corporate`, `academic`, `tech`. Styles are designed for the `default` theme:
+`list_layouts`, `manage_slide`, and `set_frontmatter` accept optional `theme` and `style` parameters to override the server default for a single call. This lets one server instance handle all theme/style combinations without restarting:
 
 ```json
-{
-  "command": "npx",
-  "args": [
-    "-y",
-    "@masaki39/marp-mcp@latest",
-    "-s",
-    "rich"]
-}
+{ "theme": "gaia", "style": "rich" }
 ```
+
+Omit either parameter to fall back to the server default.
 
 ## Available Layouts
 

@@ -1,12 +1,12 @@
 /**
  * Tool: export_slide
- * Exports a Marp markdown presentation to HTML or PDF using marp-cli.
+ * Exports a Marp markdown presentation to HTML, PDF, or PPTX using marp-cli.
  */
 
 import { z } from "zod";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
-import { join } from "path";
+import { basename, dirname, join } from "path";
 import { validateFilePath } from "../utils/path-validator.js";
 import { createErrorResponse, createSuccessResponse } from "../utils/response.js";
 import type { ToolResponse } from "../types/common.js";
@@ -14,10 +14,10 @@ import type { ToolResponse } from "../types/common.js";
 export const exportSlideSchema = z.object({
   filePath: z.string().describe("Absolute path to the Marp markdown file to export (must end in .md)"),
   format: z
-    .enum(["html", "pdf"])
+    .enum(["html", "pdf", "pptx"])
     .describe(
       "Output format: 'html' for browser-viewable presentation with full style rendering, " +
-        "'pdf' for printable document"
+        "'pdf' for printable document, 'pptx' for PowerPoint (requires LibreOffice)"
     ),
   outputPath: z
     .string()
@@ -51,15 +51,15 @@ function getMarpBinPath(): string {
 }
 
 /**
- * Runs marp CLI with the given args and resolves with { exitCode, stdout, stderr }.
+ * Runs a command and resolves with { exitCode, stdout, stderr }.
  */
-function runMarp(
+function runCommand(
+  command: string,
   args: string[],
   timeoutMs: number
 ): Promise<{ exitCode: number; stdout: string; stderr: string }> {
   return new Promise((resolve) => {
-    const marpBin = getMarpBinPath();
-    const proc = spawn(marpBin, args, { stdio: ["ignore", "pipe", "pipe"] });
+    const proc = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
 
     let stdout = "";
     let stderr = "";
@@ -76,7 +76,7 @@ function runMarp(
     proc.on("close", (code) => {
       clearTimeout(timer);
       if (timedOut) {
-        resolve({ exitCode: -1, stdout, stderr: "Export timed out after 60 seconds" });
+        resolve({ exitCode: -1, stdout, stderr: `Command timed out after ${timeoutMs / 1000} seconds` });
       } else {
         resolve({ exitCode: code ?? 1, stdout, stderr });
       }
@@ -90,11 +90,35 @@ function runMarp(
 }
 
 /**
- * MCP Tool: Exports a Marp markdown presentation to HTML or PDF.
+ * Checks whether LibreOffice is available in PATH.
+ */
+async function checkLibreOffice(): Promise<boolean> {
+  const result = await runCommand("libreoffice", ["--version"], 10_000);
+  return result.exitCode === 0;
+}
+
+/**
+ * Detects local image paths in markdown content (non-http/https references).
+ */
+function detectLocalImagePaths(content: string): string[] {
+  const matches: string[] = [];
+  const regex = /!\[.*?\]\(([^)]+)\)/g;
+  let m;
+  while ((m = regex.exec(content)) !== null) {
+    const src = m[1].split(" ")[0]; // strip optional title attribute
+    if (!src.startsWith("http://") && !src.startsWith("https://")) {
+      matches.push(src);
+    }
+  }
+  return matches;
+}
+
+/**
+ * MCP Tool: Exports a Marp markdown presentation to HTML, PDF, or PPTX.
  *
  * @param {object} options - Export options
  * @param {string} options.filePath - Absolute path to the Marp markdown file
- * @param {"html" | "pdf"} options.format - Output format
+ * @param {"html" | "pdf" | "pptx"} options.format - Output format
  * @param {string} [options.outputPath] - Output file path (default: same dir as input)
  * @param {boolean} [options.allowLocalFiles] - Allow local file access in HTML export
  * @param {string} [options.themeSet] - Path to custom theme CSS file
@@ -123,25 +147,99 @@ export async function exportSlide({
 
   // Validate outputPath if provided
   if (outputPath) {
-    const outputError = validateFilePath(outputPath, [".html", ".pdf"]);
+    const outputError = validateFilePath(outputPath, [".html", ".pdf", ".pptx"]);
     if (outputError) {
       return createErrorResponse(`Invalid outputPath: ${outputError}`);
     }
   }
 
-  // Check that the input file exists
+  // Check that the input file exists and read content
+  let content: string;
   try {
-    await fs.access(filePath);
+    content = await fs.readFile(filePath, "utf-8");
   } catch {
     return createErrorResponse(
       `File not found: ${filePath}. Ensure the file exists before exporting.`
     );
   }
 
-  // Determine output path
+  // Detect local image paths for HTML warning
+  let localImageWarning: string | undefined;
+  if (format === "html") {
+    const localPaths = detectLocalImagePaths(content);
+    if (localPaths.length > 0) {
+      localImageWarning =
+        `Local image paths detected: [${localPaths.join(", ")}]. ` +
+        "HTML export may not display these correctly. Consider using PDF format instead, " +
+        "or set allowLocalFiles: true if you need HTML with local images.";
+    }
+  }
+
+  // PPTX format: requires LibreOffice
+  if (format === "pptx") {
+    const libreOfficeAvailable = await checkLibreOffice();
+    if (!libreOfficeAvailable) {
+      return createErrorResponse(
+        "PPTX export requires LibreOffice. Install it and ensure 'libreoffice' is in PATH. " +
+          "On macOS: `brew install --cask libreoffice`. On Ubuntu: `sudo apt install libreoffice`."
+      );
+    }
+
+    const finalOutputPath = outputPath ?? filePath.replace(/\.md$/, ".pptx");
+    const outputDir = dirname(finalOutputPath);
+    const tmpPdfPath = join(outputDir, `_tmp_${basename(filePath, ".md")}.pdf`);
+
+    // Step 1: Export to PDF via marp
+    const marpArgs: string[] = [
+      "--no-config-file",
+      "--html",
+      "--pdf",
+      "--output", tmpPdfPath,
+    ];
+    if (allowLocalFiles) marpArgs.push("--allow-local-files");
+    if (themeSet) marpArgs.push("--theme-set", themeSet);
+    marpArgs.push(filePath);
+
+    const marpResult = await runCommand(getMarpBinPath(), marpArgs, 60_000);
+    if (marpResult.exitCode !== 0) {
+      return createErrorResponse(
+        `Export failed (PDF stage): ${marpResult.stderr.trim() || `marp CLI exited with code ${marpResult.exitCode}`}`
+      );
+    }
+
+    // Step 2: Convert PDF to PPTX via LibreOffice
+    try {
+      const loResult = await runCommand(
+        "libreoffice",
+        ["--headless", "--convert-to", "pptx", "--outdir", outputDir, tmpPdfPath],
+        120_000
+      );
+      if (loResult.exitCode !== 0) {
+        return createErrorResponse(
+          `Export failed (PPTX stage): ${loResult.stderr.trim() || `libreoffice exited with code ${loResult.exitCode}`}`
+        );
+      }
+
+      // LibreOffice names the output based on the input filename
+      const loOutputPath = join(outputDir, `${basename(tmpPdfPath, ".pdf")}.pptx`);
+      if (loOutputPath !== finalOutputPath) {
+        await fs.rename(loOutputPath, finalOutputPath);
+      }
+    } finally {
+      await fs.unlink(tmpPdfPath).catch(() => {});
+    }
+
+    return createSuccessResponse({
+      message: "Exported successfully to PPTX",
+      outputPath: finalOutputPath,
+      format,
+      sourceFile: filePath,
+    });
+  }
+
+  // HTML or PDF format
   const resolvedOutput = outputPath ?? filePath.replace(/\.md$/, `.${format}`);
 
-  // Build marp CLI args
   const args: string[] = [
     "--no-config-file",
     "--html",                          // always enable --html for style class rendering
@@ -162,8 +260,7 @@ export async function exportSlide({
 
   args.push(filePath);
 
-  // Run marp CLI
-  const { exitCode, stderr } = await runMarp(args, 60_000);
+  const { exitCode, stderr } = await runCommand(getMarpBinPath(), args, 60_000);
 
   if (exitCode !== 0) {
     const errorMessage = stderr.trim() || `marp CLI exited with code ${exitCode}`;
@@ -175,5 +272,6 @@ export async function exportSlide({
     outputPath: resolvedOutput,
     format,
     sourceFile: filePath,
+    ...(localImageWarning ? { warning: localImageWarning } : {}),
   });
 }

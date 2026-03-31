@@ -6,6 +6,8 @@
 import { z } from "zod";
 import { promises as fs } from "fs";
 import { getLayout, getLayoutNames } from "./list_layouts.js";
+import { getActiveTheme, getTheme } from "../themes/index.js";
+import { getActiveStyle, getStyle } from "../styles/index.js";
 import { ensureSlideId, findSlideIndexById, generateSlideId } from "../utils/slide-id.js";
 import { validateFilePath } from "../utils/path-validator.js";
 import { parseFrontmatter, splitSlides, joinSlides } from "../utils/frontmatter.js";
@@ -58,6 +60,20 @@ export const manageSlideSchema = z.object({
     .describe(
       "Speaker notes appended as an HTML comment block (<!-- ... -->) at the end of the slide. " +
         'Supports multiple lines. Example: "Key point to emphasize\\nRemember to pause here"'
+    ),
+  theme: z
+    .string()
+    .optional()
+    .describe(
+      "Theme name to use for this call (e.g. 'gaia', 'uncover', 'academic'). " +
+        "Overrides server default for this call only. Omit to use server default."
+    ),
+  style: z
+    .string()
+    .optional()
+    .describe(
+      "Style name to use for this call (e.g. 'rich', 'minimal', 'dark'). " +
+        "Overrides server default for this call only. Omit to use server default."
     ),
 });
 
@@ -145,11 +161,32 @@ export async function manageSlide({
   position = "end",
   slideId,
   note,
+  theme: themeName,
+  style: styleName,
 }: z.infer<typeof manageSlideSchema>): Promise<ToolResponse> {
   // Validate file path
   const pathError = validateFilePath(filePath);
   if (pathError) {
     return createErrorResponse(pathError);
+  }
+
+  // Resolve theme and style
+  const resolvedTheme = themeName ? getTheme(themeName) : getActiveTheme();
+  if (themeName && !resolvedTheme) {
+    return createErrorResponse(`Unknown theme: "${themeName}". Call list_themes_and_styles to see available themes.`);
+  }
+  const resolvedStyle = styleName ? getStyle(styleName) : getActiveStyle();
+  if (styleName && !resolvedStyle) {
+    return createErrorResponse(`Unknown style: "${styleName}". Call list_themes_and_styles to see available styles.`);
+  }
+  if (
+    resolvedStyle!.compatibleThemes.length > 0 &&
+    !resolvedStyle!.compatibleThemes.includes(resolvedTheme!.name)
+  ) {
+    return createErrorResponse(
+      `Style "${resolvedStyle!.name}" is not compatible with theme "${resolvedTheme!.name}". ` +
+        `Compatible themes: ${resolvedStyle!.compatibleThemes.join(", ")}.`
+    );
   }
 
   // Handle delete mode separately
@@ -195,11 +232,11 @@ export async function manageSlide({
     return createErrorResponse("layoutType is required for insert/replace modes");
   }
 
-  const layout = getLayout(layoutType);
+  const layout = getLayout(layoutType, resolvedTheme!, resolvedStyle!);
 
   if (!layout) {
     return createErrorResponse(
-      `Unknown layout type "${layoutType}". Available layouts: ${getLayoutNames().join(", ")}. ` +
+      `Unknown layout type "${layoutType}". Available layouts: ${getLayoutNames(resolvedTheme!, resolvedStyle!).join(", ")}. ` +
         "Call list_layouts to see full parameter details for each layout."
     );
   }

@@ -43,7 +43,7 @@ describe("theme manager", () => {
 });
 
 async function getLayoutNamesFromTool(): Promise<string[]> {
-  const response = await listLayouts();
+  const response = await listLayouts({});
   const payload = JSON.parse(response.content[0].text) as {
     layouts: Array<{ name: string }>;
   };

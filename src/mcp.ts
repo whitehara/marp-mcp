@@ -66,7 +66,8 @@ export async function startMcpServer(): Promise<void> {
   server.tool(
     "list_layouts",
     "List all available slide layouts with their required/optional parameters. " +
-      "ALWAYS call this before manage_slide to discover valid layoutType values and their params for the active theme/style.",
+      "ALWAYS call this before manage_slide to discover valid layoutType values and their params. " +
+      "Accepts optional 'theme' and 'style' params to override server defaults for this call only.",
     listLayoutsSchema.shape,
     listLayouts
   );
@@ -84,7 +85,8 @@ export async function startMcpServer(): Promise<void> {
     "manage_slide",
     "Insert, replace, or delete slides in a Marp file using slide IDs. " +
       "Always call list_layouts first to see available layoutType values and their required params. " +
-      "Use read_slide to get existing slide IDs before replace/delete/after/before operations.",
+      "Use read_slide to get existing slide IDs before replace/delete/after/before operations. " +
+      "Accepts optional 'theme' and 'style' params to override server defaults for this call only.",
     manageSlideSchema.shape,
     manageSlide
   );
@@ -92,7 +94,8 @@ export async function startMcpServer(): Promise<void> {
   server.tool(
     "set_frontmatter",
     "Initialize or update required Marp frontmatter (marp:true, theme, header, paginate) and inject active style CSS. " +
-      "Call this FIRST before adding slides to any new or existing presentation file.",
+      "Call this FIRST before adding slides to any new or existing presentation file. " +
+      "Accepts optional 'theme' and 'style' params to override server defaults for this call only.",
     setFrontmatterSchema.shape,
     setFrontmatter
   );
@@ -107,8 +110,9 @@ export async function startMcpServer(): Promise<void> {
 
   server.tool(
     "export_slide",
-    "Export a Marp markdown presentation to HTML or PDF using marp-cli. " +
-      "HTML export preserves all style class rendering; PDF produces a printable document. " +
+    "Export a Marp markdown presentation to HTML, PDF, or PPTX using marp-cli. " +
+      "HTML export preserves all style class rendering; PDF produces a printable document; PPTX requires LibreOffice. " +
+      "Note: HTML export may not display local image files correctly — use PDF when local images are present. " +
       "Call set_frontmatter and ensure slides are complete before exporting.",
     exportSlideSchema.shape,
     exportSlide
@@ -117,8 +121,8 @@ export async function startMcpServer(): Promise<void> {
   server.tool(
     "list_themes_and_styles",
     "List all available themes and styles with descriptions and layout counts. " +
-      "Use this to help choose the right visual style for a presentation. " +
-      "Then call list_layouts with the chosen -t theme / -s style to see the specific layouts available.",
+      "Shows current server defaults and explains how to override them per call. " +
+      "Call this first when choosing a theme/style, then call list_layouts with your chosen theme/style params.",
     listThemesAndStylesSchema.shape,
     listThemesAndStyles
   );
