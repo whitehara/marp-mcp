@@ -10,11 +10,11 @@
   "scripts": {
     "test": "jest",
     "build": "tsc && shx chmod 755 build/index.js",
-    "prepublishOnly": "npm run build",
-    "prepare": "npm run build",
-    "readme:generate": "npm test -- --testPathPattern=readme-generator",
-    "skills:generate": "npm test -- --testPathPattern=skill-generator",
-    "examples:generate": "npm test -- --testPathPattern=example-generator",
+    "prepublishOnly": "pnpm run build",
+    "prepare": "pnpm run build",
+    "readme:generate": "pnpm test -- --testPathPattern=readme-generator",
+    "skills:generate": "pnpm test -- --testPathPattern=skill-generator",
+    "examples:generate": "pnpm test -- --testPathPattern=example-generator",
     "examples:html": "npm run examples:html:styles && npm run examples:html:themes",
     "examples:html:styles": "marp --html --input-dir assets/examples/md --output assets/examples/html --no-config-file",
     "examples:html:themes": "marp --html --input-dir assets/examples/md --output assets/examples/html --theme-set assets/themes/academic.css --no-config-file",
@@ -49,6 +49,7 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "packageManager": "pnpm@10.32.1",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.19.1",
     "commander": "^14.0.3",

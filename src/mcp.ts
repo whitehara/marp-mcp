@@ -54,14 +54,18 @@ const packageJson = JSON.parse(
  * Starts the MCP server on stdio transport.
  */
 export async function startMcpServer(): Promise<void> {
-  const server = new McpServer({
-    name: "marp-mcp",
-    version: packageJson.version,
-    capabilities: {
-      resources: {},
-      tools: {},
+  const server = new McpServer(
+    {
+      name: "marp-mcp",
+      version: packageJson.version,
     },
-  });
+    {
+      capabilities: {
+        resources: {},
+        tools: {},
+      },
+    }
+  );
 
   server.tool(
     "list_layouts",

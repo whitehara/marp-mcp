@@ -3,12 +3,12 @@
 ## ドキュメント自動生成（最重要）
 
 - `README.md`、`skills/marp/SKILL.md`、`assets/examples/md/` はすべて Jest テスト内で自動生成される
-- **`npm test` を実行すると上書きされる**ため、内容を変えたい場合は対応する generator テストを修正する
+- **`pnpm test` を実行すると上書きされる**ため、内容を変えたい場合は対応する generator テストを修正する
   - README → `src/__tests__/readme-generator.test.ts`
   - SKILL.md → `src/__tests__/skill-generator.test.ts`
   - Examples → `src/styles/__tests__/example-generator.test.ts`、`src/themes/__tests__/example-generator.test.ts`
 - `.claude/skills/marp/SKILL.md` は `skills/marp/SKILL.md` へのシンボリックリンク
-- generator テストも `npm test` に含まれるため、テスト実行 = ドキュメント再生成
+- generator テストも `pnpm test` に含まれるため、テスト実行 = ドキュメント再生成
 
 ## ESM + TypeScript
 
@@ -38,11 +38,21 @@
 - 一時ディレクトリ: `fs.mkdtemp(path.join(os.tmpdir(), "marp-{prefix}-"))`
 - `beforeEach` で `setActiveTheme("default")` を呼んでテーマ状態リセット
 
-## npm publish
+## パッケージ管理 (pnpm)
 
+- パッケージマネージャーは pnpm（`pnpm install` でロックファイル `pnpm-lock.yaml` を更新）
+- `npm publish` / `npm version` は pnpm プロジェクトでもそのまま動作する
 - `"files"`: `build`, `.claude/skills`, `README.md`, `LICENSE` のみ公開
+
+## リリースフロー
+
+1. `changelog/{version}.md` を作成してリリースノートを書く
+2. `npm version {version}` でバージョンバンプ＋タグ作成
+3. `git push && git push --tags` でプッシュ → GitHub Actions が自動で GitHub Release を作成
+4. `npm publish` で npm に手動公開
 
 ## CI
 
-- テスト: Node 18.x / 20.x / 22.x
+- テスト: Node 18.x / 20.x / 22.x（pnpm でインストール）
 - examples の HTML は CI で GitHub Pages にデプロイ（`assets/examples/html/` は `.gitignore` 対象）
+- タグ push（`v*`）で GitHub Release を自動作成（`changelog/{version}.md` がリリースノート）
