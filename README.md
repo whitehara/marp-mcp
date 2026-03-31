@@ -253,17 +253,17 @@ Rendered samples (GitHub Pages):
 
 Generate markdown examples:
 ```bash
-npm run examples:generate
+pnpm run examples:generate
 ```
 
 Generate HTML files locally:
 ```bash
-npm run examples:html
+pnpm run examples:html
 ```
 
 Preview examples with live reload (recommended for testing):
 ```bash
-npm run examples:server
+pnpm run examples:server
 # Open http://localhost:8080 in your browser
 ```
 
