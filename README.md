@@ -14,11 +14,23 @@
 An MCP server for creating and editing Marp presentations with AI assistance.
 This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [Academic](./assets/themes/academic.css) in this repository.
 
-## Setup
+## ⚙️ Setup
 
 ### Claude Code
 
-Add to `~/.claude/settings.json` (or run `/mcp add` in Claude Code):
+**Option 1 — CLI, user scope** (recommended):
+
+```bash
+claude mcp add marp-mcp -- npx -y @masaki39/marp-mcp@latest
+```
+
+**Option 2 — CLI, project scope** (shareable with team via `.mcp.json`):
+
+```bash
+claude mcp add --scope project marp-mcp -- npx -y @masaki39/marp-mcp@latest
+```
+
+**Option 3 — Manual config** (`~/.claude/settings.json` or `.mcp.json`):
 
 ```json
 {
@@ -50,14 +62,18 @@ Use `-t` / `--theme` and `-s` / `--style` args to set the server-wide default. C
 
 ```json
 {
-  "command": "npx",
-  "args": ["-y", "@masaki39/marp-mcp@latest", "-t", "gaia", "-s", "rich"]
+  "mcpServers": {
+    "marp-mcp": {
+      "command": "npx",
+      "args": ["-y", "@masaki39/marp-mcp@latest", "-t", "default", "-s", "academic"]
+    }
+  }
 }
 ```
 
 Omitting these flags defaults to `default` theme and `default` style.
 
-## Tools
+## 🛠️ Tools
 
 | Tool | Description |
 |------|-------------|
@@ -80,7 +96,7 @@ Omitting these flags defaults to `default` theme and `default` style.
 
 Omit either parameter to fall back to the server default.
 
-## Example
+## 🎨 Example
 
 Rendered samples (GitHub Pages):
 
@@ -95,9 +111,12 @@ Rendered samples (GitHub Pages):
 - [Default theme, academic style](https://masaki39.github.io/marp-mcp/example-default-academic-style.html)
 - [Default theme, tech style](https://masaki39.github.io/marp-mcp/example-default-tech-style.html)
 
-## Available Layouts
+## 📐 Available Layouts
 
 ### Default theme
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -109,9 +128,14 @@ Rendered samples (GitHub Pages):
 | `image-center` | Slide with centered image (fixed h:350) |
 | `content` | Standard content slide with heading and free-form markdown body (supports bullets with -, bold with **, code with backticks) |
 
+</details>
+
 ### Styles
 
 #### `rich` — Rich visual style with cards, timelines, grids, gradients, and more
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -141,7 +165,12 @@ Rendered samples (GitHub Pages):
 | `pull-quote` | Decorative impact quote with large quotation marks, centered layout |
 | `bento-grid` | Bento Box modular grid for mixed content (use 'Size|Title|Content' format, Size: small/medium/large) |
 
+</details>
+
 #### `minimal` — Clean, flat design with typography focus and minimal decoration
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -161,7 +190,12 @@ Rendered samples (GitHub Pages):
 | `agenda` | Clean agenda slide with numbered items and optional time durations (use 'Item name|Duration' format) |
 | `comparison` | Side-by-side comparison with explicit left/right titles and list items, separated by a thin divider |
 
+</details>
+
 #### `dark` — Dark mode style with indigo and emerald accents, developer-friendly
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -187,7 +221,12 @@ Rendered samples (GitHub Pages):
 | `code-comparison` | Side-by-side code comparison (Before/After or two languages) |
 | `code-showcase` | Code block with language badge, optional explanation text, and optional highlight bullet points |
 
+</details>
+
 #### `corporate` — Professional business style with navy color scheme, structured layouts
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -212,7 +251,12 @@ Rendered samples (GitHub Pages):
 | `pull-quote` | Corporate decorative impact quote with large quotation marks |
 | `quadrant` | 2x2 matrix for SWOT, risk analysis, or priority grids |
 
+</details>
+
 #### `academic` — Academic conference presentation style with maroon color scheme, structured for scholarly talks
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -232,7 +276,12 @@ Rendered samples (GitHub Pages):
 | `sidebar` | Main content with sidebar for definitions, notes, or references |
 | `results-table` | Results table with best-value highlighting (prefix cell with * to highlight) |
 
+</details>
+
 #### `tech` — Modern tech/startup style with violet-cyan gradient accents, strong typography for product demos and engineering talks
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
@@ -247,7 +296,9 @@ Rendered samples (GitHub Pages):
 | `feature-grid` | Grid of feature cards, each with an icon, title, and description. Use 'Icon|Title|Description' format. |
 | `roadmap` | Horizontal milestone timeline with status indicators. Use 'Phase|Label|Status' format. Status: 'done', 'current', or 'future'. |
 
-## Development
+</details>
+
+## 🔧 Development
 
 ### Working with Examples
 
@@ -269,11 +320,11 @@ pnpm run examples:server
 
 **Note**: HTML files are automatically generated and deployed to GitHub Pages by CI/CD. They are not committed to git.
 
-## License
+## 📄 License
 
 MIT License
 
-## Links
+## 🔗 Links
 
 - [GitHub](https://github.com/masaki39/marp-mcp)
 - [npm](https://www.npmjs.com/package/@masaki39/marp-mcp)

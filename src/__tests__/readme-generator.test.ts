@@ -40,7 +40,7 @@ function buildReadme(): string {
       const rows = Object.entries(style.layouts)
         .map(([name, layout]) => `| \`${name}\` | ${layout.description} |`)
         .join("\n");
-      return `#### \`${styleName}\` — ${style.description}\n\n| Layout | Description |\n|--------|-------------|\n${rows}`;
+      return `#### \`${styleName}\` — ${style.description}\n\n<details>\n<summary>Show layouts</summary>\n\n| Layout | Description |\n|--------|-------------|\n${rows}\n\n</details>`;
     })
     .join("\n\n");
 
@@ -76,11 +76,23 @@ function buildReadme(): string {
 An MCP server for creating and editing Marp presentations with AI assistance.
 This MCP server allows LLMs to edit Markdown files according to a specified layout, and now supports the default Marp theme along with Gaia, Uncover, and the [Academic](./assets/themes/academic.css) in this repository.
 
-## Setup
+## ⚙️ Setup
 
 ### Claude Code
 
-Add to \`~/.claude/settings.json\` (or run \`/mcp add\` in Claude Code):
+**Option 1 — CLI, user scope** (recommended):
+
+\`\`\`bash
+claude mcp add marp-mcp -- npx -y @masaki39/marp-mcp@latest
+\`\`\`
+
+**Option 2 — CLI, project scope** (shareable with team via \`.mcp.json\`):
+
+\`\`\`bash
+claude mcp add --scope project marp-mcp -- npx -y @masaki39/marp-mcp@latest
+\`\`\`
+
+**Option 3 — Manual config** (\`~/.claude/settings.json\` or \`.mcp.json\`):
 
 \`\`\`json
 {
@@ -112,14 +124,18 @@ Use \`-t\` / \`--theme\` and \`-s\` / \`--style\` args to set the server-wide de
 
 \`\`\`json
 {
-  "command": "npx",
-  "args": ["-y", "@masaki39/marp-mcp@latest", "-t", "gaia", "-s", "rich"]
+  "mcpServers": {
+    "marp-mcp": {
+      "command": "npx",
+      "args": ["-y", "@masaki39/marp-mcp@latest", "-t", "default", "-s", "academic"]
+    }
+  }
 }
 \`\`\`
 
 Omitting these flags defaults to \`default\` theme and \`default\` style.
 
-## Tools
+## 🛠️ Tools
 
 | Tool | Description |
 |------|-------------|
@@ -142,26 +158,31 @@ Omitting these flags defaults to \`default\` theme and \`default\` style.
 
 Omit either parameter to fall back to the server default.
 
-## Example
+## 🎨 Example
 
 Rendered samples (GitHub Pages):
 
 ${themeLinks}
 ${styleLinks}
 
-## Available Layouts
+## 📐 Available Layouts
 
 ### Default theme
+
+<details>
+<summary>Show layouts</summary>
 
 | Layout | Description |
 |--------|-------------|
 ${defaultThemeRows}
 
+</details>
+
 ### Styles
 
 ${styleLayoutSections}
 
-## Development
+## 🔧 Development
 
 ### Working with Examples
 
@@ -183,11 +204,11 @@ pnpm run examples:server
 
 **Note**: HTML files are automatically generated and deployed to GitHub Pages by CI/CD. They are not committed to git.
 
-## License
+## 📄 License
 
 MIT License
 
-## Links
+## 🔗 Links
 
 - [GitHub](https://github.com/masaki39/marp-mcp)
 - [npm](https://www.npmjs.com/package/@masaki39/marp-mcp)
