@@ -58,6 +58,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@marp-team/marp-cli": "^4.2.3",
     "@types/jest": "^29.5.12",
     "@types/node": "^24.6.2",
