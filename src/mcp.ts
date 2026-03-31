@@ -111,7 +111,7 @@ export async function startMcpServer(): Promise<void> {
   server.tool(
     "export_slide",
     "Export a Marp markdown presentation to HTML, PDF, or PPTX using marp-cli. " +
-      "HTML export preserves all style class rendering; PDF produces a printable document; PPTX requires LibreOffice. " +
+      "HTML preserves all style rendering; PDF is printable; PPTX embeds slides as images (editable PPTX via pptxEditable flag requires LibreOffice). " +
       "Note: HTML export may not display local image files correctly — use PDF when local images are present. " +
       "Call set_frontmatter and ensure slides are complete before exporting.",
     exportSlideSchema.shape,

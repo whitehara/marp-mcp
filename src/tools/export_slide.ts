@@ -6,7 +6,7 @@
 import { z } from "zod";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
-import { basename, dirname, join } from "path";
+import { join } from "path";
 import { validateFilePath } from "../utils/path-validator.js";
 import { createErrorResponse, createSuccessResponse } from "../utils/response.js";
 import type { ToolResponse } from "../types/common.js";
@@ -17,7 +17,7 @@ export const exportSlideSchema = z.object({
     .enum(["html", "pdf", "pptx"])
     .describe(
       "Output format: 'html' for browser-viewable presentation with full style rendering, " +
-        "'pdf' for printable document, 'pptx' for PowerPoint (requires LibreOffice)"
+        "'pdf' for printable document, 'pptx' for PowerPoint-compatible file (slide images embedded)"
     ),
   outputPath: z
     .string()
@@ -39,6 +39,14 @@ export const exportSlideSchema = z.object({
     .describe(
       "Absolute path to a custom theme CSS file to include. " +
         "Omit when using built-in themes (default, gaia, uncover)."
+    ),
+  pptxEditable: z
+    .boolean()
+    .optional()
+    .describe(
+      "[EXPERIMENTAL] Generate an editable PPTX with actual text and shapes instead of pre-rendered images. " +
+        "Requires LibreOffice to be installed. May have lower slide reproducibility and does not support presenter notes. " +
+        "Only valid when format is 'pptx'."
     ),
 });
 
@@ -90,14 +98,6 @@ function runCommand(
 }
 
 /**
- * Checks whether LibreOffice is available in PATH.
- */
-async function checkLibreOffice(): Promise<boolean> {
-  const result = await runCommand("libreoffice", ["--version"], 10_000);
-  return result.exitCode === 0;
-}
-
-/**
  * Detects local image paths in markdown content (non-http/https references).
  */
 function detectLocalImagePaths(content: string): string[] {
@@ -122,6 +122,7 @@ function detectLocalImagePaths(content: string): string[] {
  * @param {string} [options.outputPath] - Output file path (default: same dir as input)
  * @param {boolean} [options.allowLocalFiles] - Allow local file access in HTML export
  * @param {string} [options.themeSet] - Path to custom theme CSS file
+ * @param {boolean} [options.pptxEditable] - Generate editable PPTX (requires LibreOffice)
  * @returns {Promise<ToolResponse>} Export result with output file path
  */
 export async function exportSlide({
@@ -130,6 +131,7 @@ export async function exportSlide({
   outputPath,
   allowLocalFiles,
   themeSet,
+  pptxEditable,
 }: z.infer<typeof exportSlideSchema>): Promise<ToolResponse> {
   // Validate input file path
   const pathError = validateFilePath(filePath);
@@ -151,6 +153,11 @@ export async function exportSlide({
     if (outputError) {
       return createErrorResponse(`Invalid outputPath: ${outputError}`);
     }
+  }
+
+  // pptxEditable is only valid for pptx format
+  if (pptxEditable && format !== "pptx") {
+    return createErrorResponse("pptxEditable is only valid when format is 'pptx'.");
   }
 
   // Check that the input file exists and read content
@@ -175,71 +182,10 @@ export async function exportSlide({
     }
   }
 
-  // PPTX format: requires LibreOffice
-  if (format === "pptx") {
-    const libreOfficeAvailable = await checkLibreOffice();
-    if (!libreOfficeAvailable) {
-      return createErrorResponse(
-        "PPTX export requires LibreOffice. Install it and ensure 'libreoffice' is in PATH. " +
-          "On macOS: `brew install --cask libreoffice`. On Ubuntu: `sudo apt install libreoffice`."
-      );
-    }
-
-    const finalOutputPath = outputPath ?? filePath.replace(/\.md$/, ".pptx");
-    const outputDir = dirname(finalOutputPath);
-    const tmpPdfPath = join(outputDir, `_tmp_${basename(filePath, ".md")}.pdf`);
-
-    // Step 1: Export to PDF via marp
-    const marpArgs: string[] = [
-      "--no-config-file",
-      "--html",
-      "--pdf",
-      "--output", tmpPdfPath,
-    ];
-    if (allowLocalFiles) marpArgs.push("--allow-local-files");
-    if (themeSet) marpArgs.push("--theme-set", themeSet);
-    marpArgs.push(filePath);
-
-    const marpResult = await runCommand(getMarpBinPath(), marpArgs, 60_000);
-    if (marpResult.exitCode !== 0) {
-      return createErrorResponse(
-        `Export failed (PDF stage): ${marpResult.stderr.trim() || `marp CLI exited with code ${marpResult.exitCode}`}`
-      );
-    }
-
-    // Step 2: Convert PDF to PPTX via LibreOffice
-    try {
-      const loResult = await runCommand(
-        "libreoffice",
-        ["--headless", "--convert-to", "pptx", "--outdir", outputDir, tmpPdfPath],
-        120_000
-      );
-      if (loResult.exitCode !== 0) {
-        return createErrorResponse(
-          `Export failed (PPTX stage): ${loResult.stderr.trim() || `libreoffice exited with code ${loResult.exitCode}`}`
-        );
-      }
-
-      // LibreOffice names the output based on the input filename
-      const loOutputPath = join(outputDir, `${basename(tmpPdfPath, ".pdf")}.pptx`);
-      if (loOutputPath !== finalOutputPath) {
-        await fs.rename(loOutputPath, finalOutputPath);
-      }
-    } finally {
-      await fs.unlink(tmpPdfPath).catch(() => {});
-    }
-
-    return createSuccessResponse({
-      message: "Exported successfully to PPTX",
-      outputPath: finalOutputPath,
-      format,
-      sourceFile: filePath,
-    });
-  }
-
-  // HTML or PDF format
+  // Determine output path
   const resolvedOutput = outputPath ?? filePath.replace(/\.md$/, `.${format}`);
 
+  // Build marp CLI args
   const args: string[] = [
     "--no-config-file",
     "--html",                          // always enable --html for style class rendering
@@ -248,6 +194,11 @@ export async function exportSlide({
 
   if (format === "pdf") {
     args.push("--pdf");
+  } else if (format === "pptx") {
+    args.push("--pptx");
+    if (pptxEditable) {
+      args.push("--pptx-editable");
+    }
   }
 
   if (allowLocalFiles) {
@@ -267,8 +218,10 @@ export async function exportSlide({
     return createErrorResponse(`Export failed: ${errorMessage}`);
   }
 
+  const formatLabel = format === "pptx" && pptxEditable ? "PPTX (editable)" : format.toUpperCase();
+
   return createSuccessResponse({
-    message: `Exported successfully to ${format.toUpperCase()}`,
+    message: `Exported successfully to ${formatLabel}`,
     outputPath: resolvedOutput,
     format,
     sourceFile: filePath,

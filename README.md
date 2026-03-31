@@ -80,6 +80,21 @@ Omitting these flags defaults to `default` theme and `default` style.
 
 Omit either parameter to fall back to the server default.
 
+## Example
+
+Rendered samples (GitHub Pages):
+
+- [Academic theme](https://masaki39.github.io/marp-mcp/example-academic-theme.html)
+- [Default theme](https://masaki39.github.io/marp-mcp/example-default-theme.html)
+- [Gaia theme](https://masaki39.github.io/marp-mcp/example-gaia-theme.html)
+- [Uncover theme](https://masaki39.github.io/marp-mcp/example-uncover-theme.html)
+- [Default theme, rich style](https://masaki39.github.io/marp-mcp/example-default-rich-style.html)
+- [Default theme, minimal style](https://masaki39.github.io/marp-mcp/example-default-minimal-style.html)
+- [Default theme, dark style](https://masaki39.github.io/marp-mcp/example-default-dark-style.html)
+- [Default theme, corporate style](https://masaki39.github.io/marp-mcp/example-default-corporate-style.html)
+- [Default theme, academic style](https://masaki39.github.io/marp-mcp/example-default-academic-style.html)
+- [Default theme, tech style](https://masaki39.github.io/marp-mcp/example-default-tech-style.html)
+
 ## Available Layouts
 
 ### Default theme
@@ -231,21 +246,6 @@ Omit either parameter to fall back to the server default.
 | `highlight-box` | Alert/callout box with color-coded variants: 'info' (cyan), 'warning' (amber), 'success' (green) |
 | `feature-grid` | Grid of feature cards, each with an icon, title, and description. Use 'Icon|Title|Description' format. |
 | `roadmap` | Horizontal milestone timeline with status indicators. Use 'Phase|Label|Status' format. Status: 'done', 'current', or 'future'. |
-
-## Example
-
-Rendered samples (GitHub Pages):
-
-- [Academic theme](https://masaki39.github.io/marp-mcp/example-academic-theme.html)
-- [Default theme](https://masaki39.github.io/marp-mcp/example-default-theme.html)
-- [Gaia theme](https://masaki39.github.io/marp-mcp/example-gaia-theme.html)
-- [Uncover theme](https://masaki39.github.io/marp-mcp/example-uncover-theme.html)
-- [Default theme, rich style](https://masaki39.github.io/marp-mcp/example-default-rich-style.html)
-- [Default theme, minimal style](https://masaki39.github.io/marp-mcp/example-default-minimal-style.html)
-- [Default theme, dark style](https://masaki39.github.io/marp-mcp/example-default-dark-style.html)
-- [Default theme, corporate style](https://masaki39.github.io/marp-mcp/example-default-corporate-style.html)
-- [Default theme, academic style](https://masaki39.github.io/marp-mcp/example-default-academic-style.html)
-- [Default theme, tech style](https://masaki39.github.io/marp-mcp/example-default-tech-style.html)
 
 ## Development
 

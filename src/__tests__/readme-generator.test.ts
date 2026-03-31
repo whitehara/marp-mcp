@@ -142,6 +142,13 @@ Omitting these flags defaults to \`default\` theme and \`default\` style.
 
 Omit either parameter to fall back to the server default.
 
+## Example
+
+Rendered samples (GitHub Pages):
+
+${themeLinks}
+${styleLinks}
+
 ## Available Layouts
 
 ### Default theme
@@ -153,13 +160,6 @@ ${defaultThemeRows}
 ### Styles
 
 ${styleLayoutSections}
-
-## Example
-
-Rendered samples (GitHub Pages):
-
-${themeLinks}
-${styleLinks}
 
 ## Development
 
