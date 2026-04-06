@@ -51,7 +51,7 @@ export const resultsTableLayout: SlideLayout = {
     if (params.caption) {
       slide += `<p class="acad-table-caption">${params.caption}</p>\n\n`;
     }
-    slide += `<table class="acad-results-table">\n<thead><tr>${headerRow}</tr></thead>\n<tbody>\n${bodyRows}\n</tbody>\n</table>`;
+    slide += `<table class="acad-results-table" style="font-size: 0.85em">\n<thead><tr>${headerRow}</tr></thead>\n<tbody>\n${bodyRows}\n</tbody>\n</table>`;
 
     return slide;
   },

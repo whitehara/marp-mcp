@@ -12,7 +12,7 @@ function getImageConstraint(imagePath: string, hPx: number): string {
     const { width, height } = imageSize(buffer);
     if (!width || !height) return `h:${hPx}`;
     const projectedWidth = hPx * (width / height);
-    if (projectedWidth > 1200) return `h:${hPx} w:1200`;
+    if (projectedWidth > 1200) return `w:1200`;
     return `h:${hPx}`;
   } catch {
     return `h:${hPx}`;
@@ -58,13 +58,8 @@ export const imageCenterLayout: SlideLayout = {
     let slide = `<!-- _class: acad-img-center -->\n\n`;
     slide += `## ${params.heading}\n\n`;
 
-    if (params.description && params.citations) {
-      slide += `![center ${getImageConstraint(params.imagePath as string, 430)}](${params.imagePath})`;
-    } else if (!params.description && !params.citations) {
-      slide += `![center ${getImageConstraint(params.imagePath as string, 530)}](${params.imagePath})`;
-    } else {
-      slide += `![center ${getImageConstraint(params.imagePath as string, 480)}](${params.imagePath})`;
-    }
+    const hPx = params.description && params.citations ? 430 : !params.description && !params.citations ? 530 : 480;
+    slide += `![center ${getImageConstraint(params.imagePath as string, hPx)}](${params.imagePath})`;
 
     if (params.caption) {
       slide += `\n\n<p class="acad-image-caption">${params.caption}</p>`;

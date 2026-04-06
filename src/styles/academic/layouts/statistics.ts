@@ -31,9 +31,9 @@ export const statisticsLayout: SlideLayout = {
         if (parts.length >= 2) {
           const number = parts[0].trim();
           const label = parts[1].trim();
-          return `<div>\n<div class="acad-stat-number">${number}</div>\n<div class="acad-stat-label">${label}</div>\n</div>`;
+          return `<div>\n<div class="acad-stat-number" style="font-size: 2.2em">${number}</div>\n<div class="acad-stat-label" style="font-size: 0.8em">${label}</div>\n</div>`;
         }
-        return `<div>\n<div class="acad-stat-number">${stat}</div>\n</div>`;
+        return `<div>\n<div class="acad-stat-number" style="font-size: 2.2em">${stat}</div>\n</div>`;
       })
       .join("\n");
     let slide = `## ${params.heading}\n\n<div class="acad-stat-box">\n${statItems}\n</div>`;

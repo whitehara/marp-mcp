@@ -37,6 +37,6 @@ export const sidebarLayout: SlideLayout = {
     }
     sidebarInner += `<ul>\n${sidebarList}\n</ul>`;
 
-    return `## ${params.heading}\n\n<div class="acad-sidebar-layout">\n<div class="acad-sidebar-main">\n\n${params.content}\n\n</div>\n<div class="acad-sidebar">\n${sidebarInner}\n</div>\n</div>`;
+    return `## ${params.heading}\n\n<div class="acad-sidebar-layout">\n<div class="acad-sidebar-main">\n\n${params.content}\n\n</div>\n<div class="acad-sidebar" style="font-size: 0.8em">\n${sidebarInner}\n</div>\n</div>`;
   },
 };

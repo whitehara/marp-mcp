@@ -236,13 +236,11 @@ style: |
     min-width: 0;
   }
   .acad-method-step-label {
-    font-size: 0.9em;
     font-weight: 600;
     color: #800000;
     line-height: 1.2;
   }
   .acad-method-step-desc {
-    font-size: 0.75em;
     color: #475569;
     margin-top: 0.2rem;
   }
@@ -332,13 +330,11 @@ style: |
     max-width: calc(50% - 1rem);
   }
   .acad-stat-number {
-    font-size: 2.2em;
     font-weight: 700;
     color: #800000;
     line-height: 1.1;
   }
   .acad-stat-label {
-    font-size: 0.8em;
     color: #475569;
     margin-top: 0.3rem;
   }
@@ -353,7 +349,6 @@ style: |
   .acad-sidebar {
     border-left: 3px solid #800000;
     padding-left: 1rem;
-    font-size: 0.8em;
   }
   .acad-sidebar h4 {
     margin-top: 0;
@@ -375,7 +370,6 @@ style: |
     border-collapse: collapse;
     width: 100%;
     margin: 0.5rem auto;
-    font-size: 0.85em;
   }
   .acad-results-table thead th {
     background: #800000;
@@ -563,28 +557,28 @@ Step-by-step overview.
 
 <div class="acad-method-steps">
 <div class="acad-method-step">
-<div class="acad-method-step-label">Recruitment</div>
-<div class="acad-method-step-desc">N=120 participants</div>
+<div class="acad-method-step-label" style="font-size: 0.9em">Recruitment</div>
+<div class="acad-method-step-desc" style="font-size: 0.75em">N=120 participants</div>
 </div>
 <div class="acad-method-arrow">→</div>
 <div class="acad-method-step">
-<div class="acad-method-step-label">Randomization</div>
-<div class="acad-method-step-desc">Double-blind RCT</div>
+<div class="acad-method-step-label" style="font-size: 0.9em">Randomization</div>
+<div class="acad-method-step-desc" style="font-size: 0.75em">Double-blind RCT</div>
 </div>
 <div class="acad-method-arrow">→</div>
 <div class="acad-method-step">
-<div class="acad-method-step-label">Intervention</div>
-<div class="acad-method-step-desc">12-week protocol</div>
+<div class="acad-method-step-label" style="font-size: 0.9em">Intervention</div>
+<div class="acad-method-step-desc" style="font-size: 0.75em">12-week protocol</div>
 </div>
 <div class="acad-method-arrow">→</div>
 <div class="acad-method-step">
-<div class="acad-method-step-label">Assessment</div>
-<div class="acad-method-step-desc">Pre/post measures</div>
+<div class="acad-method-step-label" style="font-size: 0.9em">Assessment</div>
+<div class="acad-method-step-desc" style="font-size: 0.75em">Pre/post measures</div>
 </div>
 <div class="acad-method-arrow">→</div>
 <div class="acad-method-step">
-<div class="acad-method-step-label">Analysis</div>
-<div class="acad-method-step-desc">Mixed-effects model</div>
+<div class="acad-method-step-label" style="font-size: 0.9em">Analysis</div>
+<div class="acad-method-step-desc" style="font-size: 0.75em">Mixed-effects model</div>
 </div>
 </div>
 
@@ -623,20 +617,20 @@ Step-by-step overview.
 
 <div class="acad-stat-box">
 <div>
-<div class="acad-stat-number">99.9%</div>
-<div class="acad-stat-label">Uptime</div>
+<div class="acad-stat-number" style="font-size: 2.2em">99.9%</div>
+<div class="acad-stat-label" style="font-size: 0.8em">Uptime</div>
 </div>
 <div>
-<div class="acad-stat-number">2.5M</div>
-<div class="acad-stat-label">Users</div>
+<div class="acad-stat-number" style="font-size: 2.2em">2.5M</div>
+<div class="acad-stat-label" style="font-size: 0.8em">Users</div>
 </div>
 <div>
-<div class="acad-stat-number">150ms</div>
-<div class="acad-stat-label">Avg Latency</div>
+<div class="acad-stat-number" style="font-size: 2.2em">150ms</div>
+<div class="acad-stat-label" style="font-size: 0.8em">Avg Latency</div>
 </div>
 <div>
-<div class="acad-stat-number">4.8★</div>
-<div class="acad-stat-label">Rating</div>
+<div class="acad-stat-number" style="font-size: 2.2em">4.8★</div>
+<div class="acad-stat-label" style="font-size: 0.8em">Rating</div>
 </div>
 </div>
 
@@ -656,7 +650,7 @@ The system uses a **microservices** architecture with event-driven communication
 - Each service owns its data
 
 </div>
-<div class="acad-sidebar">
+<div class="acad-sidebar" style="font-size: 0.8em">
 <h4>Key Terms</h4>
 <ul>
 <li>API Gateway: Entry point</li>
@@ -673,7 +667,7 @@ The system uses a **microservices** architecture with event-driven communication
 
 <p class="acad-table-caption">Table 1: Comparison on benchmark dataset. * indicates best value.</p>
 
-<table class="acad-results-table">
+<table class="acad-results-table" style="font-size: 0.85em">
 <thead><tr><th>Model</th><th>Accuracy</th><th>F1 Score</th><th>Latency</th></tr></thead>
 <tbody>
 <tr><td>Baseline</td><td>88.2</td><td>85.1</td><td>120ms</td></tr>

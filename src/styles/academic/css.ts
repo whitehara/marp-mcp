@@ -235,13 +235,11 @@ section.acad-img-center {
   min-width: 0;
 }
 .acad-method-step-label {
-  font-size: 0.9em;
   font-weight: 600;
   color: #800000;
   line-height: 1.2;
 }
 .acad-method-step-desc {
-  font-size: 0.75em;
   color: #475569;
   margin-top: 0.2rem;
 }
@@ -331,13 +329,11 @@ section blockquote p {
   max-width: calc(50% - 1rem);
 }
 .acad-stat-number {
-  font-size: 2.2em;
   font-weight: 700;
   color: #800000;
   line-height: 1.1;
 }
 .acad-stat-label {
-  font-size: 0.8em;
   color: #475569;
   margin-top: 0.3rem;
 }
@@ -352,7 +348,6 @@ section blockquote p {
 .acad-sidebar {
   border-left: 3px solid #800000;
   padding-left: 1rem;
-  font-size: 0.8em;
 }
 .acad-sidebar h4 {
   margin-top: 0;
@@ -374,7 +369,6 @@ section blockquote p {
   border-collapse: collapse;
   width: 100%;
   margin: 0.5rem auto;
-  font-size: 0.85em;
 }
 .acad-results-table thead th {
   background: #800000;

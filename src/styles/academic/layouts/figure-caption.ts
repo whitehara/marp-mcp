@@ -12,7 +12,7 @@ function getImageConstraint(imagePath: string, hPx: number): string {
     const { width, height } = imageSize(buffer);
     if (!width || !height) return `h:${hPx}`;
     const projectedWidth = hPx * (width / height);
-    if (projectedWidth > 1200) return `h:${hPx} w:1200`;
+    if (projectedWidth > 1200) return `w:1200`;
     return `h:${hPx}`;
   } catch {
     return `h:${hPx}`;

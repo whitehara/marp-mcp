@@ -34,9 +34,9 @@ export const methodologyLayout: SlideLayout = {
         const parts = step.split("|");
         const label = parts[0].trim();
         const desc = parts.length > 1 ? parts[1].trim() : "";
-        let html = `<div class="acad-method-step">\n<div class="acad-method-step-label">${label}</div>`;
+        let html = `<div class="acad-method-step">\n<div class="acad-method-step-label" style="font-size: 0.9em">${label}</div>`;
         if (desc) {
-          html += `\n<div class="acad-method-step-desc">${desc}</div>`;
+          html += `\n<div class="acad-method-step-desc" style="font-size: 0.75em">${desc}</div>`;
         }
         html += `\n</div>`;
         if (i < steps.length - 1) {
