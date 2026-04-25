@@ -240,10 +240,14 @@ function normalizeResourceReadUri(body: unknown, serverId: string): unknown {
     const params = (msg as Record<string, unknown>).params;
     if (typeof params !== "object" || params === null) return msg;
     const uri = (params as Record<string, unknown>).uri;
-    if (typeof uri !== "string" || !uri.startsWith(prefix)) return msg;
+    if (typeof uri !== "string") return msg;
+    console.error(`RESOURCE_URI_DEBUG: ${uri}`);
+    if (!uri.startsWith(prefix)) return msg;
+    const normalized = uri.slice(prefix.length);
+    console.error(`RESOURCE_URI_NORMALIZED: ${normalized}`);
     return {
       ...msg as Record<string, unknown>,
-      params: { ...(params as Record<string, unknown>), uri: uri.slice(prefix.length) },
+      params: { ...(params as Record<string, unknown>), uri: normalized },
     };
   }
   return Array.isArray(body) ? body.map(normalizeMsg) : normalizeMsg(body);
