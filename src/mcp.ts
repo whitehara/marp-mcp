@@ -224,6 +224,32 @@ export async function startMcpServer(): Promise<void> {
 }
 
 /**
+ * Strips a "serverId_" prefix from resources/read URIs.
+ * MCP hosts may prefix resource URIs with the server ID for internal routing
+ * (e.g., "marp-mcp_ui://marp-mcp/preview.html"). Node's URL parser rejects
+ * underscores in schemes, so we normalise before the MCP SDK sees it.
+ * Handles both single JSON-RPC messages and batch arrays.
+ */
+function normalizeResourceReadUri(body: unknown, serverId: string): unknown {
+  const prefix = `${serverId}_`;
+  function normalizeMsg(msg: unknown): unknown {
+    if (
+      typeof msg !== "object" || msg === null ||
+      (msg as Record<string, unknown>).method !== "resources/read"
+    ) return msg;
+    const params = (msg as Record<string, unknown>).params;
+    if (typeof params !== "object" || params === null) return msg;
+    const uri = (params as Record<string, unknown>).uri;
+    if (typeof uri !== "string" || !uri.startsWith(prefix)) return msg;
+    return {
+      ...msg as Record<string, unknown>,
+      params: { ...(params as Record<string, unknown>), uri: uri.slice(prefix.length) },
+    };
+  }
+  return Array.isArray(body) ? body.map(normalizeMsg) : normalizeMsg(body);
+}
+
+/**
  * Starts the MCP server with Streamable HTTP transport (stateless mode).
  * Each request creates a new McpServer instance.
  */
@@ -241,6 +267,11 @@ export async function startHttpServer(): Promise<void> {
   });
 
   app.all("/mcp", async (req: Request, res: Response) => {
+    // The MCP host prefixes resource URIs with the server ID for internal routing:
+    //   "marp-mcp_ui://marp-mcp/preview.html"
+    // Node's new URL() rejects this scheme, so strip the prefix before the SDK sees it.
+    req.body = normalizeResourceReadUri(req.body, process.env.MCP_SERVER_ID ?? "marp-mcp");
+
     const server = createMcpServer();
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,

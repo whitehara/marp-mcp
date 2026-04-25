@@ -150,6 +150,7 @@ The server starts in HTTP mode automatically (`MCP_TRANSPORT=http` is set in the
 |----------|---------|-------------|
 | `MCP_TRANSPORT` | `http` | Transport: `http` or `stdio` |
 | `PORT` | `3000` | HTTP listen port |
+| `MCP_SERVER_ID` | `marp-mcp` | Server ID — must match the ID registered in your MCP host (e.g., Cloudflare AI Controls) |
 | `PUPPETEER_EXECUTABLE_PATH` | `/usr/bin/chromium` | Chromium binary path for PDF export |
 | `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` | `true` | Skip bundled Chromium download (uses system Chromium) |
 
@@ -168,6 +169,9 @@ services:
     environment:
       - MCP_TRANSPORT=http
       - PORT=3000
+      # MCP_SERVER_ID must match the Server ID registered in Cloudflare AI Controls.
+      # Default: marp-mcp
+      #- MCP_SERVER_ID=marp-mcp
 ```
 
 After starting, connect your MCP client to `http://<host>:3000/mcp`.
@@ -210,6 +214,27 @@ pnpm run build:ui   # Vite bundle only (mcp-app.html)
 ```
 
 > **Note:** The original masaki39/marp-mcp project auto-generates `README.md` and `skills/marp/SKILL.md` via Jest generator tests. Running `pnpm test` in this fork will regenerate those files from the generator templates. If you update the README manually, skip the generator tests or update `src/__tests__/readme-generator.test.ts` accordingly.
+
+---
+
+## Cloudflare MCP Server Portal との連携
+
+[Cloudflare Zero Trust](https://one.cloudflare.com/) の **AI Controls** でこのサーバーを MCP Server として登録する場合、登録時に設定する **Server ID** と環境変数 `MCP_SERVER_ID` を一致させる必要があります。
+
+> **重要:** MCP ホストはリソース URI の先頭にサーバー ID を付加して内部管理します（例: `marp-mcp_ui://marp-mcp/preview.html`）。`MCP_SERVER_ID` がこのサーバー ID と一致していないと、`preview_slide` の UI 読み込み時に **-32602 Invalid resource URI** エラーが発生します。
+
+### 設定例
+
+Cloudflare AI Controls で Server ID を `marp-mcp`（デフォルト）のまま登録する場合、環境変数の追加は不要です。
+
+Server ID を変更した場合は `compose.yml` または `docker run` の `-e` オプションで合わせてください:
+
+```yaml
+environment:
+  - MCP_SERVER_ID=your-server-id   # Cloudflare AI Controls の Server ID と同じ値
+```
+
+デフォルト値は `marp-mcp` です。
 
 ---
 

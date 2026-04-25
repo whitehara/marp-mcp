@@ -6,3 +6,6 @@ services:
     environment:
       - MCP_TRANSPORT=http
       - PORT=3000
+      # MCP_SERVER_ID must match the Server ID registered in Cloudflare AI Controls.
+      # Default: marp-mcp
+      #- MCP_SERVER_ID=marp-mcp
