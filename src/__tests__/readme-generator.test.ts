@@ -214,6 +214,12 @@ MIT License
 - [npm](https://www.npmjs.com/package/@masaki39/marp-mcp)
 - [Marp](https://marp.app/)
 - [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Additional Documentation
+
+- [Deployment Guide](docs/deployment.md) — Building from source, Docker, compose.yml, environment variables
+- [Cloudflare MCP Server Portal](docs/cloudflare-portal.md) — Connecting to Cloudflare AI Controls (MCP_SERVER_ID)
+- [Credits](docs/credits.md) — Acknowledgements for upstream authors
 `;
 }
 
