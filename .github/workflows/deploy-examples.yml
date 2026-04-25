@@ -1,15 +1,21 @@
 name: Deploy Examples to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'assets/examples/md/**'
-      - 'assets/themes/**'
-      - 'src/themes/**'
-      - 'src/styles/**'
-      - '.github/workflows/deploy-examples.yml'
+  # Trigger only on manual dispatch.
+  # Automatic push-based deployment is disabled for this fork because
+  # GitHub Pages is not configured here.  Enable the push trigger below
+  # and configure Pages in repo Settings if you want automatic deployment.
   workflow_dispatch:
+
+  # Uncomment to re-enable automatic deployment:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'assets/examples/md/**'
+  #     - 'assets/themes/**'
+  #     - 'src/themes/**'
+  #     - 'src/styles/**'
+  #     - '.github/workflows/deploy-examples.yml'
 
 permissions:
   contents: read
@@ -37,7 +43,10 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build
+        run: pnpm run build
 
       - name: Generate markdown examples
         run: pnpm run examples:generate

@@ -1,0 +1,15 @@
+node_modules
+build
+.git
+.github
+.claude
+.claude-plugin
+assets
+changelog
+skills
+src/**/__tests__
+*.test.ts
+*.spec.ts
+README.md
+LICENSE
+jest.config.cjs

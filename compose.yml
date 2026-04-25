@@ -1,0 +1,8 @@
+services:
+  marp-mcp:
+    image: ghcr.io/whitehara/marp-mcp:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - MCP_TRANSPORT=http
+      - PORT=3000

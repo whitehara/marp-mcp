@@ -50,12 +50,23 @@ export const exportSlideSchema = z.object({
     ),
 });
 
+// Cache the resolved marp command path across calls.
+let _marpCommand: string | undefined;
+
 /**
- * Resolves the marp CLI binary path.
- * Looks in node_modules/.bin relative to the current working directory (project root).
+ * Resolves the marp CLI binary.
+ * Prefers the local node_modules/.bin/marp (dev); falls back to "marp" in PATH (Docker).
  */
-function getMarpBinPath(): string {
-  return join(process.cwd(), "node_modules", ".bin", "marp");
+async function getMarpCommand(): Promise<string> {
+  if (_marpCommand !== undefined) return _marpCommand;
+  const devPath = join(process.cwd(), "node_modules", ".bin", "marp");
+  try {
+    await fs.access(devPath);
+    _marpCommand = devPath;
+  } catch {
+    _marpCommand = "marp";
+  }
+  return _marpCommand;
 }
 
 /**
@@ -211,7 +222,7 @@ export async function exportSlide({
 
   args.push(filePath);
 
-  const { exitCode, stderr } = await runCommand(getMarpBinPath(), args, 60_000);
+  const { exitCode, stderr } = await runCommand(await getMarpCommand(), args, 60_000);
 
   if (exitCode !== 0) {
     const errorMessage = stderr.trim() || `marp CLI exited with code ${exitCode}`;

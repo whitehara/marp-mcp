@@ -20,7 +20,7 @@ import {
   setActiveStyle,
 } from "./styles/index.js";
 import { error as logError } from "./utils/logger.js";
-import { startMcpServer } from "./mcp.js";
+import { startMcpServer, startHttpServer } from "./mcp.js";
 import { registerCommands } from "./cli/commands.js";
 
 // Load version from package.json
@@ -78,11 +78,17 @@ program.hook("preAction", (_thisCommand, actionCommand) => {
 });
 
 // Default command: serve (MCP server)
+// MCP_TRANSPORT=http → StreamableHTTP on PORT (default 3000)
+// MCP_TRANSPORT unset  → stdio (default)
 program
   .command("serve", { isDefault: true })
-  .description("Start MCP server on stdio (default)")
+  .description("Start MCP server (stdio by default, HTTP when MCP_TRANSPORT=http)")
   .action(async () => {
-    await startMcpServer();
+    if (process.env.MCP_TRANSPORT === "http") {
+      await startHttpServer();
+    } else {
+      await startMcpServer();
+    }
   });
 
 // Register CLI subcommands

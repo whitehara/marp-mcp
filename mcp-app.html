@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Marp Slide Preview</title>
+  <script src="https://cdn.jsdelivr.net/npm/@marp-team/marpit-svg-polyfill@2.1.0/lib/polyfill.browser.js"
+          integrity="sha384-DZPhTcCjnUmqFGL0GXmgANvsgTY5MrUreRiI49zUtCTWof1zJh0Dyz9TMqBJWMbu"
+          crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+    .main { display: flex; flex-direction: column; height: 100%; }
+    .toolbar { padding: 8px; border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent); display: flex; flex-direction: column; gap: 6px; }
+    .toolbar-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .toolbar-group { display: flex; gap: 4px; align-items: center; }
+    #previewContainer { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 16px; background: color-mix(in srgb, currentColor 5%, transparent); }
+    .marpit { max-width: 100%; }
+    .marpit svg[data-marpit-svg] { max-width: 100%; height: auto; display: block; }
+    select, button { padding: 4px 10px; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); border-radius: 4px; cursor: pointer; font-size: 13px; background: inherit; color: inherit; }
+    button:disabled, select:disabled { opacity: 0.4; cursor: not-allowed; }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 8px 18px; border-radius: 6px; font-size: 13px; z-index: 1000; white-space: nowrap; }
+    .toast-hide { animation: fadeOut 0.4s ease forwards; }
+    @keyframes fadeOut { to { opacity: 0; } }
+  </style>
+</head>
+<body>
+  <main class="main">
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <div class="toolbar-group">
+          <label for="themeSelect">Theme:</label>
+          <select id="themeSelect" disabled></select>
+        </div>
+        <div class="toolbar-group">
+          <button type="button" id="firstBtn" disabled>&lt;&lt;</button>
+          <button type="button" id="prevBtn" disabled>&lt;</button>
+          <button type="button" id="nextBtn" disabled>&gt;</button>
+          <button type="button" id="lastBtn" disabled>&gt;&gt;</button>
+        </div>
+      </div>
+      <div class="toolbar-row">
+        <div class="toolbar-group">
+          <select id="downloadFormat" disabled>
+            <option value="md">Markdown</option>
+            <option value="pdf">PDF</option>
+            <option value="pptx">PPTX</option>
+            <option value="pptx-editable">Editable PPTX</option>
+          </select>
+          <button type="button" id="downloadBtn" disabled>Download</button>
+        </div>
+      </div>
+    </div>
+    <div id="previewContainer">
+      <style id="slideStyle"></style>
+      <div class="marpit"></div>
+    </div>
+  </main>
+  <script type="module" src="/src/mcp-app.ts"></script>
+</body>
+</html>
