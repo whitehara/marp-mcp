@@ -36,25 +36,16 @@ async function loadHtml(): Promise<string> {
 export function registerPreviewSlide(server: McpServer): void {
   registerAppResource(
     server,
+    "Marp Slide Preview",
     RESOURCE_URI,
-    RESOURCE_URI,
-    { mimeType: RESOURCE_MIME_TYPE },
-    async () => ({
+    {
+      description: "Interactive Marp slide preview with page navigation and theme switching (MCP Apps UI)",
+    },
+    async (uri) => ({
       contents: [{
-        uri: RESOURCE_URI,
+        uri: uri.href,
         mimeType: RESOURCE_MIME_TYPE,
         text: await loadHtml(),
-        _meta: {
-          ui: {
-            csp: {
-              resourceDomains: [
-                "https://cdn.jsdelivr.net",
-                "https://esm.sh",
-              ],
-              connectDomains: ["https://esm.sh"],
-            },
-          },
-        },
       }],
     }),
   );
@@ -78,11 +69,6 @@ export function registerPreviewSlide(server: McpServer): void {
           .optional()
           .describe("Slide name used as download filename (e.g. 'my-slides'). Defaults to 'slide'."),
       },
-      outputSchema: z.object({
-        markdown: z.string(),
-        theme:    z.string(),
-        name:     z.string(),
-      }),
       _meta: { ui: { resourceUri: RESOURCE_URI } },
     },
     async ({ markdown, theme, name }) => {
