@@ -103,6 +103,10 @@ The server starts in HTTP mode automatically (`MCP_TRANSPORT=http` is set in the
 | `MCP_SERVER_ID` | `marp-mcp` | Server ID — must match the ID registered in your MCP host (e.g., Cloudflare AI Controls). See [Cloudflare MCP Server Portal](cloudflare-portal.md). |
 | `PUPPETEER_EXECUTABLE_PATH` | `/usr/bin/chromium` | Chromium binary path for PDF export |
 | `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` | `true` | Skip bundled Chromium download (uses system Chromium) |
+| `EXPORT_BACKEND` | `none` | Export backend: `none` (base64 in response), `nextcloud_nfs` (write to NFS path). See [Nextcloud Export](nextcloud-export.md). |
+| `NEXTCLOUD_EXPORT_PATH` | *(required for `nextcloud_nfs`)* | Absolute path to the NFS-mounted export directory (e.g. `/nextcloud-data/data/username/files/marp-exports`) |
+| `NEXTCLOUD_BASE_URL` | *(required for `nextcloud_nfs`)* | Base URL of your Nextcloud instance (e.g. `https://nextcloud.example.com`) |
+| `NEXTCLOUD_USERNAME` | *(required for `nextcloud_nfs`)* | Nextcloud username used to construct the download URL |
 
 ---
 

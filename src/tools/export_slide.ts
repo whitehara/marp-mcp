@@ -9,6 +9,7 @@ import { promises as fs } from "fs";
 import { join } from "path";
 import { validateFilePath } from "../utils/path-validator.js";
 import { createErrorResponse, createSuccessResponse } from "../utils/response.js";
+import { resolveExportOutputPath, ensureExportDir, buildFileExportExtra } from "../export-backend.js";
 import type { ToolResponse } from "../types/common.js";
 
 export const exportSlideSchema = z.object({
@@ -193,8 +194,10 @@ export async function exportSlide({
     }
   }
 
-  // Determine output path
-  const resolvedOutput = outputPath ?? filePath.replace(/\.md$/, `.${format}`);
+  // Determine output path (may be redirected by the active export backend)
+  const defaultOutput  = outputPath ?? filePath.replace(/\.md$/, `.${format}`);
+  const resolvedOutput = resolveExportOutputPath(defaultOutput);
+  await ensureExportDir(resolvedOutput);
 
   // Build marp CLI args
   const args: string[] = [
@@ -230,12 +233,14 @@ export async function exportSlide({
   }
 
   const formatLabel = format === "pptx" && pptxEditable ? "PPTX (editable)" : format.toUpperCase();
+  const extra       = buildFileExportExtra(resolvedOutput);
 
   return createSuccessResponse({
     message: `Exported successfully to ${formatLabel}`,
     outputPath: resolvedOutput,
     format,
     sourceFile: filePath,
+    ...extra,
     ...(localImageWarning ? { warning: localImageWarning } : {}),
   });
 }

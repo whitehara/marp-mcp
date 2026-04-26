@@ -1,12 +1,13 @@
 /**
  * Tool: export_pdf
- * Exports Marp markdown content (passed directly) to PDF and returns base64-encoded data.
- * Used by the preview_slide UI for in-browser PDF download.
+ * Exports Marp markdown content (passed directly) to PDF.
+ * Returns base64-encoded data (default) or a download URL depending on EXPORT_BACKEND.
  */
 
 import { z } from "zod";
 import { runMarpFromMarkdown, injectTheme } from "../utils/marp-cli.js";
 import { createErrorResponse } from "../utils/response.js";
+import { saveExportBuffer } from "../export-backend.js";
 import type { ToolResponse } from "../types/common.js";
 
 export const exportPdfSchema = z.object({
@@ -30,13 +31,15 @@ export async function exportPdf({
     const md       = theme ? injectTheme(markdown, theme) : markdown;
     const buffer   = await runMarpFromMarkdown(md, { format: "pdf" });
     const filename = `${name ?? "presentation"}.pdf`;
+    const result   = await saveExportBuffer(filename, buffer);
 
     return {
-      content: [{ type: "text", text: `PDF exported: ${filename} (${buffer.length} bytes)` }],
+      content: [{ type: "text", text: result.message }],
       structuredContent: {
-        data_base64: buffer.toString("base64"),
         filename,
         mime_type: "application/pdf",
+        ...(result.base64    ? { data_base64:   result.base64 }    : {}),
+        ...(result.downloadUrl ? { download_url: result.downloadUrl } : {}),
       },
     };
   } catch (e) {
